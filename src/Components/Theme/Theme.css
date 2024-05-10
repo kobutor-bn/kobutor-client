@@ -1,0 +1,75 @@
+.toggle-theme-wrapper {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 4px;
+}
+
+.toggle-theme {
+    position: relative;
+    display: inline-block;
+    height: 24px;
+    width: 50px;
+}
+
+.toggle-theme input {
+    display: none;
+}
+
+.slider {
+    background-color: lightgray;
+    position: absolute;
+    cursor: pointer;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    top: 0;
+    transition: 0.2s;
+}
+
+.slider:before {
+    background-color: black;
+    bottom: 2px;
+    content: "";
+    height: 20px;
+    width: 20px;
+    left: 2px;
+    position: absolute;
+    transition: 0.4s;
+}
+
+.moonIcon {
+    cursor: pointer;
+    border-radius: 50%;
+    padding: 2px;
+    position: absolute;
+    transform: rotate(240deg);
+    right: -3px;
+    top: -3px;
+    font-size: 18px;
+    color: black;
+    transition: all 0.05s ease-in;
+}
+
+.noneDisplay {
+    opacity: 0;
+}
+
+.slider.round {
+    background-color: #6b6b6b;
+    border-radius: 34px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+input:checked + .slider:before {
+    opacity: 0;
+
+    transform: translateX(26px);
+}
+
+input:checked + .slider {
+    background-color: #FFB84C;
+}
