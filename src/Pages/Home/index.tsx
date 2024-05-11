@@ -2,8 +2,9 @@ import NormalSlider from "../../Components/Slider/NormalSlider/NormalSlider.tsx"
 import Accordion from "../../Components/Accordion/Accordion.tsx";
 import {images} from "../ProductDetails/index.ts";
 import hpone from "../../assets/hpone.jpg";
-import Modal from "../../Components/Modal/Modal.tsx";
+import Modal from "../../Components/Modal";
 import React from "react";
+import DDMenu from "../../Components/Modal/DDMenu.tsx";
 
 const Home: React.FC = () => {
     return (
@@ -27,7 +28,7 @@ const Home: React.FC = () => {
                 images={images}/>
             <Modal>
                 <h1 className="text-lg font-bold mb-4">Modal Content</h1>
-                <p className="text-lg font-bold mb-4">This is a modal example with Tailwind CSS.</p>
+                <DDMenu></DDMenu>
             </Modal>
             <Accordion></Accordion>
         </div>
