@@ -1,6 +1,8 @@
 import Theme from "../Theme/Theme.tsx";
 import {useState} from "react";
 import './Navbar.css';
+import DDMenu from "../Modal/DDMenu.tsx";
+import Modal from "../Modal";
 
 function Navbar() {
     const [menuOpen, setMenuOpen] = useState(false);
@@ -14,7 +16,7 @@ function Navbar() {
 
     return (
         <>
-            <nav className="flex justify-between items-center w-full bg-black text-white p-3">
+            <nav className="flex z-50 justify-between items-center w-full bg-black text-white p-3">
                 <div>Logo</div>
                 <ul className="hidden md:flex gap-3">
                     <li>Shop</li>
@@ -24,11 +26,15 @@ function Navbar() {
                     <li>sign in</li>
                     <li>register</li>
                     <Theme></Theme>
-                    <div className="menu-icon md:hidden" onClick={toggleMenu}>
-                        <span className="menu-line"></span>
-                        <span className="menu-line"></span>
-                    </div>
                 </ul>
+                <div className="md:hidden menu-icon z-50" onClick={toggleMenu}>
+                    <span className="menu-line"></span>
+                    <span className="menu-line"></span>
+                    <Modal>
+                        <h1 className="text-lg font-bold mb-4">Modal Content</h1>
+                        <DDMenu></DDMenu>
+                    </Modal>
+                </div>
             </nav>
         </>
     )
