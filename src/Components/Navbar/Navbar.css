@@ -5,6 +5,7 @@
     align-items: center;
     width: 1.8rem;
     height: 20px;
+    /*z-index: 999;*/
     gap: 0.5rem;
     cursor: pointer;
 }
