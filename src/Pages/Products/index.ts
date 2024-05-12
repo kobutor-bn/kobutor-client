@@ -24,5 +24,23 @@ export const images: ICommon.Image[] = [
         title: 'chair',
         url: chair,
         desc: 'any'
-    }
+    },
+    {
+        id: 1,
+        title: 'chair',
+        url: chair,
+        desc: 'any'
+    },
+    {
+        id: 1,
+        title: 'chair',
+        url: chair,
+        desc: 'any'
+    },
+    {
+        id: 1,
+        title: 'chair',
+        url: chair,
+        desc: 'any'
+    },
 ]

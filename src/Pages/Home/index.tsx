@@ -2,9 +2,7 @@ import NormalSlider from "../../Components/Slider/NormalSlider/NormalSlider.tsx"
 import Accordion from "../../Components/Accordion/Accordion.tsx";
 import {images} from "../ProductDetails/index.ts";
 import hpone from "../../assets/hpone.jpg";
-import Modal from "../../Components/Modal";
 import React from "react";
-import DDMenu from "../../Components/Modal/DDMenu.tsx";
 
 const Home: React.FC = () => {
     return (
@@ -26,10 +24,6 @@ const Home: React.FC = () => {
                 title={'Hottest Index'}
                 desc={''}
                 images={images}/>
-            <Modal>
-                <h1 className="text-lg font-bold mb-4">Modal Content</h1>
-                <DDMenu></DDMenu>
-            </Modal>
             <Accordion></Accordion>
         </div>
 

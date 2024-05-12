@@ -1,17 +1,14 @@
-import React, {useState} from 'react';
+import React from 'react';
 import './index.css';
 
 interface ModalProps {
+    isOpen: boolean;
+    toggleModal: () => void;
     children: React.ReactNode;
 }
 
-const Modal: React.FC<ModalProps> = ({children}) => {
-    const [isOpen, setIsOpen] = useState(false);
-
-    const toggleModal = () => {
-        setIsOpen(!isOpen);
-
-    };
+const Modal: React.FC<ModalProps> = (props) => {
+    const {isOpen, toggleModal, children} = props;
 
     const closeModal = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
         e.stopPropagation();

@@ -1,11 +1,3 @@
-.container {
-    background: #EEEDEB;
-    max-width: 650px;
-    width: 100%;
-    margin: auto;
-    box-shadow: 2px 4px 8px #B2A59B;
-}
-
 .wrapperp {
     display: flex;
     flex-direction: column;

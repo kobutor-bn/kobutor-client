@@ -1,13 +1,14 @@
 import './App.css'
 import Navbar from "./Components/Navbar/Navbar.tsx";
 import Footer from "./Components/Footer.tsx";
-import Home from "./Pages/Home";
+import {Outlet} from "react-router-dom";
 
 function App() {
     return (
         <div>
             <Navbar/>
-            <Home/>
+
+            <Outlet/>
             {/*<Products/>*/}
             {/*<ProductDetails></ProductDetails>*/}
             {/*<Register/>*/}

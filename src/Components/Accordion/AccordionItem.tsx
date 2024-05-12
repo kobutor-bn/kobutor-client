@@ -14,7 +14,8 @@ const AccordionItem: React.FC<AccordionItemProps> = (props) => {
     const contentHeight = useRef<HTMLDivElement | null>(null);
 
     return (
-        <div className="wrapper text-sm md:text-lg">
+        <div
+            className="wrapper border-black border-b overflow-hidden max-w-[550px]  bg-gray-50 text-sm md:text-lg">
             <button className={`question-container ${isOpen ? 'active' : ''}`} onClick={onClick}>
                 <p className='question-content font-bold'>{question}</p>
                 <RiArrowDropDownLine className={`arrow ${isOpen ? 'active' : ''}`}/>

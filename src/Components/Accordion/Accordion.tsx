@@ -31,12 +31,12 @@ const Accordion = () => {
     };
 
     return (
-        <div className='container py-20 my-32 px-6 md:p-10 md:rounded-3xl'>
-            <p className="flex flex-col gap-3 mb-10 md:px-20 md:py-10 text-center">
+        <div className='max-w-screen-md w-full m-auto shadow-lg bg-gray-100 py-20 my-32 px-6 md:p-10 md:rounded-3xl'>
+            <p className="flex flex-col gap-3 mb-10 md:mb-5 md:pb-0 md:px-20 md:py-10 text-center">
                 <span className="text-2xl md:text-5xl font-extrabold">Questions? We've got answers.</span><br/>
                 <span className="text-sm">Not seeing your specific question, check our help center or contact our support team.</span>
             </p>
-            <div className="wrapperp p-6 md:px-20 md:py-10">
+            <div className="wrapperp bg-gray-50 p-6 md:px-20 md:py-10">
                 {data.map((item, index) => (
                     <AccordionItem
                         key={index}

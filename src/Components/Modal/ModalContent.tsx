@@ -2,7 +2,7 @@ import React from 'react';
 import './index.css';
 import Theme from "../Theme/Theme.tsx";
 
-const DDMenu: React.FC = () => {
+const ModalContent: React.FC = () => {
     return (
         <div className="h-screen w-full">
             <div className="flex justify-center items-center flex-col gap-4 text-black">
@@ -14,4 +14,4 @@ const DDMenu: React.FC = () => {
     );
 };
 
-export default DDMenu;
+export default ModalContent;
