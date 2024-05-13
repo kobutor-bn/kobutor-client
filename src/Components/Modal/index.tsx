@@ -24,7 +24,7 @@ const Modal: React.FC<ModalProps> = (props) => {
         <>
             <button
                 onClick={toggleModal}
-                className="absolute -left-9999 opacity-0"
+                className="md:hidden absolute -left-9999 opacity-0"
                 tabIndex={-1}
             >
                 Click me
