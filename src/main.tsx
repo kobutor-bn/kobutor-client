@@ -6,6 +6,8 @@ import App from "./App.tsx";
 import ErrorPage from "./Pages/Error.tsx";
 import Home from "./Pages/Home";
 import Products from "./Pages/Products/index.tsx";
+import {Provider} from "react-redux";
+import {store} from "./store.ts";
 
 const router = createBrowserRouter([
     {
@@ -16,17 +18,24 @@ const router = createBrowserRouter([
             {
                 path: "/home",
                 element: <Home/>,
+            },
+            {
+                path: "/products",
+                children: [
+                    {
+                        path: "/products/listing",
+                        element: <Products/>,
+                    }
+                ]
             }
         ],
     },
-    {
-        path: "/listing",
-        element: <Products/>,
-    }
 ]);
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
-    <React.StrictMode>
-        <RouterProvider router={router}/>
-    </React.StrictMode>,
+    <Provider store={store}>
+        <React.StrictMode>
+            <RouterProvider router={router}/>
+        </React.StrictMode>,
+    </Provider>
 )

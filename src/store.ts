@@ -1,0 +1,11 @@
+// Infer the `Store` and `AppDispatch` types from the store itself
+import {configureStore} from '@reduxjs/toolkit'
+
+export const store = configureStore({
+    reducer: {},
+})
+
+// Inferred type: {posts: PostsState, comments: CommentsState, users: UsersState}
+export type AppDispatch = typeof store.dispatch
+
+export type Store = ReturnType<typeof store.getState>
