@@ -1,12 +1,12 @@
 import CartCard from "../../Components/Card/CartCard.tsx";
-import chair from "../../assets/chair.jpg";
-import camera from "../../assets/camera.jpg";
-import hpone from "../../assets/hpone.jpg";
+import {useSelector} from "react-redux";
+import {RootState} from "../../store.ts";
 
 function Cart() {
+    const items = useSelector((state: RootState) => state.cart.items);
+
     return (
         <>
-            <div className="text-center bg-gray-400 py-4">Free delivery for all members!</div>
             <div className="lg:flex lg:mx-auto max-w-5xl p-5">
                 <div className="">
                     <div className="max-w-screen-md mx-auto border-b-[1px] border-b-gray-400 my-6 pb-6">
@@ -15,42 +15,9 @@ function Cart() {
                             |
                             USD 400</p>
                     </div>
-                    <CartCard
-                        title="Chair"
-                        size='Big'
-                        desc='Whatever description of products goes here'
-                        imgUrl={chair}
-                        price={100.00}
-                        category="Furniture"
-                        quantity={0}
-                    />
-                    <CartCard
-                        title="Chair"
-                        size='Big'
-                        desc='Whatever description of products goes here'
-                        imgUrl={camera}
-                        price={100.00}
-                        category="Furniture"
-                        quantity={0}
-                    />
-                    <CartCard
-                        title="Chair"
-                        size='Big'
-                        desc='Whatever description of products goes here'
-                        imgUrl={hpone}
-                        price={100.00}
-                        category="Furniture"
-                        quantity={0}
-                    />
-                    <CartCard
-                        title="Chair"
-                        size='Big'
-                        desc='Whatever description of products goes here'
-                        imgUrl={chair}
-                        price={100.00}
-                        category="Furniture"
-                        quantity={0}
-                    />
+                    {items.map((item: ICart.Item, i) => {
+                        return <CartCard item={item} key={i}/>
+                    })}
                 </div>
 
                 <div className="max-w-screen-md mx-auto flex flex-col gap-4 pt-16 lg:py-6">
@@ -77,7 +44,7 @@ function Cart() {
             </div>
         </>
 
-    )
+    );
 }
 
 export default Cart;

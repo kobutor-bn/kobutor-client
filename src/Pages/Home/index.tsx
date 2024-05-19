@@ -7,10 +7,7 @@ import React from "react";
 const Home: React.FC = () => {
     return (
         <div>
-            <p className="text-center py-4">
-                Free Delivery, Member Exclusive Products and Promos for all our Members. <br/>
-                <span className="underline font-bold">Join us!</span>
-            </p>
+
             <img className="h-96 md:w-screen mx-auto" src={hpone} alt={"chair"}/>
             <NormalSlider
                 length={0}

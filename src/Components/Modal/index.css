@@ -1,12 +1,22 @@
 .modal-wrapper {
+    z-index: 999;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
     background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
 }
 
 .modal-content {
     background-color: white;
+    height: 100%;
+    overflow: hidden;
     padding: 20px;
     animation: slideIn .5s forwards;
-    transform: translateX(50%);
 }
 
 @keyframes slideIn {

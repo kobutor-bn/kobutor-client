@@ -1,26 +1,60 @@
-import type {PayloadAction} from '@reduxjs/toolkit'
 import {createSlice} from '@reduxjs/toolkit'
+import chair from "../../assets/chair.jpg";
 
-export interface CartState {
-    value: number
-}
-
-const initialState: CartState = {
-    value: 0,
+const initialState: ICart.Items = {
+    items: [
+        {
+            title: "Chair",
+            category: "Furniture",
+            desc: "Whatever description of products goes here",
+            imgUrl: chair,
+            price: 46.34,
+            quantity: 4,
+            size: "Big",
+            stock: 6,
+        },
+        {
+            title: "Chair",
+            category: "Furniture",
+            desc: "Whatever description of products goes here",
+            imgUrl: chair,
+            price: 46.34,
+            quantity: 4,
+            size: "Big",
+            stock: 6,
+        },
+        {
+            title: "Chair",
+            category: "Furniture",
+            desc: "Whatever description of products goes here",
+            imgUrl: chair,
+            price: 46.34,
+            quantity: 4,
+            size: "Big",
+            stock: 6,
+        },
+        {
+            title: "Chair",
+            category: "Furniture",
+            desc: "Whatever description of products goes here",
+            imgUrl: chair,
+            price: 46.34,
+            quantity: 4,
+            size: "Big",
+            stock: 6,
+        },
+    ],
 }
 
 export const CartSlice = createSlice({
     name: 'cart',
     initialState,
     reducers: {
-        increment: (state) => {
-            state.value += 1
+        increment: () => {
         },
-        decrement: (state) => {
-            state.value -= 1
+        decrement: () => {
         },
-        incrementByAmount: (state, action: PayloadAction<number>) => {
-            state.value += action.payload
+        incrementByAmount: () => {
         },
     },
 })

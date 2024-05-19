@@ -9,12 +9,10 @@ function ProductDetails() {
 
     return (
         <>
-            <div className="text-center bg-gray-400 py-4">Free delivery for all members!</div>
-            <div className="max-w-screen-2xl mx-auto flex flex-col gap-3 p-4 pt-8">
+            <div className="max-w-screen-2xl mx-auto flex flex-col gap-3 p-4 pt-20">
                 <Card title={"Seamless Mineral Wash Cropped Cami"}
                       desc={desc}
                       imgUrl={chair} price={0} size={"dynamic"}>
-
                 </Card>
                 <div className="flex gap-3 py-5">
                     <img src={chair} className="border border-black h-52 w-52 hover:brightness-90" alt=""/>

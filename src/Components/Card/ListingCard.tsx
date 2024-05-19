@@ -1,4 +1,5 @@
 import React from "react";
+import {Link} from "react-router-dom";
 
 interface CardProps {
     title: string;
@@ -26,7 +27,9 @@ const ListingCard: React.FC<CardProps> = (props) => {
     return (
         <div className="max-w-screen-2xl mx-auto bg-white border-black overflow-hidden">
             <div className={`md:flex ${fixedBlock}`}>
-                <img className={`${sizeClass} object-fill w-fit md:w-3/5`} src={imgUrl} alt=""/>
+                <Link to={"/product/details"}>
+                    <img className={`${sizeClass} object-fill w-fit md:w-3/5`} src={imgUrl} alt=""/>
+                </Link>
                 <div className="flex flex-col max-w-screen-2xl w-full text-sm ga1 pt-4 gap-1">
                     <div>
                         <div className="flex gap-3">
@@ -36,8 +39,10 @@ const ListingCard: React.FC<CardProps> = (props) => {
                     </div>
                     <div className="uppercase tracking-wide text-sm text-indigo-500 font-semibold">Furniture
                     </div>
-                    <a href="#" className="block leading-tight font-medium text-black hover:underline">
-                        {title}</a>
+                    <Link to={"/product/details"}>
+                        <a href="#" className="block leading-tight font-medium text-black hover:underline">
+                            {title}</a>
+                    </Link>
                     <p className="text-slate-500">{desc}</p>
                     <p className="text-rose-500 font-bold">${price}</p>
                 </div>

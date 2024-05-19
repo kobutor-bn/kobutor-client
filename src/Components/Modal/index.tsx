@@ -1,40 +1,42 @@
-import React from 'react';
+import React, {useRef} from 'react';
 import './index.css';
+import {IModal} from "../../Services/Modal";
+import {useDispatch, useSelector} from "react-redux";
+import {AppDispatch, RootState} from "../../store.ts";
+import {toggleMenu} from "./state.ts";
 
-interface ModalProps {
-    isOpen: boolean;
-    toggleModal: () => void;
-    children: React.ReactNode;
-}
+const Modal: React.FC<IModal.Props> = ({children}) => {
+    const dispatch: AppDispatch = useDispatch();
+    const isOpen = useSelector((state: RootState) => state.menu.isOpen);
+    const modalWrapperRef = useRef<HTMLDivElement | null>(null);
 
-const Modal: React.FC<ModalProps> = (props) => {
-    const {isOpen, toggleModal, children} = props;
-
-    const closeModal = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-        e.stopPropagation();
-        if ((e.target as HTMLDivElement).classList.contains('modal-wrapper')) {
-            toggleModal();
+    const handleOverlayClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+        if (modalWrapperRef.current && modalWrapperRef.current === e.target) {
+            dispatch(toggleMenu());
             const menuIcon = document.querySelector('.menu-icon');
-            // @ts-expect-error because js can't detect if it's a valid html selector
-            menuIcon.classList.remove('clicked');
+            if (menuIcon) {
+                menuIcon.classList.remove('clicked');
+            }
         }
     };
 
     return (
         <>
             <button
-                onClick={toggleModal}
+                onClick={() => dispatch(toggleMenu())}
                 className="md:hidden absolute -left-9999 opacity-0"
                 tabIndex={-1}
+                style={{pointerEvents: 'none'}}
             >
                 Click me
             </button>
             {isOpen && (
                 <div
-                    onClick={closeModal}
-                    className="modal-wrapper fixed top-0 right-0 w-full h-full flex items-center z-10 justify-center"
+                    onClick={handleOverlayClick}
+                    className="modal-wrapper"
+                    ref={modalWrapperRef}
                 >
-                    <div className="modal-content w-4/5">
+                    <div className="modal-content drop-shadow-none w-4/5">
                         {children}
                     </div>
                 </div>

@@ -6,8 +6,10 @@ import App from "./App.tsx";
 import ErrorPage from "./Pages/Error.tsx";
 import Home from "./Pages/Home";
 import Products from "./Pages/Products/index.tsx";
+import ProductDetails from "./Pages/ProductDetails/index.tsx";
 import {Provider} from "react-redux";
 import {store} from "./store.ts";
+import Cart from "./Pages/Cart";
 
 const router = createBrowserRouter([
     {
@@ -20,13 +22,21 @@ const router = createBrowserRouter([
                 element: <Home/>,
             },
             {
-                path: "/products",
+                path: "/product",
                 children: [
                     {
-                        path: "/products/listing",
+                        path: "/product/listing",
                         element: <Products/>,
+                    },
+                    {
+                        path: "/product/details",
+                        element: <ProductDetails/>,
                     }
                 ]
+            },
+            {
+                path: "/cart",
+                element: <Cart/>,
             }
         ],
     },
