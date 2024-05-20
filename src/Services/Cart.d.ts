@@ -1,5 +1,6 @@
 declare namespace ICart {
     interface Item {
+        id: string;
         title: string;
         desc: string;
         imgUrl: string;
@@ -11,6 +12,8 @@ declare namespace ICart {
     }
 
     interface Items {
+        qty: number;
+        price: number;
         items: Item[];
     }
 }

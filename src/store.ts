@@ -4,6 +4,7 @@ import SearchState from './Components/Searchbar/state.ts'
 import DropdownSlice from "./Components/Dropdown/state.ts";
 import ModalSlice from "./Components/Modal/state.ts";
 import CartSlice from "./Pages/Cart/state.ts";
+import ProductSlice from "./Pages/ProductDetails/state.ts";
 
 export const store = configureStore({
     reducer: {
@@ -11,6 +12,7 @@ export const store = configureStore({
         dropdown: DropdownSlice,
         menu: ModalSlice,
         cart: CartSlice,
+        products: ProductSlice,
     },
 })
 

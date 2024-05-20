@@ -5,11 +5,12 @@ interface ButtonProps {
     size?: 'small' | 'medium' | 'large';
     color?: 'primary' | 'secondary';
     shape?: 'circle' | 'square';
+    onClick?: () => void;
     // children: React.ReactNode;
 }
 
 const Button: React.FC<ButtonProps> = (props) => {
-    const {size, color, shape, text} = props;
+    const {size, color, shape, text, onClick} = props;
     let sizeClass = '';
     let colorClass = '';
 
@@ -36,7 +37,7 @@ const Button: React.FC<ButtonProps> = (props) => {
 
     return (
         <>
-            <button className={`${colorClass}  p-2 ${sizeClass}`}>
+            <button onClick={onClick} className={`${colorClass}  p-2 ${sizeClass}`}>
                 {text}
                 {/*{children}*/}
             </button>

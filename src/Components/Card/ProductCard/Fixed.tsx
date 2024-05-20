@@ -1,15 +1,6 @@
 import React from "react";
 
-interface CardProps {
-    title: string;
-    desc: string;
-    imgUrl: string;
-    price: number;
-    size: 'fixed' | 'dynamic';
-}
-
-const ProductCard: React.FC<CardProps> = (props) => {
-    const {title, desc, price, imgUrl, size} = props;
+const ProductCard: React.FC<{ item: IProduct.Item, size: string }> = ({item, size}) => {
     let sizeClass = '';
     let fixedBlock = '';
 
@@ -26,16 +17,16 @@ const ProductCard: React.FC<CardProps> = (props) => {
     return (
         <div className="max-w-screen-2xl mx-auto bg-white border-black overflow-hidden">
             <div className={`md:flex ${fixedBlock}`}>
-                <img className={`${sizeClass} object-fill w-fit md:w-3/5`} src={imgUrl} alt=""/>
+                <img className={`${sizeClass} object-fill w-fit md:w-3/5`} src={item.imgUrl} alt=""/>
                 <div className="py-8 md:px-8">
                     <div className="uppercase tracking-wide text-sm text-indigo-500 font-semibold">Furniture
                     </div>
                     <a href="#"
                        className="block mt-1 text-lg leading-tight font-medium text-black hover:underline">
-                        {title}</a>
-                    <p className="mt-2 text-slate-500">{desc}</p>
+                        {item.title}</a>
+                    <p className="mt-2 text-slate-500">{item.desc}</p>
                     <div className='md:flex-none items-center justify-between'>
-                        <p className="text-rose-500 font-bold">${price}</p>
+                        <p className="text-rose-500 font-bold">${item.price}</p>
                         <div className="flex flex-col py-4 gap-3">
                             <p className="font-bold">Color: Black</p>
                             <div className="flex gap-3">

@@ -1,10 +1,12 @@
-import {images} from "./index.ts";
 import ListingCard from "../../Components/Card/ListingCard.tsx";
 import Dropdown from "../../Components/Dropdown";
 import {useState} from "react";
 import {IDropDown} from "../../Services/Dropdown";
+import {useSelector} from "react-redux";
+import {RootState} from "../../store.ts";
 
 function Products() {
+    const products = useSelector((state: RootState) => state.products.items)
     const [isOpen, setIsOpen] = useState(false);
     const [selectedOption, setSelectedOption] = useState<IDropDown.Option | null>(null);
 
@@ -81,14 +83,11 @@ function Products() {
                 <Dropdown btn={<Button/>} body={<Options/>} isOpen={isOpen} selectOption={selectOption}
                           options={options}/>
                 <div className="grid grid-cols-2 gap-5 md:grid-cols-3 lg:grid-cols-4">
-                    {images.map((image, i) => {
+                    {products.map((product, i) => {
                         return (
                             <ListingCard
                                 key={i}
-                                title={"Chair"}
-                                desc={"A fucking Chair"}
-                                imgUrl={image.url}
-                                price={0}
+                                item={product}
                                 size={"fixed"}
                             ></ListingCard>
                         );

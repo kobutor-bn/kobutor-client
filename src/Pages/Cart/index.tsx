@@ -4,6 +4,8 @@ import {RootState} from "../../store.ts";
 
 function Cart() {
     const items = useSelector((state: RootState) => state.cart.items);
+    const qty = useSelector((state: RootState) => state.cart.qty);
+    const price = useSelector((state: RootState) => state.cart.price);
 
     return (
         <>
@@ -11,9 +13,9 @@ function Cart() {
                 <div className="">
                     <div className="max-w-screen-md mx-auto border-b-[1px] border-b-gray-400 my-6 pb-6">
                         <p className="text-center text-2xl font-bold">Cart</p>
-                        <p className="lg:hidden text-center text-lg font-semibold text-rose-500 tracking-widest">4 Items
+                        <p className="lg:hidden text-center text-lg font-semibold text-rose-500 tracking-widest">{qty} Items
                             |
-                            USD 400</p>
+                            USD {price}</p>
                     </div>
                     {items.map((item: ICart.Item, i) => {
                         return <CartCard item={item} key={i}/>

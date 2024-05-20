@@ -1,8 +1,17 @@
 declare namespace IProduct {
-    interface State {
+    interface Item {
+        id: string;
         title: string;
-        stock: number;
-        price: number;
         desc: string;
+        imgUrl: string;
+        price: number;
+        category: string;
+        size: string;
+        quantity: number;
+        stock: number;
+    }
+
+    interface Items {
+        items: Item[];
     }
 }
