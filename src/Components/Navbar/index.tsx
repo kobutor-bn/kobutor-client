@@ -1,7 +1,7 @@
 import './index.css';
 import {Link} from "react-router-dom";
-import Modal from "../Modal";
-import ModalContent from "../Modal/ModalContent.tsx";
+import Menu from "../Menu";
+import MenuContent from "../Menu/MenuContent.tsx";
 import {CiShop} from "react-icons/ci";
 import {PiHandbagBold, PiUserCircleGear} from "react-icons/pi";
 import {MdOutlineFavoriteBorder} from "react-icons/md";
@@ -10,19 +10,23 @@ import Dropdown from "../Dropdown";
 import {IDropDown} from "../../Services/Dropdown";
 import {useDispatch, useSelector} from "react-redux";
 import {AppDispatch, RootState} from "../../store.ts";
-import {selectOption, toggleIsOpen} from "../Dropdown/state.ts";
-import {toggleMenu} from "../Modal/state.ts";
+import {selectOption} from "../Dropdown/state.ts";
+import {toggleMenu, toggleModal} from "../Menu/state.ts";
+import ModalContent from "../Menu/ModalContent.tsx";
 
 function Navbar() {
     const dispatch: AppDispatch = useDispatch();
     const options = useSelector((state: RootState) => state.dropdown.options);
     const isDDOpen = useSelector((state: RootState) => state.dropdown.isOpen)
-    const isMenuOpen = useSelector((state: RootState) => state.menu.isOpen)
+    const isMenuOpen = useSelector((state: RootState) => state.menu.isMenuOpen)
 
     const Button = () =>
-        <div className="flex gap-3" onClick={() => dispatch(toggleIsOpen())}>
+        <div className="flex gap-3">
+            {/*<div className="flex gap-3" onClick={() => dispatch(toggleIsOpen())}>*/}
             <PiUserCircleGear className="text-white h-6 w-6"/>
-            <li>SIGN IN</li>
+            <Link to={'/login'}>
+                <li>SIGN IN</li>
+            </Link>
         </div>
 
     const Options = () =>
@@ -41,6 +45,17 @@ function Navbar() {
                 </div>
             )}
         </>
+
+    const MenuTrigger = () =>
+        <div
+            className={`flex flex-col justify-center items-center w-7 h-5 gap-2 cursor-pointer md:hidden menu-icon ${isMenuOpen ? "clicked" : ""}`}
+            onClick={() => dispatch(toggleMenu())}
+        >
+                            <span
+                                className="w-full h-[2px] bg-white menu-line transition-transform duration-500"></span>
+            <span
+                className="w-full h-[2px] bg-white menu-line transition-transform duration-500"></span>
+        </div>
 
     return (
         <div className="w-screen ">
@@ -65,18 +80,10 @@ function Navbar() {
                             {/*<Theme></Theme>*/}
                         </ul>
 
-                        <div
-                            className={`flex flex-col justify-center items-center w-7 h-5 gap-2 cursor-pointer md:hidden menu-icon ${isMenuOpen ? "clicked" : ""}`}
-                            onClick={() => dispatch(toggleMenu())}
-                        >
-                            <span
-                                className="w-full h-[2px] bg-white menu-line transition-transform duration-500"></span>
-                            <span
-                                className="w-full h-[2px] bg-white menu-line transition-transform duration-500"></span>
-                        </div>
-                        <Modal>
-                            <ModalContent></ModalContent>
-                        </Modal>
+                        <Menu
+                            trigger={<MenuTrigger/>}
+                            body={<MenuContent/>}>
+                        </Menu>
                     </nav>
                 </div>
 
@@ -88,7 +95,12 @@ function Navbar() {
                             <div className="hidden md:flex">
                                 <SearchBar/>
                             </div>
-                            <MdOutlineFavoriteBorder className="text-rose-500 h-6 w-6"/>
+
+                            <Menu
+                                trigger={<MdOutlineFavoriteBorder onClick={() => dispatch(toggleModal())}
+                                                                  className="text-rose-500 h-6 w-6"/>}
+                                body={<ModalContent/>}>
+                            </Menu>
                             <Link to={"/cart"}>
                                 <PiHandbagBold className="text-black h-6 w-6"/>
                             </Link>

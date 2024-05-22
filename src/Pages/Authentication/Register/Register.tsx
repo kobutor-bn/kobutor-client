@@ -14,12 +14,6 @@ function Register() {
                 <input className="border-[1px] p-3" type="text" id="password" placeholder="Password"/>
                 <h3 className="text-sm mb-[-16px]">Birthday</h3>
                 <input className="border-[1px] p-3" type="date" name="birthday" id="birthday" placeholder="Birthday"/>
-                {/*<div className="flex gap-3 items-center w-full">*/}
-                {/*    <input type="radio" id="male" name="male" value="male"/>*/}
-                {/*    <label htmlFor="male">Male</label>*/}
-                {/*    <input type="radio" id="female" name="female" value="female"/>*/}
-                {/*    <label htmlFor="female">Female</label>*/}
-                {/*</div>*/}
 
                 <h3 className="text-sm mb-[-16px]">Gender</h3>
                 <ul className="items-center w-full text-sm font-medium sm:flex">

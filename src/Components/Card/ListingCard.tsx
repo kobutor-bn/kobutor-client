@@ -1,25 +1,13 @@
 import React from "react";
 import {Link} from "react-router-dom";
 
-const ListingCard: React.FC<{ item: IProduct.Item, size: string }> = ({item, size}) => {
-    let sizeClass = '';
-    let fixedBlock = '';
-
-    switch (size) {
-        case 'fixed':
-            sizeClass = 'md:w-full';
-            fixedBlock = 'flex-col';
-            break;
-        case 'dynamic':
-            sizeClass = '';
-            break;
-    }
+const ListingCard: React.FC<{ item: IProduct.Item }> = ({item}) => {
 
     return (
         <div className="max-w-screen-2xl mx-auto bg-white border-black overflow-hidden">
-            <div className={`md:flex ${fixedBlock}`}>
+            <div className="md:flex flex-col">
                 <Link to={`/product/details/${item.id}`}>
-                    <img className={`${sizeClass} object-fill w-fit md:w-3/5`} src={item.imgUrl} alt=""/>
+                    <img className="object-fill w-fit md:w-full" src={item.imgUrl} alt=""/>
                 </Link>
                 <div className="flex flex-col max-w-screen-2xl w-full text-sm ga1 pt-4 gap-1">
                     <div>
@@ -30,7 +18,7 @@ const ListingCard: React.FC<{ item: IProduct.Item, size: string }> = ({item, siz
                     </div>
                     <div className="uppercase tracking-wide text-sm text-indigo-500 font-semibold">Furniture
                     </div>
-                    <Link to={"/product/details"}>
+                    <Link to={`/product/details/${item.id}`}>
                         <a href="#" className="block leading-tight font-medium text-black hover:underline">
                             {item.title}</a>
                     </Link>

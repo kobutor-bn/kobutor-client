@@ -2,10 +2,12 @@ import React from "react";
 
 declare namespace IModal {
     interface State {
-        isOpen: boolean;
+        isMenuOpen: boolean;
+        isModalOpen: boolean;
     }
 
     interface Props {
-        children: React.ReactNode;
+        trigger: React.ReactNode;
+        body: React.ReactNode;
     }
 }

@@ -88,7 +88,6 @@ function Products() {
                             <ListingCard
                                 key={i}
                                 item={product}
-                                size={"fixed"}
                             ></ListingCard>
                         );
                     })}

@@ -1,11 +1,12 @@
 import React, {useRef} from 'react';
 import './index.css';
-import {IModal} from "../../Services/Modal";
-import {useDispatch, useSelector} from "react-redux";
+import Theme from "../Theme/Theme.tsx";
+import {Link} from "react-router-dom";
 import {AppDispatch, RootState} from "../../store.ts";
+import {useDispatch, useSelector} from "react-redux";
 import {toggleMenu} from "./state.ts";
 
-const Modal: React.FC<IModal.Props> = ({children}) => {
+const MenuContent: React.FC = () => {
     const dispatch: AppDispatch = useDispatch();
     const isOpen = useSelector((state: RootState) => state.menu.isOpen);
     const modalWrapperRef = useRef<HTMLDivElement | null>(null);
@@ -22,22 +23,20 @@ const Modal: React.FC<IModal.Props> = ({children}) => {
 
     return (
         <>
-            <button
-                onClick={() => dispatch(toggleMenu())}
-                className="md:hidden absolute -left-9999 opacity-0"
-                tabIndex={-1}
-                style={{pointerEvents: 'none'}}
-            >
-                Click me
-            </button>
             {isOpen && (
                 <div
                     onClick={handleOverlayClick}
-                    className="modal-wrapper"
+                    className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
                     ref={modalWrapperRef}
                 >
                     <div className="modal-content drop-shadow-none w-4/5">
-                        {children}
+                        <div className="flex justify-center h-screen w-full">
+                            <div className="flex justify-center items-center flex-col gap-4 text-black">
+                                <Theme></Theme>
+                                <Link to={'/product/listing'}>SHOP</Link>
+                                <p>Others</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             )}
@@ -45,4 +44,4 @@ const Modal: React.FC<IModal.Props> = ({children}) => {
     );
 };
 
-export default Modal;
+export default MenuContent;

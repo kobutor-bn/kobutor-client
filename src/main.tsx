@@ -10,6 +10,9 @@ import ProductDetails from "./Pages/ProductDetails/index.tsx";
 import {Provider} from "react-redux";
 import {store} from "./store.ts";
 import Cart from "./Pages/Cart";
+import Login from "./Pages/Authentication/Login";
+import Register from "./Pages/Authentication/Register/Register.tsx";
+import User from "./Pages/User";
 
 const router = createBrowserRouter([
     {
@@ -40,6 +43,18 @@ const router = createBrowserRouter([
             }
         ],
     },
+    {
+        path: "/login",
+        element: <Login/>,
+    },
+    {
+        path: "/register",
+        element: <Register/>,
+    },
+    {
+        path: "/settings",
+        element: <User/>,
+    }
 ]);
 
 ReactDOM.createRoot(document.getElementById('root')!).render(

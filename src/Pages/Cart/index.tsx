@@ -34,8 +34,8 @@ function Cart() {
                     </div>
                     <p>Delivery fee (if applicable) will be calculated at checkout.</p>
                 </div>
-
             </div>
+            
             <div className="lg:flex lg:mx-auto max-w-5xl p-5 flex flex-col gap-4 my-11">
                 <p className="text-2xl font-bold">Favorites</p>
                 <p>Want to view your favorites? <span className="underline">Join us</span> or <span

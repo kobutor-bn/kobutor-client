@@ -33,8 +33,7 @@ function ProductDetails() {
     return (
         <>
             <div className="max-w-screen-2xl mx-auto flex flex-col gap-3 p-4 pt-20">
-                <Card item={product} size={"dynamic"}>
-                </Card>
+                <Card item={product}></Card>
                 <div className="flex gap-3 py-5">
                     <img src={chair} className="border border-black h-52 w-52 hover:brightness-90" alt=""/>
                     <img src={chair} className="border border-black h-52 w-52 hover:brightness-90" alt=""/>
