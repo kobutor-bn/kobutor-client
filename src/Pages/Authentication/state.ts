@@ -2,30 +2,31 @@ import type {PayloadAction} from '@reduxjs/toolkit'
 import {createSlice} from '@reduxjs/toolkit'
 
 export interface AuthenticateState {
-    value: number
+    email: string;
+    password: string;
+    isLoggedIn?: boolean;
 }
 
 const initialState: AuthenticateState = {
-    value: 0,
+    email: "",
+    password: "",
+    isLoggedIn: false
 }
 
 export const AuthenticateSlice = createSlice({
-    name: 'cart',
+    name: 'auth',
     initialState,
     reducers: {
-        increment: (state) => {
-            state.value += 1
-        },
-        decrement: (state) => {
-            state.value -= 1
-        },
-        incrementByAmount: (state, action: PayloadAction<number>) => {
-            state.value += action.payload
+        login: (state, action: PayloadAction<{ email: string; password: string }>) => {
+            const {email, password} = action.payload;
+            state.email = email;
+            state.password = password;
+            state.isLoggedIn = true;
         },
     },
 })
 
 // Action creators are generated for each case reducer function
-export const {increment, decrement, incrementByAmount} = AuthenticateSlice.actions
+export const {login} = AuthenticateSlice.actions
 
 export default AuthenticateSlice.reducer

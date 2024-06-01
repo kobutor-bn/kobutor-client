@@ -5,6 +5,7 @@ import DropdownSlice from "./Components/Dropdown/state.ts";
 import ModalSlice from "./Components/Menu/state.ts";
 import CartSlice from "./Pages/Cart/state.ts";
 import ProductSlice from "./Pages/ProductDetails/state.ts";
+import AuthenticateSlice from "./Pages/Authentication/state.ts";
 
 export const store = configureStore({
     reducer: {
@@ -13,6 +14,7 @@ export const store = configureStore({
         menu: ModalSlice,
         cart: CartSlice,
         products: ProductSlice,
+        auth: AuthenticateSlice,
     },
 })
 

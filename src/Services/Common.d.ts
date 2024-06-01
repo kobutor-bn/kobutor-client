@@ -7,11 +7,7 @@ declare namespace ICommon {
     };
 
     interface SliderProps {
-        length: number;
-        current: number;
         title: string;
-        desc: string;
-        images: Image[];
         // children: React.ReactNode;
     }
 }

@@ -13,7 +13,7 @@ declare namespace IDropDown {
 
     interface CustomDropdownProps {
         isOpen: boolean;
-        options: Option[];
+        options?: Option[];
         selectOption?: (option) => void;
         body: ReactNode;
         btn: ReactNode;

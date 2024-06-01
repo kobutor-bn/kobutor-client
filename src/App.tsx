@@ -7,12 +7,7 @@ function App() {
     return (
         <div>
             <Navbar/>
-
             <Outlet/>
-            {/*<Products/>*/}
-            {/*<ProductDetails></ProductDetails>*/}
-            {/*<Register/>*/}
-            {/*<ProductDetails/>*/}
             <Footer/>
         </div>
 

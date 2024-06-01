@@ -3,7 +3,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {AppDispatch, RootState} from '../../store';
 import {toggleModal} from './state.ts';
 
-const ModalContent: React.FC = () => {
+const ModalContent: React.FC<{ content: React.ReactNode }> = ({content}) => {
     const dispatch: AppDispatch = useDispatch();
     const isModalOpen = useSelector((state: RootState) => state.menu.isModalOpen);
     const modalWrapperRef = useRef<HTMLDivElement | null>(null);
@@ -29,13 +29,13 @@ const ModalContent: React.FC = () => {
                         <div className="flex justify-end">
                             <button
                                 onClick={() => dispatch(toggleModal())}
-                                className="text-gray-500 hover:text-gray-800"
+                                className="text-gray-500 bg-gray-200 px-2 rounded-full hover:text-gray-800"
                             >
                                 &times;
                             </button>
                         </div>
                         <div className="mt-2">
-                            <p>Your content goes here</p>
+                            {content}
                         </div>
                     </div>
                 </div>

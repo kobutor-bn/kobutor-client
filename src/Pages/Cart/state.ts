@@ -22,6 +22,8 @@ export const CartSlice = createSlice({
             } else {
                 state.items.push({...action.payload, quantity: 1});
             }
+
+            CartSlice.caseReducers.total(state);
         },
 
         total: (state) => {
@@ -35,11 +37,17 @@ export const CartSlice = createSlice({
 
             state.qty = qty;
             state.price = price;
-        }
+        },
+
+        Remove: (state, action: PayloadAction<ICart.Item>) => {
+            state.items = state.items.filter(prod => prod.id !== action.payload.id);
+
+            CartSlice.caseReducers.total(state);
+        },
     },
 })
 
 // Action creators are generated for each case reducer function
-export const {AddToBag} = CartSlice.actions
+export const {AddToBag, Remove} = CartSlice.actions
 
 export default CartSlice.reducer

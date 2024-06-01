@@ -4,24 +4,43 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 import {Navigation, Pagination} from 'swiper/modules';
+import {useSelector} from "react-redux";
+import {RootState} from "../../../store.ts";
+import "./index.css";
 
 
-const Slider: React.FC<ICommon.SliderProps> = (props) => {
-    const {length, current, title, desc, images} = props;
+const NormalSlider: React.FC<ICommon.SliderProps> = (props) => {
+    const {title} = props;
+    const products = useSelector((state: RootState) => state.products.items)
 
     return (
-        <div className="p-4 pr-0">
+        <div className="">
             <p className="font-bold text-2xl py-6">{title}</p>
             <Swiper
-                slidesPerView={5 / 4}
-                spaceBetween={25}
+                slidesPerView={1.25}
+                spaceBetween={15}
                 navigation={true}
                 modules={[Pagination, Navigation]}
                 className="mySwiper"
+                breakpoints={{
+                    1024: {
+                        slidesPerView: 2.75,
+                        spaceBetween: 30,
+                    },
+                    1440: {
+                        slidesPerView: 3.25,
+                        spaceBetween: 30,
+                    },
+                    768: {
+                        slidesPerView: 1.50,
+                        spaceBetween: 30,
+                    },
+                }}
             >
-                {images.map((image, i) => (
+                {products.map((product, i) => (
                     <SwiperSlide>
-                        <img key={i} src={image.url} className="" alt=""/>
+                        <img key={i} src={product.imgUrl} className="sliderImg" alt=""/>
+                        <p className="font-medium pt-5 text-3xl">{product.title}</p>
                     </SwiperSlide>
                 ))}
             </Swiper>
@@ -29,4 +48,4 @@ const Slider: React.FC<ICommon.SliderProps> = (props) => {
     )
 }
 
-export default Slider;
+export default NormalSlider;

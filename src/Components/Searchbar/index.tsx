@@ -17,7 +17,7 @@ const SearchBar: React.FC = () => {
     };
 
     return (
-        <div className="relative">
+        <div className="relative z-10">
             {isFocused && (
                 <div
                     className="whitebg fixed inset-0 bg-white transition-all duration-300 h-1/2"
@@ -25,7 +25,7 @@ const SearchBar: React.FC = () => {
                 />
             )}
             <div
-                className={`transform transition-all duration-300 ${isFocused ? 'fixed top-4 left-1/2 -translate-x-1/2 w-3/4' : 'relative w-full'} z-10`}
+                className={`transform transition-all duration-300 ${isFocused ? 'fixed top-4 left-1/2 -translate-x-1/2 w-3/4' : 'relative w-full'}`}
             >
                 <IoIosSearch className="absolute bottom-2 left-2 text-black h-6 w-6"/>
                 <input

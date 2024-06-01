@@ -1,5 +1,9 @@
 import {createSlice} from '@reduxjs/toolkit'
 import chair from "../../assets/chair.jpg";
+import camera from "../../assets/camera.jpg";
+import hpone from "../../assets/hpone.jpg";
+import shoe from "../../assets/shoe.jpg";
+import watch from "../../assets/watch.jpg";
 
 const initialState: IProduct.Items = {
     items: [
@@ -16,10 +20,10 @@ const initialState: IProduct.Items = {
         },
         {
             id: '2',
-            title: "Chair",
+            title: "Camera",
             category: "Furniture",
             desc: "Whatever description of products goes here",
-            imgUrl: chair,
+            imgUrl: camera,
             price: 46.34,
             quantity: 4,
             size: "Big",
@@ -27,10 +31,10 @@ const initialState: IProduct.Items = {
         },
         {
             id: '3',
-            title: "Chair",
+            title: "Headphone",
             category: "Furniture",
             desc: "Whatever description of products goes here",
-            imgUrl: chair,
+            imgUrl: hpone,
             price: 46.34,
             quantity: 4,
             size: "Big",
@@ -38,10 +42,21 @@ const initialState: IProduct.Items = {
         },
         {
             id: '4',
-            title: "Chair",
+            title: "Shoe",
             category: "Furniture",
             desc: "Whatever description of products goes here",
-            imgUrl: chair,
+            imgUrl: shoe,
+            price: 46.34,
+            quantity: 4,
+            size: "Big",
+            stock: 6,
+        },
+        {
+            id: '5',
+            title: "Watch",
+            category: "Furniture",
+            desc: "Whatever description of products goes here",
+            imgUrl: watch,
             price: 46.34,
             quantity: 4,
             size: "Big",

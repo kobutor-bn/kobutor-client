@@ -1,6 +1,6 @@
 import ListingCard from "../../Components/Card/ListingCard.tsx";
 import Dropdown from "../../Components/Dropdown";
-import {useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import {IDropDown} from "../../Services/Dropdown";
 import {useSelector} from "react-redux";
 import {RootState} from "../../store.ts";
@@ -9,6 +9,7 @@ function Products() {
     const products = useSelector((state: RootState) => state.products.items)
     const [isOpen, setIsOpen] = useState(false);
     const [selectedOption, setSelectedOption] = useState<IDropDown.Option | null>(null);
+    const dropdownRef = useRef<HTMLDivElement>(null);
 
     const toggleDropdown = () => {
         setIsOpen(!isOpen);
@@ -19,10 +20,27 @@ function Products() {
         setIsOpen(false);
     };
 
+    const handleClickOutside = (event: MouseEvent) => {
+        if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+            setIsOpen(false);
+        }
+    };
+
+    useEffect(() => {
+        if (isOpen) {
+            document.addEventListener('mousedown', handleClickOutside);
+        } else {
+            document.removeEventListener('mousedown', handleClickOutside);
+        }
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [isOpen]);
+
     const options = [
-        {label: 'Option 1', value: 'option1'},
-        {label: 'Option 2', value: 'option2'},
-        {label: 'Option 3', value: 'option3'},
+        {label: 'Best Selling', value: 'option1'},
+        {label: 'Trending Products', value: 'option2'},
+        {label: 'This Month', value: 'option3'},
     ];
 
     const Button = () =>
@@ -30,7 +48,7 @@ function Products() {
             onClick={toggleDropdown}
             className="flex items-center gap-5 py-2 px-4 border border-gray-400 rounded-sm focus:outline-none"
         >
-            {selectedOption ? selectedOption.label : 'Select an option'}
+            {selectedOption ? selectedOption.label : 'Select Category'}
             {/*<LuFilterX/>*/}
             <svg
                 className="h-5 w-5 ml-2 inline-block"
@@ -51,8 +69,8 @@ function Products() {
     const Options = () =>
         <>
             {isOpen && (
-                <div
-                    className="absolute bg-yellow-50 top-full left-0 -mt-0.5 w-full border border-black  shadow-lg z-10">
+                <div ref={dropdownRef}
+                     className="absolute bg-white w-48 top-full left-0 -mt-0.5 border border-black shadow-lg">
                     {options.map((option: IDropDown.Option) => (
                         <div
                             key={option.value}
@@ -80,8 +98,12 @@ function Products() {
 
             <div className="flex flex-col gap-8 max-w-screen-2xl mx-auto p-4 py-8 pt-4">
                 {/*<Dropdown/>*/}
-                <Dropdown btn={<Button/>} body={<Options/>} isOpen={isOpen} selectOption={selectOption}
-                          options={options}/>
+                <Dropdown
+                    btn={<Button/>}
+                    body={<Options/>}
+                    isOpen={isOpen}
+                    options={options}
+                    selectOption={selectOption}/>
                 <div className="grid grid-cols-2 gap-5 md:grid-cols-3 lg:grid-cols-4">
                     {products.map((product, i) => {
                         return (
