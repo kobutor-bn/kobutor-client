@@ -1,0 +1,27 @@
+.mySwiper .swiper-slide {
+    display: block;
+}
+
+@media (max-width: 767px) {
+    .mySwiper .swiper-slide {
+        min-height: auto;
+        height: auto;
+    }
+}
+
+.placeholder {
+    width: 100%;
+    padding-bottom: 50%;
+    background-color: #f3f3f3;
+}
+
+.md .placeholder {
+    padding-bottom: 25%;
+}
+
+
+@media (min-width: 2560px) {
+    .advertise {
+        aspect-ratio: 6/2;
+    }
+}

@@ -5,13 +5,14 @@ interface ButtonProps {
     size?: 'small' | 'medium' | 'large';
     color?: 'primary' | 'secondary';
     shape?: 'circle' | 'square';
-    onClick?: (...args: any[]) => void;
+    onClick?: (...args: never[]) => void;
     type?: 'button' | 'submit' | 'reset';
-    // children: React.ReactNode;
+    style?: React.CSSProperties;
+    className?: string; // Add className prop
 }
 
 const Button: React.FC<ButtonProps> = (props) => {
-    const {size, color, shape, type, text, onClick} = props;
+    const {size, color, shape, type, text, onClick, style, className} = props;
     let sizeClass = '';
     let colorClass = '';
     let shapeClass = '';
@@ -47,13 +48,15 @@ const Button: React.FC<ButtonProps> = (props) => {
     }
 
     return (
-        <>
-            <button type={type} onClick={onClick} className={`${colorClass} ${shapeClass}  p-2 ${sizeClass}`}>
-                {text}
-                {/*{children}*/}
-            </button>
-        </>
+        <button
+            style={style}
+            type={type}
+            onClick={onClick}
+            className={`${colorClass} ${shapeClass} ${sizeClass} p-2 ${className}`}
+        >
+            {text}
+        </button>
     )
 }
 
-export default Button
+export default Button;

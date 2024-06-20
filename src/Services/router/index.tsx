@@ -1,0 +1,104 @@
+import {lazy, Suspense} from "react";
+import {createBrowserRouter, RouterProvider} from "react-router-dom";
+import App from "../../App.tsx";
+import ErrorPage from "../../Pages/Error.tsx";
+import Loading from "../../Components/Loading";
+import Favorites from "../../Components/Favorites.tsx";
+import ProtectedRoute from "../../ProtectedRoutes.tsx";
+
+const Home = lazy(() => import('../../Pages/Home'));
+const Products = lazy(() => import('../../Pages/Products'));
+const ProductDetails = lazy(() => import('../../Pages/ProductDetails'));
+const Cart = lazy(() => import('../../Pages/Cart'));
+const Login = lazy(() => import('../../Pages/Authentication/Login'));
+const Register = lazy(() => import('../../Pages/Authentication/Register/Register'));
+const User = lazy(() => import('../../Pages/User'));
+
+const router = createBrowserRouter([
+    {
+        path: '/',
+        element: <App/>,
+        errorElement: <ErrorPage/>,
+        children: [
+            {
+                path: '/login',
+                element: (
+                    <Suspense fallback={<Loading/>}>
+                        <Login/>
+                    </Suspense>
+                ),
+            },
+            {
+                path: '/register',
+                element: (
+                    <Suspense fallback={<Loading/>}>
+                        <Register/>
+                    </Suspense>
+                ),
+            },
+            {
+                path: '/home',
+                element: (
+                    <Suspense fallback={<Loading/>}>
+                        <Home/>
+                    </Suspense>
+                ),
+            },
+            {
+                path: '/product',
+                children: [
+                    {
+                        path: '/product/listing',
+                        element: (
+                            <Suspense fallback={<Loading/>}>
+                                <Products/>
+                            </Suspense>
+                        ),
+                    },
+                    {
+                        path: '/product/details/:id',
+                        element: (
+                            <Suspense fallback={<Loading/>}>
+                                <ProductDetails/>
+                            </Suspense>
+                        ),
+                    },
+                ],
+            },
+            {
+                path: '/cart',
+                element: (
+                    <ProtectedRoute>
+                        <Suspense fallback={<Loading/>}>
+                            <Cart/>
+                        </Suspense>
+                    </ProtectedRoute>
+                ),
+            },
+            {
+                path: '/settings',
+                element: (
+                    <ProtectedRoute>
+                        <Suspense fallback={<Loading/>}>
+                            <User/>
+                        </Suspense>
+                    </ProtectedRoute>
+                ),
+            },
+            {
+                path: '/favorites',
+                element: (
+                    <ProtectedRoute>
+                        <Suspense fallback={<Loading/>}>
+                            <Favorites/>
+                        </Suspense>
+                    </ProtectedRoute>
+                ),
+            },
+        ],
+    },
+]);
+
+export default function Router() {
+    return <RouterProvider router={router}/>
+}

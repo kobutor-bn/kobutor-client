@@ -1,9 +1,9 @@
 import ListingCard from "../../Components/Card/ListingCard.tsx";
 import Dropdown from "../../Components/Dropdown";
 import {useEffect, useRef, useState} from "react";
-import {IDropDown} from "../../Services/Dropdown";
+import {IDropDown} from "../../Services/typings/Dropdown";
 import {useSelector} from "react-redux";
-import {RootState} from "../../store.ts";
+import {RootState} from "../../Services/store";
 
 function Products() {
     const products = useSelector((state: RootState) => state.products.items)
