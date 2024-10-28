@@ -9,10 +9,20 @@ interface ButtonProps {
     type?: 'button' | 'submit' | 'reset';
     style?: React.CSSProperties;
     className?: string; // Add className prop
+    disabled?: boolean;
 }
 
 const Button: React.FC<ButtonProps> = (props) => {
-    const {size, color, shape, type, text, onClick, style, className} = props;
+    const {size,
+        color,
+        shape,
+        disabled,
+        type,
+        text,
+        onClick,
+        style,
+        className} = props;
+
     let sizeClass = '';
     let colorClass = '';
     let shapeClass = '';
@@ -52,7 +62,8 @@ const Button: React.FC<ButtonProps> = (props) => {
             style={style}
             type={type}
             onClick={onClick}
-            className={`${colorClass} ${shapeClass} ${sizeClass} p-2 ${className}`}
+            className={`font-montserrat ${colorClass} ${shapeClass} ${sizeClass} p-2 ${className}`}
+            disabled={disabled}
         >
             {text}
         </button>

@@ -6,8 +6,8 @@ export default {
     ],
     theme: {
         fontFamily: {
-            'sans': ['Montserrat', 'sans-serif'],
-            'serif': ['Josefin Sans', 'serif'],
+            'Nunito': ['"Nunito"', 'sans-serif'],
+            'montserrat': ['"Montserrat"', 'sans-serif'],
         },
         extend: {},
     },

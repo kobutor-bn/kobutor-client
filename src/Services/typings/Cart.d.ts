@@ -3,19 +3,13 @@ declare namespace ICart {
         id: string;
         title: string;
         desc: string;
-        imgUrl: string;
         price: number;
-        colors: Color[];
+        selectedColor: string;
+        colors: { [key: string]: string };
         category: string;
         size: string;
         quantity: number;
         stock: number;
-    }
-
-
-    interface Color {
-        color: string;
-        images: Image[];
     }
 
     interface Items {

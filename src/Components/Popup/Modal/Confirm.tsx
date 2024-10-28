@@ -2,14 +2,14 @@ import React from 'react';
 import Button from "../../Button.tsx";
 import {AppDispatch} from "../../../Services/store";
 import {useDispatch} from "react-redux";
-import {Remove} from "../../../Pages/Cart/Cart.ts";
+import {Remove} from "../../../Services/store/slices/Cart.ts";
 import {toggleModal} from "../../../Services/store/slices/modal.ts";
 
-const Confirm: React.FC<{ item: IProduct.Item }> = ({item: item}) => {
+const Confirm: React.FC<{ item: ICart.Item }> = ({item}) => {
     const dispatch: AppDispatch = useDispatch();
 
     const handleYesClick = () => {
-        dispatch(Remove(item));
+        dispatch(Remove({id: item.id, selectedColor: item.selectedColor}));
         dispatch(toggleModal());
     };
 
@@ -22,8 +22,6 @@ const Confirm: React.FC<{ item: IProduct.Item }> = ({item: item}) => {
                 <Button onClick={handleYesClick} className="w-full" text={'Yes'} color="primary" size={'large'}/>
             </div>
         </div>
-
-
     );
 };
 

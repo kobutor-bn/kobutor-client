@@ -1,9 +1,4 @@
 @media (min-width: 1024px) {
-    .mySwiper .swiper-slide {
-        min-height: 500px;
-        height: 500px;
-    }
-
     .sliderImg {
         object-fit: cover;
         width: 100%;
@@ -14,11 +9,6 @@
 }
 
 @media (min-width: 768px) {
-    .mySwiper .swiper-slide {
-        min-height: 600px;
-        height: 600px;
-    }
-
     .sliderImg {
         object-fit: fill;
         width: 100%;
@@ -27,25 +17,11 @@
 }
 
 @media (max-width: 767px) {
-    .mySwiper .swiper-slide {
-        min-height: 650px;
-        height: 650px;
-    }
-
     .sliderImg {
         object-fit: fill;
         width: 100%;
         flex: 1 0 auto;
     }
-}
-
-.mySwiper .swiper-slide {
-    display: flex;
-    flex-direction: column;
-    align-items: start;
-    padding: 10px;
-    box-sizing: border-box;
-    height: 100%;
 }
 
 .sliderImg {

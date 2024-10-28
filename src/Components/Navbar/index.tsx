@@ -9,17 +9,18 @@ import Dropdown from "../Dropdown";
 import {useDispatch, useSelector} from "react-redux";
 import {AppDispatch, RootState} from "../../Services/store";
 import {useEffect, useRef, useState} from "react";
-import {unsetUser} from "../../Services/store/slices/user.ts";
 import {toggleMenu} from "../../Services/store/slices/menu.ts";
 import {toggleModal} from "../../Services/store/slices/modal.ts";
 import ModalContent from "../Popup/Modal/ModalContent.tsx";
 import Modal from "../Popup/Modal";
 import LoginPrompt from "../Popup/Modal/LoginPrompt.tsx";
 import "./index.css";
+import {logout} from "../../Services/store/slices/auth.ts";
+import {userSelector} from "../../Services/store/slices/user.ts";
 
 function Navbar() {
     const dispatch: AppDispatch = useDispatch();
-    const user = useSelector((state: RootState) => state.user);
+    const user = useSelector(userSelector);
     const isMenuOpen = useSelector((state: RootState) => state.menu.isOpen);
     const cart = useSelector((state: RootState) => state.cart);
     const [isDDOpen, setIsDDOpen] = useState(false);
@@ -30,9 +31,9 @@ function Navbar() {
         setIsDDOpen(!isDDOpen);
     };
 
-    const logout = () => {
+    const accLogout = () => {
         setIsDDOpen(!isDDOpen);
-        dispatch((unsetUser()));
+        dispatch(logout());
         navigate('/login');
     }
 
@@ -56,7 +57,7 @@ function Navbar() {
     const Button = () => (
         <div className="flex gap-3 items-center">
             <PiUserCircleGear className="text-white h-6 w-6 2xl:h-10 2xl:w-10"/>
-            <li className="cursor-pointer capitalize" onClick={toggleDropdown}>{user!.first_name}</li>
+            <li className="cursor-pointer capitalize" onClick={toggleDropdown}>{user!.username}</li>
         </div>
     );
 
@@ -69,15 +70,15 @@ function Navbar() {
                         onClick={toggleDropdown}
                         className="border-b border-gray-300 px-4 py-2 hover:bg-gray-100"
                     >
-                        <p>Wase Zahin</p>
-                        <p>w.zahin@yahoo.com</p>
+                        <p>{user!.name}</p>
+                        <p>{user!.email}</p>
                     </div>
                     <Link to={'/settings'} onClick={toggleDropdown}>
                         <div className="border-b border-gray-300 px-4 py-2 cursor-pointer hover:bg-gray-100">
                             Settings
                         </div>
                     </Link>
-                    <Link to={'/login'} onClick={logout}>
+                    <Link to={'/login'} onClick={accLogout}>
                         <div className="border-b border-gray-300 px-4 py-2 cursor-pointer hover:bg-gray-100">
                             Sign Out
                         </div>
@@ -92,18 +93,18 @@ function Navbar() {
             className={`flex flex-col justify-center items-center w-7 h-5 gap-2 cursor-pointer md:hidden menu-icon ${isMenuOpen ? "clicked" : ""}`}
             onClick={() => dispatch(toggleMenu())}
         >
-            <span className="w-full h-[2px] bg-white menu-line transition-transform duration-500"></span>
-            <span className="w-full h-[2px] bg-white menu-line transition-transform duration-500"></span>
+            <span className="w-full h-[2px] bg-white menu-line"></span>
+            <span className="w-full h-[2px] bg-white menu-line"></span>
         </div>
     );
 
     return (
-        <div className="w-screen">
+        <div className="w-screen ">
             <div className="flex flex-col shadow-xl">
                 <div className="bg-[#252525]">
                     <nav
-                        className="flex z-50 max-w-screen-2xl mx-auto justify-between items-center w-full text-white p-3 2xl:p-9 2xl:text-3xl">
-                        <Link to={"/home"}>LOGO</Link>
+                        className="flex font-montserrat z-50 max-w-screen-2xl mx-auto justify-between items-center w-full text-white p-3 2xl:p-9 2xl:text-3xl">
+                        <Link to={'/'}>LOGO</Link>
                         <ul className="hidden items-center md:flex gap-5">
                             <div className="flex gap-3 items-center">
                                 <CiShop className="text-white h-6 w-6 2xl:h-10 2xl:w-10"/>
@@ -122,14 +123,14 @@ function Navbar() {
                                 </Link>
                             }
                         </ul>
-                        <Menu trigger={<MenuTrigger/>} body={<MenuContent logout={logout}/>}/>
+                        <Menu trigger={<MenuTrigger/>} body={<MenuContent logout={accLogout}/>}/>
                     </nav>
                 </div>
 
                 <div className="bg-white">
                     <nav
                         className="flex items-center w-full max-w-screen-2xl mx-auto justify-between p-3 2xl:p-6 2xl:text-3xl">
-                        <div className="font-bold text-lg 2xl:text-3xl">KOBUTOR</div>
+                        <div className="font-montserrat font-semibold text-lg 2xl:text-3xl">KOBUTOR</div>
                         <ul className="flex items-center md:gap-8 gap-3">
                             <div className="hidden md:flex">
                                 <SearchBar/>
@@ -169,14 +170,15 @@ function Navbar() {
 
             </div>
             {user !== null ?
-                <p className="text-center 2xl:text-3xl py-5 px-1.5 bg-green-100 shadow-lg">
-                    Welcome back, <span className="capitalize">{user.first_name}!</span> Enjoy your exclusive member
+                <p className="font-montserrat text-center 2xl:text-3xl py-5 px-1.5 bg-green-100 shadow-lg">
+                    Welcome back, <span className="capitalize">{user.name}!</span> Enjoy your exclusive member
                     benefits and promotions.
                 </p>
                 :
-                <p className="text-center 2xl:text-3xl py-5 bg-yellow-100 shadow-lg">
+                <p className="font-montserrat text-center 2xl:text-3xl py-5 bg-yellow-100 shadow-lg">
                     Free Delivery, Member Exclusive Products and Promos for all our Members. <br/>
-                    <Link to={'/register'}><span className="underline font-bold">Join us!</span></Link>
+                    <Link to={'/register'}><span
+                        className="underline font-bold">Join us!</span></Link>
                 </p>
             }
         </div>

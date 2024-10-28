@@ -13,8 +13,8 @@ const Review: React.FC<{ isMediumScreen: boolean }> = ({isMediumScreen}) => {
 
     return (
         <div
-            className="py-20 xl:py-24 2xl:py-32 rounded-xl 2xl:max-w-screen-2xl max-w-screen-xl w-full m-auto shadow-lg bg-gray-100 my-8">
-            <p className="font-bold text-2xl lg:text-3xl xl:text-4xl 2xl:text-6xl text-center pb-6 md:pb-9 lg:pb-14 xl:pb-16 2xl:pb-20">Customer
+            className="py-20 xl:py-24 2xl:py-32 rounded-xl 2xl:max-w-screen-2xl max-w-screen-xl w-full m-auto shadow-lg bg-neutral-100 my-8">
+            <p className="font-montserrat font-black text-2xl lg:text-3xl xl:text-4xl 2xl:text-6xl text-center pb-6 md:pb-9 lg:pb-14 xl:pb-16 2xl:pb-20">Customer
                 Reviews</p>
             <div
                 className="flex items-center md:gap-6 max-w-screen-xl 2xl:max-w-screen-2xl mx-auto flex-wrap justify-center">

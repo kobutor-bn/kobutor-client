@@ -1,6 +1,10 @@
-# React + TypeScript + Vite
+# How this CMS works
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Most of the stuff are basic CRUD operations in a form. But the logic and relations with the entities can get complicated. And to keep track of this complication is the primary goal of this documentation.
+
+To understand the relations between the entities we need to create a basic
+flow of the whole application and connect the dots in between. Such as what
+happens when a user opens an account to how the checkout of the order works. 
 
 Currently, two official plugins are available:
 

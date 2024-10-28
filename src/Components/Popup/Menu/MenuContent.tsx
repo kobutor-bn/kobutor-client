@@ -9,6 +9,7 @@ import Button from '../../Button';
 import {MdOutlineFavoriteBorder} from 'react-icons/md';
 import {AppDispatch, RootState} from '../../../Services/store';
 import {closeMenu} from '../../../Services/store/slices/menu';
+import {userSelector} from "../../../Services/store/slices/user.ts";
 
 interface MenuContentProps {
     logout: () => void;
@@ -16,8 +17,8 @@ interface MenuContentProps {
 
 const MenuContent: React.FC<MenuContentProps> = ({logout}) => {
     const dispatch: AppDispatch = useDispatch();
-    const user = useSelector((state: RootState) => state.user);
-    const isMenuOpen = useSelector((state: RootState) => state.menu.isMenuOpen);
+    const user = useSelector(userSelector);
+    const isMenuOpen = useSelector((state: RootState) => state.menu.isOpen);
     const modalWrapperRef = useRef<HTMLDivElement | null>(null);
 
     const handleOverlayClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
@@ -35,10 +36,10 @@ const MenuContent: React.FC<MenuContentProps> = ({logout}) => {
                     ref={modalWrapperRef}
                 >
                     <div className="modal-content drop-shadow-none w-4/5">
-                        <div className="flex flex-col text-black py-12 px-2 pr-4 h-screen w-full">
+                        <div className="flex font-montserrat flex-col text-black py-12 px-2 pr-4 h-screen w-full">
                             {
                                 (user) ? <p className="text-3xl mb-4">
-                                    Hi, <span className="capitalize">{user.first_name}</span>
+                                    Hi, <span className="capitalize">{user.username}</span>
                                 </p> : null
                             }
                             <Link
@@ -46,7 +47,8 @@ const MenuContent: React.FC<MenuContentProps> = ({logout}) => {
                                 className="flex border-b w-full border-gray-300 justify-start py-5 gap-4"
                             >
                                 <CiShop className="h-6 w-6"/>
-                                <p onClick={() => dispatch(closeMenu())} className="text-lg font-semibold">
+                                <p onClick={() => dispatch(closeMenu())}
+                                   className="font-montserrat text-lg font-semibold">
                                     SHOP
                                 </p>
                             </Link>
@@ -74,7 +76,7 @@ const MenuContent: React.FC<MenuContentProps> = ({logout}) => {
                                     Favorites
                                 </p>
                             </Link>
-                            <Link to="/home" className="flex justify-start py-5 gap-4 mb-2">
+                            <Link to="/" className="flex justify-start py-5 gap-4 mb-2">
                                 <p onClick={() => dispatch(closeMenu())} className="text-xl font-thin">
                                     Kobutor
                                 </p>

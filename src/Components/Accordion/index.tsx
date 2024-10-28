@@ -32,11 +32,11 @@ const Accordion = () => {
 
     return (
         <div
-            className='2xl:max-w-screen-2xl max-w-screen-xl w-full m-auto shadow-lg bg-gray-100 py-20 my-32 2xl:my-64 px-6 flex flex-col gap-16 md:px-32 md:p-10 md:pb-28 lg:rounded-3xl'>
+            className='2xl:max-w-screen-2xl max-w-screen-xl w-full m-auto shadow-lg bg-neutral-100 py-20 my-32 2xl:my-64 px-6 flex flex-col gap-16 md:px-32 md:p-10 md:pb-28 lg:rounded-3xl'>
             <p className="flex flex-col gap-3 2xl:gap-8 md:px-20 md:pb-0 2xl:py-20 md:py-10 text-center">
                 <span
-                    className="text-2xl md:text-5xl 2xl:text-8xl font-extrabold">Questions? We've got answers.</span><br/>
-                <span className="text-sm lg:text-xl xl:text-3xl 2xl:text-5xl">Not seeing your specific question, check our help center or contact our support team.</span>
+                    className="font-montserrat text-2xl md:text-5xl 2xl:text-8xl font-black">Questions? We've got answers.</span><br/>
+                <span className="font-Nunito font-light text-sm lg:text-xl xl:text-3xl 2xl:text-5xl">Not seeing your specific question, check our help center or contact our support team.</span>
             </p>
             <div className="wrapperp rounded-3xl bg-gray-50 px-3 py-6 md:px-10 md:py-10">
                 {data.map((item, index) => (
@@ -49,7 +49,7 @@ const Accordion = () => {
                     />
                 ))}
             </div>
-            <p className="text-center 2xl:text-3xl">
+            <p className="font-Nunito font-light text-center 2xl:text-3xl">
                 Our customer support is available Monday to Friday: 5am-5pm BD Time.
                 <br/>Average answer time: less than 2 hours
             </p>

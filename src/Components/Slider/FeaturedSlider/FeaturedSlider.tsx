@@ -12,12 +12,17 @@ import LazyImage from "../../../Services/lazy/lazyImage.tsx";
 import {Link} from "react-router-dom";
 
 const FeaturedSlider: React.FC<ICommon.SliderProps> = (props) => {
+    // const { products, isLoading, error } = useTag(title);
+    //
+    // if (isLoading) return <p>Loading...</p>;
+    // if (error) return <p>Error loading tag data</p>;
+
     const {title} = props;
     const products = useSelector((state: RootState) => state.products.items);
 
     return (
         <div className="md:p-4 pr-0 xl:mb-28 mb-20">
-            <p className="font-bold text-2xl 2xl:text-5xl py-6 px-2">{title}</p>
+            <p className="font-montserrat font-bold text-2xl 2xl:text-5xl py-6 px-2">{title}</p>
             <Swiper
                 slidesPerView={1.25}
                 spaceBetween={25}
@@ -46,14 +51,15 @@ const FeaturedSlider: React.FC<ICommon.SliderProps> = (props) => {
                 {products.map((product, i) => (
                     <SwiperSlide key={i} className="swiperSlide">
                         <Link to={`/product/details/${product.id}`}>
-                            <LazyImage className="sliderImg 2xl:mb-3.5" key={i} src={product.imgUrl} alt={""}/>
+                            <LazyImage className="sliderImg 2xl:mb-3.5" key={i}
+                                       src={product.colors[Object.keys(product.colors)[0]]} alt={product.title}/>
                         </Link>
                         <div className="textContainer 2xl:gap-3">
                             <Link to={`/product/details/${product.id}`}>
-                                <p className="font-bold 2xl:text-5xl">{product.title}</p>
+                                <p className="font-montserrat font-bold 2xl:text-5xl">{product.title}</p>
                             </Link>
-                            <p className="uppercase tracking-wide 2xl:text-3xl text-sm text-indigo-500 font-semibold">{product.category}</p>
-                            <p className="mt-2 2xl:text-xl">USD ${product.price}</p>
+                            <p className="font-montserrat uppercase tracking-wide 2xl:text-3xl text-sm text-indigo-500 font-semibold">{product.category}</p>
+                            <p className="font-Nunito mt-2 2xl:text-xl">USD ${product.price}</p>
                         </div>
                     </SwiperSlide>
                 ))}

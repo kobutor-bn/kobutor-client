@@ -17,7 +17,7 @@ const AccordionItem: React.FC<AccordionItemProps> = (props) => {
         <div
             className="wrapper border-black border-b overflow-hidden max-w-screen-md bg-gray-50 text-sm md:text-lg">
             <button className={`question-container ${isOpen ? 'active' : ''}`} onClick={onClick}>
-                <p className='question-content font-bold 2xl:text-4xl'>{question}</p>
+                <p className='font-Nunito question-content font-semibold 2xl:text-4xl'>{question}</p>
                 <RiArrowDropDownLine className={`arrow ${isOpen ? 'active' : ''}`}/>
             </button>
 
@@ -26,7 +26,7 @@ const AccordionItem: React.FC<AccordionItemProps> = (props) => {
                     ? {height: contentHeight.current?.scrollHeight}
                     : {height: "0px"}
             }>
-                <p className="answer-content font-serif font-light text-xl 2xl:text-4xl">{answer}</p>
+                <p className="font-Nunito font-light answer-content text-xl 2xl:text-4xl">{answer}</p>
             </div>
         </div>
     )

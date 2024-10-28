@@ -5,6 +5,7 @@ import ErrorPage from "../../Pages/Error.tsx";
 import Loading from "../../Components/Loading";
 import Favorites from "../../Components/Favorites.tsx";
 import ProtectedRoute from "../../ProtectedRoutes.tsx";
+import Checkout from "../../Pages/Checkout";
 
 const Home = lazy(() => import('../../Pages/Home'));
 const Products = lazy(() => import('../../Pages/Products'));
@@ -21,6 +22,14 @@ const router = createBrowserRouter([
         errorElement: <ErrorPage/>,
         children: [
             {
+                path: '/',
+                element: (
+                    <Suspense fallback={<Loading/>}>
+                        <Home/>
+                    </Suspense>
+                ),
+            },
+            {
                 path: '/login',
                 element: (
                     <Suspense fallback={<Loading/>}>
@@ -29,26 +38,31 @@ const router = createBrowserRouter([
                 ),
             },
             {
-                path: '/register',
-                element: (
-                    <Suspense fallback={<Loading/>}>
-                        <Register/>
-                    </Suspense>
-                ),
-            },
-            {
-                path: '/home',
-                element: (
-                    <Suspense fallback={<Loading/>}>
-                        <Home/>
-                    </Suspense>
-                ),
+                path: '/account',
+                children: [
+                    {
+                        path: 'login',
+                        element: (
+                            <Suspense fallback={<Loading/>}>
+                                <Login/>
+                            </Suspense>
+                        ),
+                    },
+                    {
+                        path: 'register',
+                        element: (
+                            <Suspense fallback={<Loading/>}>
+                                <Register/>
+                            </Suspense>
+                        ),
+                    },
+                ],
             },
             {
                 path: '/product',
                 children: [
                     {
-                        path: '/product/listing',
+                        path: 'listing',
                         element: (
                             <Suspense fallback={<Loading/>}>
                                 <Products/>
@@ -91,6 +105,16 @@ const router = createBrowserRouter([
                     <ProtectedRoute>
                         <Suspense fallback={<Loading/>}>
                             <Favorites/>
+                        </Suspense>
+                    </ProtectedRoute>
+                ),
+            },
+            {
+                path: '/checkout',
+                element: (
+                    <ProtectedRoute>
+                        <Suspense fallback={<Loading/>}>
+                            <Checkout/>
                         </Suspense>
                     </ProtectedRoute>
                 ),

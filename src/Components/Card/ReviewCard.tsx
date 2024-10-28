@@ -20,11 +20,11 @@ const ReviewCard: React.FC<{ item: IReviewItem }> = ({item}) => {
     return (
         <div className="flex flex-col items-center gap-3 border border-gray-500 p-8 pb-14 mb-14 md:mb-0 md:pb-8">
             <div className="flex flex-col gap-0.5">
-                <p className="text-xl">{item.reviewer}</p>
-                <p className="text-md text-neutral-500">{item.createdAt}</p>
+                <p className="font-montserrat font-semibold text-xl">{item.reviewer}</p>
+                <p className="font-Nunito font-light text-md text-center text-neutral-500">{item.createdAt}</p>
             </div>
             <div className="flex flex-col items-center justify-center gap-2 md:gap-4 lg:gap-5 xl:gap-6 2xl:gap-8">
-                <p className="text-sm">
+                <p className="font-Nunito text-sm">
                     {displayedDescription}{" "}
                     {isDescriptionLong && (
                         <Link to={'/another_page'} className="text-blue-500">

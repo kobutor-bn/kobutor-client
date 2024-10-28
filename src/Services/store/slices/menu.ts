@@ -2,7 +2,7 @@ import {createSlice} from '@reduxjs/toolkit';
 import {IMenu} from '../../typings/Menu';
 
 const initialState: IMenu.State = {
-    isMenuOpen: false,
+    isOpen: false,
 };
 
 export const menuSlice = createSlice({
@@ -10,7 +10,7 @@ export const menuSlice = createSlice({
     initialState,
     reducers: {
         toggleMenu: (state) => {
-            state.isMenuOpen = !state.isMenuOpen;
+            state.isOpen = !state.isOpen;
 
             const menuIcon = document.querySelector('.menu-icon');
             if (menuIcon) {
@@ -18,7 +18,7 @@ export const menuSlice = createSlice({
             }
         },
         closeMenu: (state) => {
-            state.isMenuOpen = false;
+            state.isOpen = false;
             const menuIcon = document.querySelector('.menu-icon');
             if (menuIcon) {
                 menuIcon.classList.remove('clicked');

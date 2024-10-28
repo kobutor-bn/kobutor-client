@@ -1,32 +1,23 @@
-import type {PayloadAction} from '@reduxjs/toolkit'
-import {createSlice} from '@reduxjs/toolkit'
+// authSlice.ts
+import { createSlice } from "@reduxjs/toolkit";
+import {unsetUser} from "./user.ts";
 
-export interface AuthenticateState {
-    email: string;
-    password: string;
-    isLoggedIn?: boolean;
-}
+const initialState: API.TokenResponse = {
+    access_token: localStorage.getItem("access_token"),
+    refresh_token: localStorage.getItem("refresh_token"),
+};
 
-const initialState: AuthenticateState = {
-    email: "",
-    password: "",
-    isLoggedIn: false
-}
-
-export const AuthenticateSlice = createSlice({
-    name: 'auth',
-    initialState,
+const authSlice = createSlice({
+    name: "auth",
+    initialState: {},
     reducers: {
-        login: (state, action: PayloadAction<{ email: string; password: string }>) => {
-            const {email, password} = action.payload;
-            state.email = email;
-            state.password = password;
-            state.isLoggedIn = true;
+        logout: (state) => {
+            localStorage.removeItem("access_token");
+            localStorage.removeItem("refresh_token");
+            unsetUser();
         },
     },
-})
+});
 
-// Action creators are generated for each case reducer function
-export const {login} = AuthenticateSlice.actions
-
-export default AuthenticateSlice.reducer
+export const { logout } = authSlice.actions;
+export default authSlice.reducer;

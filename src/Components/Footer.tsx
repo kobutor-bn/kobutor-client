@@ -2,11 +2,11 @@ import {CiFacebook, CiInstagram, CiLinkedin, CiTwitter, CiYoutube} from "react-i
 
 function Footer() {
     return (
-        <footer className="bg-gray-800 text-white py-8">
+        <footer className="font-Nunito bg-gray-800 text-white py-8">
             <div className="container mx-auto px-4 lg:px-8">
                 <div className="flex flex-wrap gap-5 justify-between lg:grid lg:grid-cols-2 lg:gap-8">
                     <div className="w-full lg:w-full mb-6 lg:mb-0">
-                        <h2 className="text-2xl font-bold mb-4">Kobutor</h2>
+                        <h2 className="font-montserrat text-red-300 text-2xl font-extrabold mb-4">Kobutor</h2>
                         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elit tellus, luctus nec
                             ullamcorper mattis, pulvinar dapibus leo.</p>
                         <div className="flex gap-4 mt-4">
@@ -19,14 +19,14 @@ function Footer() {
                     </div>
 
                     <div className="w-full lg:w-full mb-6 lg:mb-0">
-                        <h2 className="text-xl font-bold mb-4">Contact Us</h2>
+                        <h2 className="font-montserrat text-xl font-bold mb-4">Contact Us</h2>
                         <p>Email: info@kobutor.com</p>
                         <p>Phone: +123-456-7890</p>
                         <p>Address: 123 Street Name, City, Country</p>
                     </div>
 
                     <div className="w-full lg:w-full mb-6 lg:mb-0">
-                        <h2 className="text-xl font-bold mb-4">Information</h2>
+                        <h2 className="font-montserrat text-xl font-bold mb-4">Information</h2>
                         <ul className="space-y-2">
                             <li><a href="#" className="hover:underline">About Us</a></li>
                             <li><a href="#" className="hover:underline">Privacy Policy</a></li>
@@ -36,7 +36,7 @@ function Footer() {
                     </div>
 
                     <div className="w-full lg:w-full mb-6 lg:mb-0">
-                        <h2 className="text-xl font-bold mb-4">Newsletter Signup</h2>
+                        <h2 className="font-montserrat text-xl font-bold mb-4">Newsletter Signup</h2>
                         <form>
                             <input type="email" placeholder="Your email" className="w-full p-2 mb-2 text-black"/>
                             <button

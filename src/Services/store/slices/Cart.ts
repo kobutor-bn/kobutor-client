@@ -10,17 +10,18 @@ export const CartSlice = createSlice({
     name: 'cart',
     initialState,
     reducers: {
-        AddToBag: (state, action: PayloadAction<ICart.Item>) => {
-            const itemExists = state.items.some(item => item.id === action.payload.id);
+        AddToBag: (state, action: PayloadAction<{ item: ICart.Item, selectedColor: string }>) => {
+            const {item, selectedColor} = action.payload;
+            const itemExists = state.items.some(i => i.id === item.id && i.selectedColor === selectedColor);
 
             if (itemExists) {
-                state.items = state.items.map(item =>
-                    item.id === action.payload.id
-                        ? {...item, quantity: item.quantity + 1}
-                        : item
+                state.items = state.items.map(i =>
+                    i.id === item.id && i.selectedColor === selectedColor
+                        ? {...i, quantity: i.quantity + 1}
+                        : i
                 );
             } else {
-                state.items.push({...action.payload, quantity: 1});
+                state.items.push({...item, selectedColor, quantity: 1});
             }
 
             CartSlice.caseReducers.total(state);
@@ -39,8 +40,10 @@ export const CartSlice = createSlice({
             state.price = price;
         },
 
-        Remove: (state, action: PayloadAction<ICart.Item>) => {
-            state.items = state.items.filter(prod => prod.id !== action.payload.id);
+        Remove: (state, action: PayloadAction<{ id: string, selectedColor: string }>) => {
+            state.items = state.items.filter(
+                prod => !(prod.id === action.payload.id && prod.selectedColor === action.payload.selectedColor)
+            );
 
             CartSlice.caseReducers.total(state);
         },

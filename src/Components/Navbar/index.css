@@ -1,6 +1,9 @@
 .menu-line {
     transition: transform 0.5s, background 0.5s;
     z-index: 999;
+    transition-property: transform;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 150ms;
 }
 
 .menu-icon.clicked .menu-line:nth-child(1) {

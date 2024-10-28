@@ -1,45 +1,26 @@
 import DetailsCard from "../../Components/Card/DetailsCard.tsx";
-import {useEffect, useState} from "react";
 import NormalSlider from "../../Components/Slider/NormalSlider/NormalSlider.tsx";
 import {useParams} from "react-router-dom";
-import {RootState} from "../../Services/store";
-import {useSelector} from "react-redux";
+import {useProductDetails} from "../../Services/hooks/products.ts";
+import {CgSpinner} from "react-icons/cg";
 
 function ProductDetails() {
-    const products = useSelector((state: RootState) => state.products.items)
     const {id} = useParams();
+    const { data, isLoading, error } = useProductDetails(id!);
 
-    const [product, setProduct] = useState<IProduct.Item>({
-        category: "",
-        desc: "",
-        id: "",
-        imgUrl: "",
-        price: 0,
-        quantity: 0,
-        colors: [],
-        size: "",
-        stock: 0,
-        title: "",
-    });
-
-    useEffect(() => {
-        products.find(product => {
-            if (product.id === id) {
-                setProduct(product)
-            }
-        });
-    }, []);
+    if (isLoading) return <CgSpinner title="Loading Products" />;
+    if (error) return <p>Error loading tag data</p>;
 
     return (
-        <>
-            <div className="max-w-screen-2xl mx-auto flex flex-col gap-3 p-4 pt-20">
-                <DetailsCard item={product}></DetailsCard>
-                <div className="pt-8">
-                    <NormalSlider title={"Recently Viewed"} slide={undefined}></NormalSlider>
-                </div>
+        <div className="max-w-screen-2xl mx-auto flex flex-col gap-3 p-4 pt-20">
+            <DetailsCard item={data!.item}></DetailsCard>
+            <div className="font-montserrat font-semibold pt-8">
+                <NormalSlider
+                    title={"Recently Viewed"}
+                    slide={undefined}>
+                </NormalSlider>
             </div>
-        </>
-
+        </div>
     )
 }
 

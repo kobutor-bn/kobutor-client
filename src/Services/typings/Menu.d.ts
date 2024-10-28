@@ -2,7 +2,7 @@ import React from "react";
 
 declare namespace IMenu {
     interface State {
-        isMenuOpen: boolean;
+        isOpen: boolean;
     }
 
     interface Props {

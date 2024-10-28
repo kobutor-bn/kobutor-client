@@ -2,7 +2,6 @@ import React, {useEffect, useState} from 'react';
 import {useSelector} from 'react-redux';
 import {RootState} from '../../Services/store';
 import {SwiperSlide} from 'swiper/react';
-import hpone from '../../assets/hpone.jpg';
 import adLarge from '../../assets/ad.jpg';
 import adSmall from '../../assets/adSmall.jpg';
 import Accordion from "../../Components/Accordion";
@@ -12,8 +11,8 @@ import "./index.css";
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/free-mode';
-import LazyImage from "../../Services/lazy/lazyImage.tsx";
 import Review from "../../Components/Review.tsx";
+import Banner from "../../Components/Banner";
 
 const Home: React.FC = () => {
     const products = useSelector((state: RootState) => state.products.items);
@@ -36,9 +35,9 @@ const Home: React.FC = () => {
 
     const NSlider = () => (
         <>
-            {products.map((product, i) => (
+            {products.map((product: IProduct.Item, i: React.Key | null | undefined) => (
                 <SwiperSlide key={i}>
-                    <img src={product.imgUrl} className="sliderImg" alt=""/>
+                    <img src={product.colors[Object.keys(product.colors)[0]]} className="sliderImg" alt=""/>
                     <p className="font-medium pt-5 text-3xl">{product.title}</p>
                 </SwiperSlide>
             ))}
@@ -47,9 +46,9 @@ const Home: React.FC = () => {
 
     const FSlider = () => (
         <>
-            {products.map((product, i) => (
+            {products.map((product: IProduct.Item, i: React.Key | null | undefined) => (
                 <SwiperSlide key={i} className="swiperSlide">
-                    <img src={product.imgUrl} className="sliderImg" alt=""/>
+                    <img src={product.colors[Object.keys(product.colors)[0]]} className="sliderImg" alt=""/>
                     <div className="textContainer">
                         <p className="font-bold">{product.title}</p>
                         <p className="uppercase tracking-wide text-sm text-indigo-500 font-semibold">{product.category}</p>
@@ -71,7 +70,7 @@ const Home: React.FC = () => {
                         alt="Advertisement"
                         onLoad={() => setIsImageLoaded(true)}
                     />
-                    <p className="absolute xl:hidden text-yellow-100 text-2xl md:text-7xl lg:text-8xl font-extrabold text-center left-1/2 transform -translate-x-1/2 bottom-2/3">
+                    <p className="absolute font-bold xl:hidden text-yellow-100 text-2xl md:text-7xl lg:text-8xl text-center left-1/2 transform -translate-x-1/2 bottom-2/3">
                         20% OFF!<br/> Shop Now!
                     </p>
                 </div>
@@ -80,14 +79,21 @@ const Home: React.FC = () => {
                     20-40% OFF!<br/>Shop Now!
                 </div>
             </div>
-            <LazyImage
-                className="md:w-full aspect-square md:aspect-[5/2] w-full mx-auto my-20 md:my-24 lg:my-32 xl:my-36 2xl:my-40"
-                src={hpone}
-                alt="chair"/>
+            <Banner/>
+            {/*<LazyImage*/}
+            {/*    className="md:w-full aspect-square md:aspect-[5/2] w-full mx-auto my-20 md:my-24 lg:my-32 xl:my-36 2xl:my-40"*/}
+            {/*    src={hpone}*/}
+            {/*    alt="chair"/>*/}
             <div className="lg:p-6 pt-16">
-                <NormalSlider title="Trending This Week" slide={<NSlider/>}/>
+                <NormalSlider
+                    title="Best Seller"
+                    id='cs1i4q7q4o9iqv7652q0'
+                    slide={<NSlider/>}/>
                 <Accordion/>
-                <FeaturedSlider title="Featured This Week" slide={<FSlider/>}/>
+                <FeaturedSlider
+                    title="Featured This Week"
+                    id='cs1ict7q4o9j8k43gqcg'
+                    slide={<FSlider/>}/>
                 <Review isMediumScreen={isMediumScreen}/>
             </div>
         </div>

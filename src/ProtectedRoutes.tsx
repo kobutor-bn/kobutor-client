@@ -1,18 +1,19 @@
 import {useNavigate} from "react-router-dom";
-import {useSelector} from "react-redux";
-import {RootState} from "./Services/store";
 import {ReactNode, useEffect} from "react";
+import {useAuth} from "./Services/hooks/auth.ts";
 
 const ProtectedRoute = ({children}: { children: ReactNode }) => {
-    const user = useSelector((state: RootState) => state.user);
     const navigate = useNavigate();
+    const { user, isLoading, error } = useAuth();
 
     useEffect(() => {
         if (!user) {
-            navigate('/login');
-            console.log('yes');
+            navigate('/account/login');
         }
     }, [navigate, user]);
+
+    if (isLoading) return <p>Loading...</p>;
+    if (error) return <p>Error loading tag data</p>;
 
     return children;
 };

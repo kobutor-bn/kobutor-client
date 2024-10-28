@@ -1,43 +1,27 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
+import {RootState} from "../index.ts";
 
-interface UserState {
-    id: string;
-    email: string;
-    first_name: string;
-    last_name: string;
-    favorites: IProduct.Item[];
+type UserState = {
+    user: IUser.Info | null; // <-- nullable property
 }
 
-// const initialState: UserState | null = null;
+const initialState: UserState = {
+    user: null
+};
 
 export const UserSlice = createSlice({
-    name: 'user',
-    initialState: null as UserState | null,
+    name: "user",
+    initialState: initialState,
     reducers: {
-        setUser: (state, action: PayloadAction<UserState>) => {
-            console.log({...(state), ...action.payload});
-
-            if (state !== null) {
-                return {...(state), ...action.payload};
-            }
-            return action.payload;
+        setUser: (state, action: PayloadAction<IUser.Info>) => {
+            state.user = action.payload;
         },
-
-        unsetUser: () => null,
-
-        addFavorite: (state, action: PayloadAction<IProduct.Item>) => {
-            if (state !== null) {
-                (state as UserState).favorites.push(action.payload);
-            }
-        },
-        removeFavorite: (state, action: PayloadAction<string>) => {
-            if (state !== null) {
-                (state as UserState).favorites = (state as UserState).favorites.filter(fav => fav.id !== action.payload);
-            }
-        }
+        unsetUser: () => initialState, // Reset user state on logout
+        addFavorite: (state, action: PayloadAction<IProduct.Item>) => {},
+        removeFavorite: (state, action: PayloadAction<string>) => {},
     },
 });
 
 export const {addFavorite, removeFavorite, setUser, unsetUser} = UserSlice.actions;
-
+export const userSelector = (state: RootState) => state.user.user;
 export default UserSlice.reducer;

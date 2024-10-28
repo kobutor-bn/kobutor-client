@@ -1,9 +1,38 @@
 declare namespace IUser {
-    type Props = {
+    type Info = {
         id: string;
-        email: string;
-        first_name: string;
-        last_name: string;
-        favorites: IProduct.Item[];
+        phone: string;
+        email?: string;
+        name?: string;
+        avatar?: string;
+        roles?: string[];
+        username: string;
+        created_at?: number;
+        permissions?: string[];
+        favorites?: IProduct.Item[];
+    };
+
+    type LoginParams = {
+        account: string;
+        secret: string;
+        source: string;
+    };
+
+    type Query = {
+        username: string;
+    };
+
+    type Create = {
+        roles: string[];
+        username: string;
+        password: string;
+    };
+
+    type Update = {
+        id: number;
+        roles: string[];
+        status: string;
+        username: string;
+        password: string;
     };
 }

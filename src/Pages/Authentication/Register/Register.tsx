@@ -3,7 +3,7 @@ import Button from "../../../Components/Button.tsx";
 function Register() {
     return (
         <div
-            className=" max-w-md w-full m-auto flex flex-col justify-center items-center gap-5 p-6 py-20">
+            className="font-Nunito max-w-md w-full m-auto flex flex-col justify-center items-center gap-5 p-6 py-20">
             <p className="font-bold text-5xl">Kobutor</p>
             <p className="font-semibold text-xl">Peace be upon you!</p>
             <form className="flex flex-col w-full gap-5">
