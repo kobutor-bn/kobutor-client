@@ -1,0 +1,10 @@
+{
+  "plugins": [
+    [
+      "react-intl",
+      {
+        "messagesDir": "./src/i18n/messages"
+      }
+    ]
+  ]
+}

@@ -1,28 +1,22 @@
 import React, {useEffect, useState} from 'react';
-import {useSelector} from 'react-redux';
-import {RootState} from '../../Services/store';
-import {SwiperSlide} from 'swiper/react';
-import adLarge from '../../assets/ad.jpg';
-import adSmall from '../../assets/adSmall.jpg';
 import Accordion from "../../Components/Accordion";
-import NormalSlider from "../../Components/Slider/NormalSlider/NormalSlider";
-import FeaturedSlider from "../../Components/Slider/FeaturedSlider/FeaturedSlider";
 import "./index.css";
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/free-mode';
 import Review from "../../Components/Review.tsx";
-import Banner from "../../Components/Banner";
+import {Banner} from "../../Services/typings/Enums.ts";
+import TagSlider from "../../Components/TagSlider";
 
 const Home: React.FC = () => {
-    const products = useSelector((state: RootState) => state.products.items);
-    const [currentAd, setCurrentAd] = useState(window.innerWidth >= 1280 ? adLarge : adSmall);
+    const [banner, setBanner] =
+        useState(window.innerWidth >= 768 ? Banner.Large : Banner.Small);
     const [isMediumScreen, setIsMediumScreen] = useState(window.innerWidth >= 768);
     const [isImageLoaded, setIsImageLoaded] = useState(false);
 
     useEffect(() => {
         const handleResize = () => {
-            setCurrentAd(window.innerWidth >= 1280 ? adLarge : adSmall);
+            setBanner(window.innerWidth >= 768 ? Banner.Large : Banner.Small);
             setIsMediumScreen(window.innerWidth >= 768);
         };
 
@@ -33,67 +27,27 @@ const Home: React.FC = () => {
         };
     }, []);
 
-    const NSlider = () => (
-        <>
-            {products.map((product: IProduct.Item, i: React.Key | null | undefined) => (
-                <SwiperSlide key={i}>
-                    <img src={product.colors[Object.keys(product.colors)[0]]} className="sliderImg" alt=""/>
-                    <p className="font-medium pt-5 text-3xl">{product.title}</p>
-                </SwiperSlide>
-            ))}
-        </>
-    );
-
-    const FSlider = () => (
-        <>
-            {products.map((product: IProduct.Item, i: React.Key | null | undefined) => (
-                <SwiperSlide key={i} className="swiperSlide">
-                    <img src={product.colors[Object.keys(product.colors)[0]]} className="sliderImg" alt=""/>
-                    <div className="textContainer">
-                        <p className="font-bold">{product.title}</p>
-                        <p className="uppercase tracking-wide text-sm text-indigo-500 font-semibold">{product.category}</p>
-                        <p className="mt-2">USD ${product.price}</p>
-                    </div>
-                </SwiperSlide>
-            ))}
-        </>
-    );
-
     return (
         <div>
             <div className="relative flex justify-center items-center">
                 <div className="relative">
                     <div className={`placeholder ${isImageLoaded ? 'hidden' : 'block'}`}></div>
                     <img
-                        className="advertise md:w-full xl:aspect-[4/2] w-full mx-auto mb-10 px-6 py-8 xl:px-8 xl:py-12 2xl:px-14 mt-6"
-                        src={currentAd}
+                        className="advertise md:w-full xl:aspect-[4/2] w-full mx-auto mb-10   xl:py-12  mt-6"
+                        src={banner}
                         alt="Advertisement"
                         onLoad={() => setIsImageLoaded(true)}
                     />
-                    <p className="absolute font-bold xl:hidden text-yellow-100 text-2xl md:text-7xl lg:text-8xl text-center left-1/2 transform -translate-x-1/2 bottom-2/3">
-                        20% OFF!<br/> Shop Now!
-                    </p>
-                </div>
-                <div
-                    className="hidden absolute inset-0 text-yellow-100 xl:flex justify-center text-center items-center font-extrabold text-xl xl:text-8xl 2xl:text-9xl">
-                    20-40% OFF!<br/>Shop Now!
                 </div>
             </div>
-            <Banner/>
-            {/*<LazyImage*/}
-            {/*    className="md:w-full aspect-square md:aspect-[5/2] w-full mx-auto my-20 md:my-24 lg:my-32 xl:my-36 2xl:my-40"*/}
-            {/*    src={hpone}*/}
-            {/*    alt="chair"/>*/}
             <div className="lg:p-6 pt-16">
-                <NormalSlider
+                <TagSlider
                     title="Best Seller"
-                    id='cs1i4q7q4o9iqv7652q0'
-                    slide={<NSlider/>}/>
+                    id='cs1i4q7q4o9iqv7652q0'/>
                 <Accordion/>
-                <FeaturedSlider
+                <TagSlider
                     title="Featured This Week"
-                    id='cs1ict7q4o9j8k43gqcg'
-                    slide={<FSlider/>}/>
+                    id='cs1ict7q4o9j8k43gqcg'/>
                 <Review isMediumScreen={isMediumScreen}/>
             </div>
         </div>

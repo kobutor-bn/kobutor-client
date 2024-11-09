@@ -1,19 +1,17 @@
 import {createSlice} from '@reduxjs/toolkit';
 import {IModal} from "../../typings/Modal";
 
-const initialState: IModal.State = {
+const initialState = {
     isModalOpen: false,
 };
 
 export const modalSlice = createSlice({
     name: 'modal',
-    initialState,
+    initialState: {},
     reducers: {
         toggleModal: (state) => {
-            state.isModalOpen = !state.isModalOpen;
         },
         closeModal: (state) => {
-            state.isModalOpen = false;
         },
     },
 });

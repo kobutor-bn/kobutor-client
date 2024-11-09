@@ -1,15 +1,14 @@
 import React from 'react';
-import {useSelector} from 'react-redux';
 import {Swiper, SwiperSlide} from 'swiper/react';
 import {FreeMode, Pagination} from "swiper/modules";
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/free-mode';
-import {RootState} from "../Services/store";
 import ReviewCard from "./Card/ReviewCard.tsx";
+import {useReviews} from "../Services/store/hooks/review.ts";
 
 const Review: React.FC<{ isMediumScreen: boolean }> = ({isMediumScreen}) => {
-    const review = useSelector((state: RootState) => state.review);
+    const { reviews } = useReviews();
 
     return (
         <div
@@ -19,9 +18,9 @@ const Review: React.FC<{ isMediumScreen: boolean }> = ({isMediumScreen}) => {
             <div
                 className="flex items-center md:gap-6 max-w-screen-xl 2xl:max-w-screen-2xl mx-auto flex-wrap justify-center">
                 {isMediumScreen ? (
-                    review.map((item, i) => (
+                    reviews.map((item, i) => (
                         <div key={i} className="bg-white rounded-md md:max-w-xs 2xl:max-w-md">
-                            <ReviewCard item={item}/>
+                            <ReviewCard id={item.id}/>
                         </div>
                     ))
                 ) : (
@@ -35,10 +34,10 @@ const Review: React.FC<{ isMediumScreen: boolean }> = ({isMediumScreen}) => {
                         modules={[FreeMode, Pagination]}
                         className="mySwiper"
                     >
-                        {review.map((item, i) => (
+                        {reviews.map((item, i) => (
                             <SwiperSlide key={i}>
                                 <div className="bg-white rounded-sm h-auto">
-                                    <ReviewCard item={item}/>
+                                    <ReviewCard id={item.id}/>
                                 </div>
                             </SwiperSlide>
                         ))}

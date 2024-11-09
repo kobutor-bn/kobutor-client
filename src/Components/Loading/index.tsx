@@ -3,7 +3,7 @@ import "./index.css";
 
 const Loading: React.FC = () => {
     return (
-        <div className="flex items-center justify-center w-full h-screen">
+        <div className="flex items-center justify-center w-full h-fit">
             <p className="text-lg text-center font-semibold loading-dots">
                 Loading
                 <span className="dot">.</span>

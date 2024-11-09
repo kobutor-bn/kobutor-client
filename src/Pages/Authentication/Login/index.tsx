@@ -1,37 +1,28 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useLoginMutation } from "../../../Services/store/apiSlice";
-import { useSelector } from "react-redux";
 import Button from "../../../Components/Button.tsx";
-import {userSelector} from "../../../Services/store/slices/user.ts";
+import { useLogin } from "../../../Services/store/hooks/auth.ts";
 
 function Login() {
     const navigate = useNavigate();
-    const user = useSelector(userSelector);
+    const [error, setError] = useState<string | null>(null);
     const [account, setAccount] = useState("");
     const [secret, setSecret] = useState("");
     const [source] = useState("username");
-    const [login, { isLoading, error }] = useLoginMutation();
+    const { login, isLoading } = useLogin();
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        setError(null);
+
         try {
-            await login({ account, secret, source }).unwrap();
-            navigate("/");
-        } catch (_) {
-            console.error("Failed to log in:", error);
+            await login({ account, secret, source })
+                .unwrap()
+                .then(() => navigate('/'))
+        } catch (error: any) {
+            setError(error?.data?.message || "Login failed");
         }
     };
-
-    useEffect(() => {
-        console.log(user);
-    }, [user]);
-
-    useEffect(() => {
-        if (user) {
-            navigate("/");
-        }
-    }, [user, navigate]);
 
     return (
         <div className="font-Nunito max-w-md w-full m-auto flex flex-col justify-center items-center gap-5 p-6 py-20">
@@ -39,8 +30,9 @@ function Login() {
             <p className="font-semibold text-xl">Peace be upon you!</p>
 
             <form onSubmit={handleSubmit} className="flex flex-col w-full gap-5">
-                {error && <div className="bg-red-200 text-red-600 p-5">An Error Occurred!</div>}
+                {error && <div className="bg-red-200 text-red-600 p-5">{error}</div>}
                 <input
+                    required
                     className="border-[1px] p-3"
                     type="text"
                     name="account"
@@ -50,6 +42,7 @@ function Login() {
                     onChange={(e) => setAccount(e.target.value)}
                 />
                 <input
+                    required
                     className="border-[1px] p-3"
                     type="password"
                     id="password"

@@ -1,10 +1,9 @@
 import {lazy, Suspense} from "react";
 import {createBrowserRouter, RouterProvider} from "react-router-dom";
 import App from "../../App.tsx";
-import ErrorPage from "../../Pages/Error.tsx";
 import Loading from "../../Components/Loading";
 import Favorites from "../../Components/Favorites.tsx";
-import ProtectedRoute from "../../ProtectedRoutes.tsx";
+import ProtectedRoute from "./ProtectedRoutes.tsx";
 import Checkout from "../../Pages/Checkout";
 
 const Home = lazy(() => import('../../Pages/Home'));
@@ -14,26 +13,19 @@ const Cart = lazy(() => import('../../Pages/Cart'));
 const Login = lazy(() => import('../../Pages/Authentication/Login'));
 const Register = lazy(() => import('../../Pages/Authentication/Register/Register'));
 const User = lazy(() => import('../../Pages/User'));
+const Error = lazy(() => import('../../Pages/Error.tsx'));
 
 const router = createBrowserRouter([
     {
         path: '/',
         element: <App/>,
-        errorElement: <ErrorPage/>,
+        errorElement: <Error error={undefined}/>,
         children: [
             {
                 path: '/',
                 element: (
                     <Suspense fallback={<Loading/>}>
                         <Home/>
-                    </Suspense>
-                ),
-            },
-            {
-                path: '/login',
-                element: (
-                    <Suspense fallback={<Loading/>}>
-                        <Login/>
                     </Suspense>
                 ),
             },

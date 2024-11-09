@@ -11,6 +11,5 @@ declare namespace ICommon {
     interface SliderProps {
         id?: string;
         title: string;
-        slide: ReactNode;
     }
 }

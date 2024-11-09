@@ -4,6 +4,7 @@ declare namespace IUser {
         phone: string;
         email?: string;
         name?: string;
+        cart_id?: string;
         avatar?: string;
         roles?: string[];
         username: string;

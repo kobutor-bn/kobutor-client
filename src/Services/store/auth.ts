@@ -1,16 +1,18 @@
 import { fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import {logout} from "./slices/auth.ts";
 
-const baseQuery = fetchBaseQuery({
+export const baseQuery = fetchBaseQuery({
     baseUrl: "/api/",
     prepareHeaders: (headers) => {
         const token = localStorage.getItem("access_token");
+        console.log(token)
         if (token) {
             headers.set("Authorization", `Bearer ${token}`);
         }
 
         return headers;
     },
+
     credentials: "include",
 });
 

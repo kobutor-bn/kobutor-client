@@ -18,14 +18,14 @@ class PagingUtil {
         delete r.pageSize;
         return r;
       }
-    } catch (_) {}
+    } catch (_) { /* empty */ }
 
     return { ...p };
   }
 
   /**
    * 适配 antd pro 列表分页字段
-   * @author rui
+   * @author zahin
    */
   private static formatPaging(data: any) {
     try {

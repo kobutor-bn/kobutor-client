@@ -83,7 +83,7 @@ const MenuContent: React.FC<MenuContentProps> = ({logout}) => {
                             </Link>
                             {
                                 (user) ?
-                                    <Link className="flex flex-col" to={'/login'} onClick={logout}>
+                                    <Link className="flex flex-col" to={'/account/login'} onClick={logout}>
                                         <Button onClick={() => dispatch(closeMenu())} text={'Sign Out'} shape={'circle'}
                                                 color={'primary'}></Button>
                                     </Link> : null
@@ -98,7 +98,7 @@ const MenuContent: React.FC<MenuContentProps> = ({logout}) => {
                                         </p>
                                     </div>
                                     <div className="flex justify-start py-5 gap-4">
-                                        <Link onClick={() => dispatch(closeMenu())} to="/login">
+                                        <Link onClick={() => dispatch(closeMenu())} to="/account/login">
                                             <Button text="Login" type="button" size="small" shape="circle"
                                                     color="primary"/>
                                         </Link>

@@ -5,7 +5,7 @@ import {useDispatch} from "react-redux";
 import {Remove} from "../../../Services/store/slices/Cart.ts";
 import {toggleModal} from "../../../Services/store/slices/modal.ts";
 
-const Confirm: React.FC<{ item: ICart.Item }> = ({item}) => {
+const Confirm: React.FC<{ item: IProduct.Item }> = ({item}) => {
     const dispatch: AppDispatch = useDispatch();
 
     const handleYesClick = () => {

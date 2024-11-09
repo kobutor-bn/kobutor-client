@@ -1,4 +1,3 @@
-// SearchBar.tsx
 import React, {useEffect, useRef} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {AppDispatch, RootState} from '../../Services/store';
@@ -13,29 +12,28 @@ import {
 } from '../../Services/store/slices/searchBar';
 import {IoIosSearch} from 'react-icons/io';
 import {useNavigate} from "react-router-dom";
+import {useLazyProducts} from "../../Services/store/hooks/products.ts";
+import Loading from "../Loading";
+import Error from "../../Pages/Error.tsx";
 
 const SearchBar: React.FC = () => {
     const dispatch: AppDispatch = useDispatch();
     const isFocused = useSelector((state: RootState) => state.search.isFocused);
     const recentSearches = useSelector((state: RootState) => state.search.recentSearches);
     const searchQuery = useSelector((state: RootState) => state.search.searchQuery);
-    const products = useSelector((state: RootState) => state.products.items);
     const overlayRef = useRef<HTMLDivElement | null>(null);
     const inputRef = useRef<HTMLInputElement | null>(null);
     const navigate = useNavigate();
+    const {fetchProducts, products, isFetching, error} = useLazyProducts();
 
-    useEffect(() => {
-        dispatch(loadRecentSearches());
-    }, [dispatch]);
+    // useEffect(() => {
+    //     dispatch(loadRecentSearches());
+    // }, [dispatch]);
 
     const handleOverlayMouseDown = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
         if (overlayRef.current && overlayRef.current.contains(e.target as Node)) {
             dispatch(setIsFocused(false));
         }
-    };
-
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        dispatch(setSearchQuery(e.target.value));
     };
 
     const handleInputBlur = () => {
@@ -67,6 +65,9 @@ const SearchBar: React.FC = () => {
         product.title.toLowerCase().includes(searchQuery.toLowerCase())
     ) : [];
 
+    if (isFetching) return <Loading/>;
+    if (error) return <Error error={ error } />;
+
     return (
         <div className="relative z-10">
             {isFocused && (
@@ -86,7 +87,7 @@ const SearchBar: React.FC = () => {
                     type="text"
                     className={`p-2 border rounded-3xl pl-10 transition-all duration-300 appearance-none w-full bg-transparent border-b border-black focus:border-amber-200 focus:border-b ${isFocused ? 'w-full' : 'w-auto'} 2xl:pl-12`}
                     onFocus={() => dispatch(handleInputFocus())}
-                    onChange={handleInputChange}
+                    onChange={(e) => fetchProducts({ title: e.target.value })}
                     onBlur={handleInputBlur}
                     ref={inputRef} // Assign ref to the input element
                 />

@@ -1,13 +1,13 @@
 /**
- * @author hancens
+ * @author zahin
  */
 declare namespace API {
     type Response<T> = {
         code: number;
         message: string;
-        request: string;
-        items: T[];
-        item: T;
+        request?: string;
+        items?: T[];
+        item?: T;
     };
 
     type TokenResponse = {

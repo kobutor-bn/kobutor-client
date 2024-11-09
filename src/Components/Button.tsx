@@ -1,73 +1,58 @@
-import React from "react";
+import React from 'react';
 
 interface ButtonProps {
     text: string;
     size?: 'small' | 'medium' | 'large';
     color?: 'primary' | 'secondary';
     shape?: 'circle' | 'square';
-    onClick?: (...args: never[]) => void;
+    onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
     type?: 'button' | 'submit' | 'reset';
     style?: React.CSSProperties;
-    className?: string; // Add className prop
+    className?: string;
     disabled?: boolean;
 }
 
-const Button: React.FC<ButtonProps> = (props) => {
-    const {size,
-        color,
-        shape,
-        disabled,
-        type,
-        text,
-        onClick,
-        style,
-        className} = props;
+const Button: React.FC<ButtonProps> = ({
+                                           text,
+                                           size = 'medium',
+                                           color = 'primary',
+                                           shape = 'square',
+                                           onClick,
+                                           type = 'button',
+                                           style,
+                                           className = '',
+                                           disabled = false,
+                                           ...rest
+                                       }) => {
+    const getClassNames = () => {
+        const sizeClass = {
+            small: 'p-1 text-sm',
+            medium: 'p-2 text-lg',
+            large: 'p-3 text-xl',
+        }[size];
 
-    let sizeClass = '';
-    let colorClass = '';
-    let shapeClass = '';
+        const colorClass = {
+            primary: 'bg-black text-white border border-black',
+            secondary: 'bg-white text-black border border-black',
+        }[color];
 
-    switch (size) {
-        case 'small':
-            sizeClass = 'p-1 text-sm';
-            break;
-        case 'medium':
-            sizeClass = 'p-2 text-lg';
-            break;
-        case 'large':
-            sizeClass = 'p-3 text-xl';
-            break;
-    }
+        const shapeClass = shape === 'circle' ? 'rounded-full px-3' : '';
 
-    switch (color) {
-        case 'primary':
-            colorClass = 'bg-black text-white border border-black';
-            break;
-        case 'secondary':
-            colorClass = 'bg-white border border-black';
-            break;
-    }
-
-    switch (shape) {
-        case 'circle':
-            shapeClass = 'rounded-3xl px-3';
-            break;
-        case 'square':
-            shapeClass = '';
-            break;
-    }
+        return `font-montserrat ${sizeClass} ${colorClass} ${shapeClass} ${className}`.trim();
+    };
 
     return (
         <button
-            style={style}
             type={type}
             onClick={onClick}
-            className={`font-montserrat ${colorClass} ${shapeClass} ${sizeClass} p-2 ${className}`}
+            style={style}
+            className={getClassNames()}
             disabled={disabled}
+            {...rest}
         >
             {text}
         </button>
-    )
-}
+    );
+};
 
 export default Button;

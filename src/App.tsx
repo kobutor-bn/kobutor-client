@@ -1,11 +1,14 @@
 import './App.css'
 import Navbar from "./Components/Navbar";
-import Footer from "./Components/Footer.tsx";
+import Footer from "./Components/Footer";
 import {Outlet} from "react-router-dom";
-import {useGetUserQuery} from "./Services/store/apiSlice.ts";
+import {useSelector} from "react-redux";
+import {userSelector} from "./Services/store/slices/user.ts";
 
 function App() {
-    useGetUserQuery();
+    const user = useSelector(userSelector);
+    console.log(user);
+
     return (
         <div>
             <Navbar/>
@@ -16,4 +19,4 @@ function App() {
     )
 }
 
-export default App
+export default App;

@@ -1,29 +1,69 @@
-import {useRouteError} from "react-router-dom";
-import Navbar from "../Components/Navbar";
-import Footer from "../Components/Footer.tsx";
+import React from 'react';
+import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
+import { SerializedError } from "@reduxjs/toolkit";
 
-interface ErrorResponse {
-    statusText?: string;
-    data?: string;
+interface ErrorProps {
+    error: FetchBaseQueryError | SerializedError | undefined;
+    refetch?: () => void;
 }
 
-export default function ErrorPage() {
-    const error = useRouteError() as ErrorResponse;
-    console.error(error);
+const Error: React.FC<ErrorProps> = ({ error, refetch }) => {
+    let message = 'An unexpected error occurred.';
+    let code = '';
+
+    if (error) {
+        if ('status' in error) {
+            switch (error.status) {
+                case "FETCH_ERROR":
+                case "TIMEOUT_ERROR":
+                case "CUSTOM_ERROR":
+                    message = error.error;
+                    code = error.status;
+                    break;
+                case "PARSING_ERROR":
+                    message = error.error;
+                    code = `PARSING_ERROR (${error.originalStatus})`;
+                    break;
+                default:
+                    message = `Error: ${error?.data?.message}`;
+                    code = `Status Code: ${error.status}`;
+            }
+        } else if ('message' in error) {
+            // Handle SerializedError types
+            message = error.message || message;
+            code = error.code || 'UNKNOWN_ERROR';
+        }
+    }
+
+    console.log(error)
 
     return (
-        <>
-            <Navbar/>
-            <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 text-gray-800">
-                <div className="max-w-md w-full bg-white shadow-md rounded-lg p-6">
-                    <h1 className="text-4xl font-bold text-red-600 mb-4">Oops!</h1>
-                    <p className="text-lg mb-4">Sorry, an unexpected error has occurred.</p>
-                    <p className="text-sm text-gray-600">
-                        <i>{error.statusText || error.data || "Unknown error"}</i>
-                    </p>
-                </div>
-            </div>
-            <Footer/>
-        </>
+        <div style={{
+            border: '1px solid #f5c2c7',
+            backgroundColor: '#f8d7da',
+            color: '#842029',
+            padding: '1rem',
+            borderRadius: '5px',
+            maxWidth: '400px',
+            margin: '1rem auto',
+            textAlign: 'center'
+        }}>
+            <h2>{error?.data?.request}</h2>
+            <p><strong>{code}</strong></p>
+            <p>{message}</p>
+            {/*<button onClick={refetch} style={{*/}
+            {/*    marginTop: '1rem',*/}
+            {/*    padding: '0.5rem 1rem',*/}
+            {/*    border: 'none',*/}
+            {/*    backgroundColor: '#d9534f',*/}
+            {/*    color: 'white',*/}
+            {/*    borderRadius: '4px',*/}
+            {/*    cursor: 'pointer',*/}
+            {/*}}>*/}
+            {/*    Retry*/}
+            {/*</button>*/}
+        </div>
     );
-}
+};
+
+export default Error;

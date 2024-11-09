@@ -1,36 +1,27 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import Button from '../Button';
 import {useDispatch, useSelector} from 'react-redux';
 import {AddToBag} from '../../Services/store/slices/Cart';
-import {addFavorite, removeFavorite, userSelector} from '../../Services/store/slices/user';
-import {RootState} from '../../Services/store';
+import {userSelector} from '../../Services/store/slices/user';
 import './CartCard.css';
 import Modal from "../Popup/Modal";
 import {toggleModal} from "../../Services/store/slices/modal";
 import ModalContent from "../Popup/Modal/ModalContent";
 import LoginPrompt from "../Popup/Modal/LoginPrompt";
 import LazyImage from "../../Services/lazy/lazyImage";
+import {useCategoryMap} from "./CategoryMap.tsx";
 
-const DetailsCard: React.FC<{ item: IProduct.Item }> = ({item}) => {
+interface DetailsCardProps {
+    item: IProduct.Item;
+    category: string;
+}
+
+const DetailsCard: React.FC<DetailsCardProps> = (props) => {
+    const { item, category } = props;
+
     const dispatch = useDispatch();
-    const favorites = useSelector((state: RootState) => state.user.user!.favorites);
-    const [isFavorite, setIsFavorite] = useState(favorites?.some(fav => fav.id === item.id));
-    const [selectedColor, setSelectedColor] = useState<string>(Object.keys(item.colors)[0]);
-    const [selectedImage, setSelectedImage] = useState<string>(item.colors[Object.keys(item.colors)[0]]);
+    const { selectedColor, selectedImage, renderAttrByCategory, renderImagesByCategory } = useCategoryMap({ item });
     const user = useSelector(userSelector);
-
-    useEffect(() => {
-        setSelectedImage(item.colors[Object.keys(item.colors)[0]]);
-        setIsFavorite(favorites?.some(fav => fav.id === item.id));
-    }, [favorites, item]);
-
-    const handleFavoriteClick = () => {
-        if (isFavorite) {
-            dispatch(removeFavorite(item.id));
-        } else {
-            dispatch(addFavorite(item));
-        }
-    };
 
     const handleAddToBag = (e: React.MouseEvent) => {
         if (selectedColor) {
@@ -58,19 +49,10 @@ const DetailsCard: React.FC<{ item: IProduct.Item }> = ({item}) => {
         }
     };
 
-    const handleImageClick = (img: string) => {
-        setSelectedImage(img);
-    };
-
-    const handleColorClick = (color: string) => {
-        setSelectedColor(color);
-        setSelectedImage(item.colors[color]);
-    };
-
     return (
         <div className="max-w-screen-2xl mx-auto bg-white border-black overflow-hidden">
             <div className="md:flex">
-                <div className="flex flex-col w-fit md:w-3/5">
+                <div className="flex flex-col w-fit">
                     {selectedImage ? (
                         <LazyImage className="object-fill" src={selectedImage} alt={item.title}/>
                     ) : (
@@ -79,15 +61,7 @@ const DetailsCard: React.FC<{ item: IProduct.Item }> = ({item}) => {
                         </div>
                     )}
                     <div className="flex overflow-x-scroll gap-3 py-5">
-                        {item.colors && Object.keys(item.colors).map((color, i) => (
-                            <LazyImage
-                                src={item.colors[color]}
-                                key={i}
-                                onClick={() => handleImageClick(item.colors[color])}
-                                className={`border border-black h-52 w-52 cursor-pointer hover:brightness-90 ${selectedImage === item.colors[color] ? 'border-red-500 border-4' : ''}`}
-                                alt={item.title}
-                            />
-                        ))}
+                        {renderImagesByCategory(category)}
                     </div>
                 </div>
                 <div className="py-8 md:px-8">
@@ -103,15 +77,7 @@ const DetailsCard: React.FC<{ item: IProduct.Item }> = ({item}) => {
                         <div className="flex flex-col py-4 gap-3">
                             <p className="font-bold">Color: {selectedColor}</p>
                             <div className="flex gap-3">
-                                {item.colors && Object.keys(item.colors).map((color, i) => (
-                                    <div
-                                        key={i}
-                                        className={`h-6 w-6 p-0.5 bg-clip-content cursor-pointer rounded-full border-2 ${selectedColor === color ? 'border-red-600' : 'border-black'}`}
-                                        style={{backgroundColor: color}}
-                                        onClick={() => handleColorClick(color)}
-                                    >
-                                    </div>
-                                ))}
+                                {renderAttrByCategory(category)}
                             </div>
                         </div>
                         <div className="font-montserrat flex flex-col py-4 gap-3">
@@ -128,13 +94,14 @@ const DetailsCard: React.FC<{ item: IProduct.Item }> = ({item}) => {
                             <div className="flex flex-col gap-3 py-4">
                                 <Button onClick={handleAddToBag} text="Add to Bag" size="large" color="primary"/>
                                 <Button
-                                    onClick={handleFavoriteClick}
-                                    text={isFavorite ? '♥ Favorite' : '♡ Favorite'}
+                                    // onClick={handleFavoriteClick}
+                                    // text={isFavorite ? '♥ Favorite' : '♡ Favorite'}
+                                    text='♥ Favorite'
                                     size="large"
                                     color="secondary"
                                     style={{
                                         borderColor: 'gray',
-                                        color: isFavorite ? 'red' : 'black',
+                                        // color: isFavorite ? 'red' : 'black',
                                     }}
                                 />
                             </div>
@@ -148,12 +115,13 @@ const DetailsCard: React.FC<{ item: IProduct.Item }> = ({item}) => {
                                 <Modal
                                     trigger={<Button
                                         onClick={() => dispatch(toggleModal())}
-                                        text={isFavorite ? '♥ Favorite' : '♡ Favorite'}
+                                        // text={isFavorite ? '♥ Favorite' : '♡ Favorite'}
+                                        text="♥ Favorite"
                                         size="large"
                                         color="secondary"
                                         style={{
                                             borderColor: 'gray',
-                                            color: isFavorite ? 'red' : 'black',
+                                            // color: isFavorite ? 'red' : 'black',
                                         }}
                                     />}
                                     body={<ModalContent content={<LoginPrompt/>}/>}

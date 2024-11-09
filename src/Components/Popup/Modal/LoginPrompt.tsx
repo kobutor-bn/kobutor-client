@@ -12,7 +12,7 @@ const LoginPrompt: React.FC = () => {
         <div className="flex flex-col gap-8">
             <p className="text-lg text-center font-bold">Please Login or Register to continue</p>
             <div className="flex gap-3">
-                <Link className="flex-grow w-full" to="/login">
+                <Link className="flex-grow w-full" to="/account/login">
                     <Button onClick={() => dispatch(toggleModal())} text="Login" color="secondary" size="large"
                             className="w-full"/>
                 </Link>
