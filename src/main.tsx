@@ -4,14 +4,16 @@ import './index.css';
 import {Provider} from 'react-redux';
 import {store} from './Services/store';
 import Router from "./Services/router";
-import {LanguageProvider} from "./Services/i18n";
+import {GlobalProvider} from "./GlobalProvider.tsx";
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
-    <LanguageProvider>
-        <Provider store={store}>
-            <React.StrictMode>
+    <Provider store={store}>
+        <React.StrictMode>
+            <GlobalProvider>
+                {/*<NotificationProvider>*/}
                 <Router/>
-            </React.StrictMode>
-        </Provider>
-    </LanguageProvider>
+                {/*</NotificationProvider>*/}
+            </GlobalProvider>
+        </React.StrictMode>
+    </Provider>
 );

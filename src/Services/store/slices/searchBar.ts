@@ -13,46 +13,42 @@ const initialState: SearchState = {
     searchQuery: '',
 };
 
-export const SearchState = createSlice({
+export const searchSlice = createSlice({
     name: 'search',
     initialState,
     reducers: {
-        setIsFocused: (state, action: PayloadAction<boolean>) => {
+        setFocus(state, action: PayloadAction<boolean>) {
             state.isFocused = action.payload;
         },
-        handleOverlayClick: (state) => {
+        closeOverlay(state) {
             state.isFocused = false;
         },
-        handleInputFocus: (state) => {
-            state.isFocused = true;
+        addRecentSearchFromStorage(state) {
+            const storedSearches = localStorage.getItem('recentSearches');
+            state.recentSearches = storedSearches ? JSON.parse(storedSearches) : [];
         },
-        loadRecentSearches: (state) => {
-            const searches = localStorage.getItem('recentSearches');
-            state.recentSearches = searches ? JSON.parse(searches) : [];
-        },
-        saveRecentSearch: (state, action: PayloadAction<IProduct.Item>) => {
-            const search = action.payload;
-            state.recentSearches = [search, ...state.recentSearches.filter(item => item !== search)];
+        addRecentSearch(state, action: PayloadAction<IProduct.Item>) {
+            const newSearch = action.payload;
+            state.recentSearches = [newSearch, ...state.recentSearches.filter(item => item.id !== newSearch.id)];
             localStorage.setItem('recentSearches', JSON.stringify(state.recentSearches));
         },
-        clearRecentSearches: (state) => {
+        clearSearchHistory(state) {
             state.recentSearches = [];
             localStorage.removeItem('recentSearches');
         },
-        setSearchQuery: (state, action: PayloadAction<string>) => {
+        updateQuery(state, action: PayloadAction<string>) {
             state.searchQuery = action.payload;
-        }
+        },
     },
 });
 
 export const {
-    setIsFocused,
-    handleOverlayClick,
-    handleInputFocus,
-    loadRecentSearches,
-    saveRecentSearch,
-    clearRecentSearches,
-    setSearchQuery,
-} = SearchState.actions;
+    setFocus,
+    closeOverlay,
+    addRecentSearchFromStorage,
+    addRecentSearch,
+    clearSearchHistory,
+    updateQuery,
+} = searchSlice.actions;
 
-export default SearchState.reducer;
+export default searchSlice.reducer;

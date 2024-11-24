@@ -16,23 +16,29 @@ declare namespace IReview {
     }
 
     interface Response {
-        review: {
-            id: string;
-            rating: string;
-            title: string;
-            desc: string;
-            created_at: string;
-        },
-        user: {
-            id: string;
-            name: string;
-            username: string;
-        },
-        product: {
-            id: string;
-            title: string;
-            desc: string;
-            images: string[];
-        }
+        review: ResReview,
+        user: ResUser,
+        product: ResProduct,
+    }
+
+    interface ResReview {
+        id: string;
+        rating: string;
+        title: string;
+        desc: string;
+        created_at: string;
+    }
+
+    interface ResUser {
+        id: string;
+        name: string;
+        username: string;
+    }
+
+    interface ResProduct {
+        id: string;
+        title: string;
+        desc: string;
+        images: string[];
     }
 }

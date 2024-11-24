@@ -1,0 +1,59 @@
+/*!* styles.css or in a <style> block *!*/
+
+/*!* Set the container to allow overflow *!*/
+/*.swiper-container {*/
+/*    overflow: visible !important;*/
+/*}*/
+
+/*!* Custom navigation button styling *!*/
+/*:root {*/
+/*    !* Customize the top offset and side offset to position the buttons *!*/
+/*    --swiper-navigation-top-offset: -20px; !* Adjust the offset to move arrows above *!*/
+/*    --swiper-navigation-sides-offset: 10px;*/
+/*}*/
+
+/*!* Custom styles for navigation buttons *!*/
+/*.swiper-button-prev,*/
+/*.swiper-button-next {*/
+/*    position: absolute;*/
+/*    font-size: 2rem;*/
+/*    padding: 46px;*/
+/*    border-radius: 50%;*/
+/*    margin-left: 50px;*/
+/*    background-color: #FA7070;*/
+/*    top: var(--swiper-navigation-top-offset, -20px) !important; !* Force custom position *!*/
+/*    z-index: 100 !important; !* Higher z-index to prevent hiding *!*/
+/*    left: var(--swiper-navigation-sides-offset, 10px) !important;*/
+/*    right: var(--swiper-navigation-sides-offset, 10px) !important;*/
+/*}*/
+
+/*!*:root {*!*/
+/*!*    --swiper-navigation-top-offset: -20px; !* Pushes buttons slightly above *!*!*/
+/*!*    --swiper-navigation-sides-offset: 20px; !* Controls horizontal position *!*!*/
+/*!*    --swiper-navigation-color: #a1a1a1*!*/
+/*!*}*!*/
+
+/*!*.swiper-button-prev,*!*/
+/*!*.swiper-button-next {*!*/
+/*!*    position: absolute;*!*/
+/*!*    top: calc(var(--swiper-navigation-top-offset, 50%) - 30px); !* Move 30px above *!*!*/
+/*!*    width: calc(var(--swiper-navigation-size) / 44 * 27);*!*/
+/*!*    height: var(--swiper-navigation-size);*!*/
+/*!*    margin-top: 0; !* Remove margin-top adjustment *!*!*/
+/*!*    z-index: 10;*!*/
+/*!*    cursor: pointer;*!*/
+/*!*    display: flex;*!*/
+/*!*    align-items: center;*!*/
+/*!*    justify-content: center;*!*/
+/*!*    color: var(--swiper-navigation-color, var(--swiper-theme-color));*!*/
+/*!*    padding: 8px;*!*/
+/*!*    border-radius: 16px;*!*/
+/*!*}*!*/
+
+/*!*.swiper-button-prev,*!*/
+/*!*.swiper-button-next {*!*/
+/*!*    top: var(--swiper-navigation-top-offset, -20px);*!*/
+/*!*    left: var(--swiper-navigation-sides-offset, 20px);*!*/
+/*!*    right: var(--swiper-navigation-sides-offset, 20px);*!*/
+/*!*    z-index: 20; !* Adjust if overlapping issues *!*!*/
+/*!*}*!*/

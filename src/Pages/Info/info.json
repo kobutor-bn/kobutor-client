@@ -1,0 +1,19 @@
+{
+  "aboutUs": {
+    "title": "About Us",
+    "subtitle": "Connecting the world, one message at a time.",
+    "content": [
+      "Kobutor was born out of a vision to create seamless connections across distances, inspired by the humble pigeon – a symbol of trust and reliability.",
+      "We are a dedicated team with a passion for facilitating clear and meaningful communications for individuals, businesses, and communities.",
+      "Our mission is to ensure that every message, no matter how big or small, reaches its destination with care and precision."
+    ]
+  },
+  "contactUs": {
+    "title": "Contact Us",
+    "subtitle": "We’re here to help you connect!",
+    "address": "123 Message Lane, Dhaka, Bangladesh",
+    "phone": "+880-123-456-789",
+    "email": "support@kobutor.com",
+    "hours": "Mon-Fri: 9am - 6pm"
+  }
+}

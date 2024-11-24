@@ -1,12 +1,11 @@
 import React from "react";
 
 declare namespace IMenu {
-    interface State {
+    export interface Item {
+        trigger?: React.ReactElement;
+        logout: () => void;
+        onCloseRequest?: () => void;
         isOpen: boolean;
-    }
-
-    interface Props {
-        trigger: React.ReactNode;
-        body: React.ReactNode;
+        setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
     }
 }

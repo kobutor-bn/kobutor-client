@@ -1,35 +1,41 @@
-import {RiArrowDropDownLine} from 'react-icons/ri'
-import React, {useRef} from 'react'
-import './index.css'
+import React from "react";
+import {FiMinus, FiPlus} from "react-icons/fi"; // Icons for expand/collapse
 
 interface AccordionItemProps {
     question: string;
     answer: string;
     isOpen: boolean;
-    onClick?: () => void;
+    onClick: () => void;
 }
 
-const AccordionItem: React.FC<AccordionItemProps> = (props) => {
-    const {question, answer, isOpen, onClick} = props;
-    const contentHeight = useRef<HTMLDivElement | null>(null);
-
+const AccordionItem: React.FC<AccordionItemProps> = ({question, answer, isOpen, onClick}) => {
     return (
         <div
-            className="wrapper border-black border-b overflow-hidden max-w-screen-md bg-gray-50 text-sm md:text-lg">
-            <button className={`question-container ${isOpen ? 'active' : ''}`} onClick={onClick}>
-                <p className='font-Nunito question-content font-semibold 2xl:text-4xl'>{question}</p>
-                <RiArrowDropDownLine className={`arrow ${isOpen ? 'active' : ''}`}/>
-            </button>
-
-            <div ref={contentHeight} className="answer-container" style={
-                isOpen
-                    ? {height: contentHeight.current?.scrollHeight}
-                    : {height: "0px"}
-            }>
-                <p className="font-Nunito font-light answer-content text-xl 2xl:text-4xl">{answer}</p>
+            className={`transition-all border rounded-xl shadow-md ${
+                isOpen ? "bg-indigo-50 border-indigo-500" : "bg-white border-gray-300"
+            }`}
+        >
+            {/* Question Header */}
+            <div
+                onClick={onClick}
+                className="flex justify-between items-center cursor-pointer p-5 font-montserrat"
+            >
+                <h3 className="text-lg font-medium text-gray-800">{question}</h3>
+                {isOpen ? (
+                    <FiMinus className="text-indigo-500 w-6 h-6"/>
+                ) : (
+                    <FiPlus className="text-gray-500 w-6 h-6"/>
+                )}
             </div>
+
+            {/* Answer Content */}
+            {isOpen && (
+                <div className="px-5 pb-5 text-gray-600 text-sm font-Nunito">
+                    {answer}
+                </div>
+            )}
         </div>
-    )
-}
+    );
+};
 
 export default AccordionItem;

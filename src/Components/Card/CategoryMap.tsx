@@ -1,14 +1,13 @@
-import { useState, useEffect } from "react";
+import {useEffect, useState} from "react";
 import LazyImage from "../../Services/lazy/lazyImage.tsx";
-import {IProduct} from "../../Services/typings/Product";
 
 interface UseCategoryMapProps {
     item: IProduct.Item;
 }
 
-export const useCategoryMap = ({ item }: UseCategoryMapProps) => {
-    const initialSelectedColor = item.colors && item.colors.length > 0 ? item.colors[0].color : null;
+export const useCategoryMap = ({item}: UseCategoryMapProps) => {
     const initialSelectedImage = item.colors && item.colors.length > 0 ? item.colors[0].image : undefined;
+    const initialSelectedColor = item.colors && item.colors.length > 0 ? item.colors[0].color : null;
 
     const [selectedColor, setSelectedColor] = useState<string | null>(initialSelectedColor);
     const [selectedImage, setSelectedImage] = useState<string | undefined>(initialSelectedImage);
@@ -34,7 +33,7 @@ export const useCategoryMap = ({ item }: UseCategoryMapProps) => {
         }
     }
 
-    const handleChange = (color: string, img: string) => {
+    const handleChange = (color: string | null, img: string) => {
         switch (item.category) {
             case 'Electronics':
                 setSelectedImage(img);
@@ -60,7 +59,7 @@ export const useCategoryMap = ({ item }: UseCategoryMapProps) => {
                                 className={`h-5 w-5 p-0.5 mb-2.5 cursor-pointer rounded-full border-2 ${
                                     selectedColor === colorObj.color ? "border-red-600" : "border-black"
                                 }`}
-                                style={{ backgroundColor: colorObj.color }}
+                                style={{backgroundColor: colorObj.color}}
                                 onClick={() => handleChange(colorObj.color, colorObj.image)}
                             ></div>
                         ))}
@@ -101,7 +100,7 @@ export const useCategoryMap = ({ item }: UseCategoryMapProps) => {
             case "Electronics":
                 return item.images.map((image: string, i) => (
                     <LazyImage
-                        className="object-fill border-2 border-black w-full h-64 md:h-80"
+                        className={`object-fill border-2 ${selectedImage === image ? "border-red-400" : "border-black"} w-full h-64 md:h-80`}
                         key={`${item.id}-${i}`}
                         src={image}
                         alt={item.title}
@@ -111,7 +110,7 @@ export const useCategoryMap = ({ item }: UseCategoryMapProps) => {
             case "Women Bags":
                 return item.colors.map((colorObj: IProduct.Colors, i) => (
                     <LazyImage
-                        className="object-fill border-2 border-black w-full h-64 md:h-80"
+                        className={`object-fill border-2 ${selectedColor === colorObj.color ? "border-red-400" : "border-black"} w-full h-64 md:h-80`}
                         key={`${item.id}-${i}`}
                         src={colorObj.image}
                         alt={item.title}

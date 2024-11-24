@@ -1,73 +1,87 @@
-import { useForm, SubmitHandler, FieldValues, DefaultValues } from 'react-hook-form';
-import { ZodSchema } from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { IForm } from "../../Services/typings/Form";
+import {DefaultValues, FieldValues, SubmitHandler, useForm} from 'react-hook-form';
+import {ZodSchema} from 'zod';
+import {zodResolver} from '@hookform/resolvers/zod';
+import {IForm} from '../../Services/typings/Form';
 
 interface FormProps<T extends FieldValues> {
+    title: string;
     fields: IForm.Item<T>[];
     schema: ZodSchema<T>;
     onSubmit: (values: T) => void;
+    defaultValues?: DefaultValues<T> | null; // Allow null as input
 }
 
-const Form = <T extends FieldValues>({ fields, schema, onSubmit }: FormProps<T>) => {
-    const generateDefaultValues = (): DefaultValues<T> => {
-        return fields.reduce((acc, field) => {
-            if (field.value !== undefined) {
-                (acc as any)[field.name] = field.value;
-            }
-            return acc;
-        }, {} as DefaultValues<T>);
-    };
+const Form = <T extends FieldValues>({
+                                         fields,
+                                         schema,
+                                         onSubmit,
+                                         title,
+                                         defaultValues,
+                                     }: FormProps<T>) => {
+    // Preprocess `defaultValues`: Replace null or undefined with sensible defaults
+    const sanitizedDefaults: DefaultValues<T> | undefined = defaultValues!
+        ? (Object.fromEntries(
+            Object.entries(defaultValues).map(([key, value]) => [key, value ?? '']) // Replace null/undefined with ''
+        ) as DefaultValues<T>)
+        : undefined;
 
-    const { register, handleSubmit, formState: { errors }, getValues } = useForm<T>({
+    const {
+        register,
+        handleSubmit,
+        formState: {errors},
+        getValues,
+    } = useForm<T>({
         resolver: zodResolver(schema),
-        defaultValues: generateDefaultValues(),
+        defaultValues: sanitizedDefaults, // Use sanitized defaults
     });
 
     const onSubmitHandler: SubmitHandler<T> = (data) => {
+        if (Object.keys(errors).length > 0) {
+            console.error('Validation errors:', errors);
+            return;
+        }
+        console.log('Form submitted with data:', data);
         onSubmit(data);
     };
 
     return (
-        <form onSubmit={handleSubmit(onSubmitHandler)} className="p-4 max-w-md mx-auto bg-gray-100 rounded-lg shadow-lg">
-            <h2 className="text-2xl font-bold mb-4">Form</h2>
-            {fields.map(field => (
-                <div className="mb-4" key={field.name as string}>
-                    <label htmlFor={field.name} className="block text-gray-700">{field.placeholder}</label>
-                    <input
-                        type={field.type}
-                        {...register(field.name, {
-                            setValueAs: field.type === 'number' ? (v) => v === '' ? undefined : parseFloat(v) : undefined,
-                        })}
-                        placeholder={field.placeholder}
-                        className="w-full p-2 border border-gray-300 rounded"
-                        defaultValue={field.value} // Ensure defaultValue is set here as well
-                    />
-                    {errors[field.name] && (
-                        <p className="text-red-500 text-sm">
-                            {(errors[field.name]?.message as string) || 'Invalid input'}
-                        </p>
-                    )}
-                </div>
-            ))}
-            <button
-                type="submit"
-                className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 transition duration-200"
-            >
-                Submit
-            </button>
-
-            <button
-                type="button"
-                onClick={() => {
-                    const values = getValues();
-                    console.log(values);
-                }}
-                className="mt-4 w-full bg-gray-500 text-white py-2 rounded hover:bg-gray-600 transition duration-200"
-            >
-                Log Current Values
-            </button>
-        </form>
+        <div className="max-w-md w-full mx-auto flex flex-col justify-center items-center gap-5 p-6">
+            <h2 className="font-bold text-3xl text-center">{title}</h2>
+            <form onSubmit={handleSubmit(onSubmitHandler)} className="flex flex-col w-full gap-5">
+                {fields.map((field) => (
+                    <div key={field.name as string} className={`flex gap-5`}>
+                        <label htmlFor={field.name} className="hidden">
+                            {field.placeholder}
+                        </label>
+                        <input
+                            type={field.type}
+                            {...register(field.name)}
+                            placeholder={field.placeholder}
+                            className="border-[1px] p-3 w-full"
+                        />
+                        {errors[field.name] && (
+                            <p className="text-red-500 text-sm">
+                                {(errors[field.name]?.message as string) || 'Invalid input'}
+                            </p>
+                        )}
+                    </div>
+                ))}
+                <button
+                    className="mt-4 w-full bg-black text-white py-2 rounded transition duration-200"
+                    color="primary"
+                    type="submit"
+                >
+                    Submit
+                </button>
+                <button
+                    type="button"
+                    onClick={() => console.log('Current values:', getValues())}
+                    className="mt-4 w-full bg-gray-500 text-white py-2 rounded hover:bg-gray-600 transition duration-200"
+                >
+                    Log Current Values
+                </button>
+            </form>
+        </div>
     );
 };
 

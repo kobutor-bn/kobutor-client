@@ -1,7 +1,7 @@
 import {useGetTaggedProductsQuery, useGetTagQuery, useGetTagsQuery} from "../apiSlice.ts";
 
 export const useTaggedProducts = (title: string) => {
-    const { data, error, isLoading }
+    const {data, error, isLoading}
         = useGetTaggedProductsQuery(title || '', {
         skip: !title,
     });
@@ -15,8 +15,8 @@ export const useTaggedProducts = (title: string) => {
     };
 };
 
-export const useTags = (params) => {
-    const { data, error, isLoading } = useGetTagsQuery(params);
+export const useTags = (params: any) => {
+    const {data, error, isLoading} = useGetTagsQuery(params);
     const tags = data?.items;
 
     return {
@@ -27,7 +27,7 @@ export const useTags = (params) => {
 }
 
 export const useTag = (id: string) => {
-    const { data, error, isLoading } = useGetTagQuery(id);
+    const {data, error, isLoading} = useGetTagQuery(id);
     const tag = data;
 
     return {

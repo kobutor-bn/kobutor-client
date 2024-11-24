@@ -4,7 +4,12 @@ import App from "../../App.tsx";
 import Loading from "../../Components/Loading";
 import Favorites from "../../Components/Favorites.tsx";
 import ProtectedRoute from "./ProtectedRoutes.tsx";
-import Checkout from "../../Pages/Checkout";
+import ReviewDetails from "../../Components/Review/Details.tsx";
+import OrderSummary from "../../Pages/Order/OrderSummary.tsx";
+import OrderStatus from "../../Pages/Order/OrderStatus.tsx";
+import OrderHistory from "../../Pages/Order/OrderHistory.tsx";
+import OrderDetails from "../../Pages/Order/OrderDetails.tsx";
+// import Checkout from "../../Pages/Checkout";
 
 const Home = lazy(() => import('../../Pages/Home'));
 const Products = lazy(() => import('../../Pages/Products'));
@@ -102,15 +107,75 @@ const router = createBrowserRouter([
                 ),
             },
             {
-                path: '/checkout',
-                element: (
-                    <ProtectedRoute>
-                        <Suspense fallback={<Loading/>}>
-                            <Checkout/>
-                        </Suspense>
-                    </ProtectedRoute>
-                ),
+                path: '/review',
+                children: [
+                    {
+                        path: '/review/details/:id',
+                        element: (
+                            <ProtectedRoute>
+                                <Suspense fallback={<Loading/>}>
+                                    <ReviewDetails/>
+                                </Suspense>
+                            </ProtectedRoute>
+                        ),
+                    }
+                ],
             },
+            {
+                path: '/order',
+                children: [
+                    {
+                        path: 'summary',
+                        element: (
+                            <ProtectedRoute>
+                                <Suspense fallback={<Loading/>}>
+                                    <OrderSummary/>
+                                </Suspense>
+                            </ProtectedRoute>
+                        ),
+                    },
+                    {
+                        path: 'status',
+                        element: (
+                            <ProtectedRoute>
+                                <Suspense fallback={<Loading/>}>
+                                    <OrderStatus/>
+                                </Suspense>
+                            </ProtectedRoute>
+                        ),
+                    },
+                    {
+                        path: 'history',
+                        element: (
+                            <ProtectedRoute>
+                                <Suspense fallback={<Loading/>}>
+                                    <OrderHistory/>
+                                </Suspense>
+                            </ProtectedRoute>
+                        ),
+                    },
+                    {
+                        path: ':id',
+                        element: (
+                            <ProtectedRoute>
+                                <Suspense fallback={<Loading/>}>
+                                    <OrderDetails/>
+                                </Suspense>
+                            </ProtectedRoute>
+                        ),
+                    },
+                ],
+            },
+            // {
+            //     path: '/checkout',
+            //     element: (
+            //         <ProtectedRoute>
+            //             <Suspense fallback={<Loading/>}>
+            //                 <Checkout/>
+            //             </Suspense>
+            //         </ProtectedRoute>
+            //     ),
+            // },
         ],
     },
 ]);

@@ -1,7 +1,7 @@
 declare namespace IUser {
     type Info = {
         id: string;
-        phone: string;
+        phone?: string;
         email?: string;
         name?: string;
         cart_id?: string;
@@ -13,10 +13,24 @@ declare namespace IUser {
         favorites?: IProduct.Item[];
     };
 
+    type Address = {
+        id: string;
+        user_id: string;
+        detail: string;
+        city: string;
+        postal_code: string;
+    }
+
     type LoginParams = {
         account: string;
         secret: string;
         source: string;
+    };
+
+    type Auth = {
+        user: IUser.Info | null;
+        isAuthenticated: boolean;
+        isUserLoading: boolean;
     };
 
     type Query = {
@@ -30,10 +44,10 @@ declare namespace IUser {
     };
 
     type Update = {
-        id: number;
-        roles: string[];
-        status: string;
-        username: string;
-        password: string;
+        id: string;
+        phone?: string;
+        email?: string;
+        username?: string;
+        password?: string;
     };
 }

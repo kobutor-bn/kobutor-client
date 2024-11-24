@@ -1,129 +1,152 @@
-import React, {useEffect, useRef} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {AppDispatch, RootState} from '../../Services/store';
+import {RootState} from '../../Services/store';
 import {
-    clearRecentSearches,
-    handleInputFocus,
-    handleOverlayClick,
-    loadRecentSearches,
-    saveRecentSearch,
-    setIsFocused,
-    setSearchQuery
+    addRecentSearch,
+    addRecentSearchFromStorage,
+    clearSearchHistory,
+    setFocus,
+    updateQuery,
 } from '../../Services/store/slices/searchBar';
 import {IoIosSearch} from 'react-icons/io';
-import {useNavigate} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {useLazyProducts} from "../../Services/store/hooks/products.ts";
-import Loading from "../Loading";
 import Error from "../../Pages/Error.tsx";
+import Loading from "../../Components/Loading";
 
 const SearchBar: React.FC = () => {
-    const dispatch: AppDispatch = useDispatch();
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const overlayRef = useRef<HTMLDivElement | null>(null);
+    const inputRef = useRef<HTMLInputElement | null>(null);
+
+    // Synchronize search results with animation
+    const [showResults, setShowResults] = useState(false);
+    const animationDuration = 300; // match the duration of the CSS transition
+
+    // Redux state
     const isFocused = useSelector((state: RootState) => state.search.isFocused);
     const recentSearches = useSelector((state: RootState) => state.search.recentSearches);
     const searchQuery = useSelector((state: RootState) => state.search.searchQuery);
-    const overlayRef = useRef<HTMLDivElement | null>(null);
-    const inputRef = useRef<HTMLInputElement | null>(null);
-    const navigate = useNavigate();
     const {fetchProducts, products, isFetching, error} = useLazyProducts();
 
-    // useEffect(() => {
-    //     dispatch(loadRecentSearches());
-    // }, [dispatch]);
+    useEffect(() => {
+        dispatch(addRecentSearchFromStorage());
+    }, [dispatch]);
 
-    const handleOverlayMouseDown = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-        if (overlayRef.current && overlayRef.current.contains(e.target as Node)) {
-            dispatch(setIsFocused(false));
+    useEffect(() => {
+        if (isFocused) {
+            setTimeout(() => setShowResults(true), animationDuration);
+        } else {
+            setShowResults(false);
+        }
+    }, [isFocused]);
+
+    const closeOverlayOnOutsideClick = (e: React.MouseEvent<HTMLDivElement>) => {
+        if (overlayRef.current && !overlayRef.current.contains(e.target as Node)) {
+            dispatch(setFocus(false));
         }
     };
 
-    const handleInputBlur = () => {
-        // Save the search query only if it matches a product title
-        const matchedProduct = products.find(product =>
-            product.title.toLowerCase() === searchQuery.toLowerCase()
+    const saveIfExactMatch = () => {
+        const exactMatch = products.find(
+            product => product.title.toLowerCase() === searchQuery.toLowerCase()
         );
-        if (matchedProduct) {
-            dispatch(saveRecentSearch(matchedProduct));
-        }
+        if (exactMatch) dispatch(addRecentSearch(exactMatch));
     };
 
-    const handleProductClick = (product: IProduct.Item) => {
-        dispatch(setSearchQuery(product.title));
-        dispatch(saveRecentSearch(product));
-        dispatch(setSearchQuery(''));
-        dispatch(setIsFocused(false));
-        if (inputRef.current) {
-            inputRef.current.value = '';
-        }
+    const handleProductSelect = (product: IProduct.Item) => {
+        dispatch(updateQuery(''));
+        dispatch(setFocus(false));
+        dispatch(addRecentSearch(product));
+        inputRef.current && (inputRef.current.value = '');
         navigate(`/product/details/${product.id}`);
     };
 
-    const handleClearSearches = () => {
-        dispatch(clearRecentSearches());
-    };
+    const filteredProducts = searchQuery
+        ? products.filter(product => product.title.toLowerCase().includes(searchQuery.toLowerCase()))
+        : [];
 
-    const filteredProducts = searchQuery ? products.filter(product =>
-        product.title.toLowerCase().includes(searchQuery.toLowerCase())
-    ) : [];
-
-    if (isFetching) return <Loading/>;
-    if (error) return <Error error={ error } />;
+    if (error) return <Error error={error}/>;
 
     return (
         <div className="relative z-10">
             {isFocused && (
                 <div
-                    className="whitebg fixed inset-0 bg-white transition-all duration-300 h-1/2"
-                    ref={overlayRef}
-                />
+                    className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-start pt-10"
+                    onClick={closeOverlayOnOutsideClick}
+                >
+                    <div
+                        ref={overlayRef}
+                        className="relative w-3/4 bg-white rounded-lg shadow-lg p-4 max-h-[80vh] overflow-y-auto"
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        {showResults && (
+                            <>
+                                <p className="p-3 font-bold text-gray-600">
+                                    {searchQuery ? 'Search Results' : 'Recent Searches'}
+                                </p>
+
+                                {isFetching ? (
+                                    <Loading/>
+                                ) : (
+                                    <div className="px-3 pb-3">
+                                        <div className="flex flex-col gap-2 font-medium">
+                                            {(searchQuery ? filteredProducts : recentSearches).map((item) => (
+                                                <div
+                                                    key={item.id}
+                                                    onClick={() => handleProductSelect(item)}
+                                                    className="bg-[#FFB347] hover:bg-gray-200 rounded-lg px-4 py-2 cursor-pointer transition-colors"
+                                                >
+                                                    {item.title}
+                                                </div>
+                                            ))}
+                                        </div>
+
+                                        {filteredProducts.length > 0 && (
+                                            <Link to="/product/listing">
+                                                <button
+                                                    className="mt-4 p-2 w-full text-center bg-gray-200 hover:bg-gray-300 rounded-lg text-blue-600 font-semibold transition-colors"
+                                                >
+                                                    Show All Results
+                                                </button>
+                                            </Link>
+                                        )}
+
+                                        {!searchQuery && recentSearches.length > 0 && (
+                                            <button
+                                                className="mt-4 p-2 text-center text-red-600 underline font-medium"
+                                                onClick={() => dispatch(clearSearchHistory())}
+                                            >
+                                                Clear Recent Searches
+                                            </button>
+                                        )}
+                                    </div>
+                                )}
+                            </>
+                        )}
+                    </div>
+                </div>
             )}
 
             <div
-                className={`transform transition-all duration-300 ${isFocused ? 'fixed top-4 left-1/2 -translate-x-1/2 w-3/4' : 'relative w-full'}`}
-            >
-                <IoIosSearch
-                    className="absolute bottom-2 left-2 text-black h-6 w-6 2xl:bottom-3 2xl:left-3 2xl:h-7 2xl:w-7"/>
+                className={`transition-all duration-${animationDuration} ${isFocused ? 'fixed top-4 left-1/2 w-3/4 transform -translate-x-1/2' : 'relative w-full'}`}>
+                <IoIosSearch className="absolute left-2 bottom-2 text-black h-6 w-6"/>
+
                 <input
-                    placeholder="Search"
                     type="text"
-                    className={`p-2 border rounded-3xl pl-10 transition-all duration-300 appearance-none w-full bg-transparent border-b border-black focus:border-amber-200 focus:border-b ${isFocused ? 'w-full' : 'w-auto'} 2xl:pl-12`}
-                    onFocus={() => dispatch(handleInputFocus())}
-                    onChange={(e) => fetchProducts({ title: e.target.value })}
-                    onBlur={handleInputBlur}
-                    ref={inputRef} // Assign ref to the input element
+                    placeholder="Search"
+                    ref={inputRef}
+                    className={`p-2 pl-10 border rounded-full transition-all duration-${animationDuration} ${isFocused ? 'w-full border-b border-amber-200' : 'border-black'} `}
+                    onFocus={() => dispatch(setFocus(true))}
+                    onChange={(e) => {
+                        const query = e.target.value;
+                        dispatch(updateQuery(query));
+                        fetchProducts({title: query});
+                    }}
+                    onBlur={saveIfExactMatch}
                 />
-                {isFocused && (
-                    <div className="absolute">
-                        <p className="p-3 font-bold ">{searchQuery ? 'Search Results' : 'Recent Searches'}</p>
-                        <div className={`flex ${searchQuery ? 'flex-col' : ''} gap-5 font-medium px-3`}>
-                            {searchQuery ? filteredProducts.map((item) => (
-                                <div key={item.id} onClick={() => handleProductClick(item)}>
-                                    {item.title}
-                                </div>
-                            )) : recentSearches.map((search, index) => (
-                                <div className="bg-neutral-300 px-3 py-0.5 rounded-xl" key={index}
-                                     onClick={() => handleProductClick(search)}>
-                                    {search.title}
-                                </div>
-                            ))}
-                        </div>
-                        {!searchQuery && recentSearches.length > 0 && (
-                            <button
-                                className="mt-6 ml-2 p-2 underline text-blue-500"
-                                onClick={handleClearSearches}
-                            >
-                                Clear &times;
-                            </button>
-                        )}
-                    </div>
-                )}
             </div>
-            {isFocused && (
-                <div
-                    className="fixed inset-x-0 bottom-0 bg-gray-900 bg-opacity-50 h-1/2"
-                    onMouseDown={handleOverlayMouseDown}
-                    onClick={() => dispatch(handleOverlayClick())}
-                />
-            )}
         </div>
     );
 };

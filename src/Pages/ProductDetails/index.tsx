@@ -5,19 +5,20 @@ import {useProductDetails} from "../../Services/store/hooks/products.ts";
 import Modal from "../../Components/Popup/Modal";
 import Button from "../../Components/Button.tsx";
 import Form from "../../Components/Form/index.tsx";
-import {reviewFormConfig, reviewSchema} from "../../Components/Form/config.ts";
+import {reviewFormConfig} from "../../Components/Form/config.ts";
 import {useAddReview} from "../../Services/store/hooks/review.ts";
 import {useSelector} from "react-redux";
-import {userSelector} from "../../Services/store/slices/user.ts";
 import {z} from "zod";
 import Loading from "../../Components/Loading";
 import Error from "../Error.tsx";
+import {reviewSchema} from "../../Components/Form/schema.ts";
+import {userSelector} from "../../Services/store/slices/auth.ts";
 import {useState} from "react";
 
 function ProductDetails() {
     const {id} = useParams();
+    const {product, isLoading, error} = useProductDetails(id!);
     const [isOpen, setIsOpen] = useState<boolean>(false);
-    const { product, isLoading, error } = useProductDetails(id!);
     const {addReview} = useAddReview();
     const user = useSelector(userSelector);
 
@@ -30,12 +31,15 @@ function ProductDetails() {
                     await addReview({
                         ...values,
                         user_id: user.id,
-                        product_id: id })
+                        product_id: id
+                    })
                         .unwrap()
-                        .then(() => setIsOpen(!isOpen));
+                        .then(() => {
+                            setIsOpen(!isOpen);
+                        })
                     console.log('Review submitted successfully');
                 } else {
-                    return <Error error={error} />;
+                    return <Error error={error}/>;
                 }
             } catch (error) {
                 console.error('Failed to submit review:', error);
@@ -45,7 +49,7 @@ function ProductDetails() {
     };
 
     if (isLoading) return <Loading/>;
-    if (error) return <Error error={error} />;
+    if (error) return <Error error={error}/>;
 
     return (
         <div className="max-w-screen-2xl mx-auto flex flex-col gap-3 p-4 pt-20">
@@ -54,19 +58,21 @@ function ProductDetails() {
                 category={product.category}
             />
             <Modal
+                isOpen={isOpen}
+                setIsOpen={setIsOpen}
                 trigger={<Button
                     onClick={() => {
                         console.log("ll")
                     }}
                     text="Add Review"
                 />}
-                body={<Form {...configWithSubmit} />}
+                body={<Form title="Add Review" {...configWithSubmit} />}
             />
             <div className="font-montserrat font-semibold pt-8">
                 <TagSlider title="Recently Viewed"/>
             </div>
         </div>
-    ) 
+    )
 }
 
 export default ProductDetails;

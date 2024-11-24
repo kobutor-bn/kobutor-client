@@ -1,7 +1,7 @@
 import {useGetProductDetailsQuery, useGetProductsQuery, useLazyGetProductsQuery} from "../apiSlice.ts";
 
 export const useProducts = () => {
-    const {data, isLoading, error, refetch }
+    const {data, isLoading, error}
         = useGetProductsQuery('');
 
     const products = data ? data.items : [];
@@ -10,12 +10,11 @@ export const useProducts = () => {
         products,
         isLoading,
         error,
-        refetch,
     };
 };
 
 export const useLazyProducts = () => {
-    const [fetchProducts, { data, error, isFetching, isError }]
+    const [fetchProducts, {data, error, isFetching, isError}]
         = useLazyGetProductsQuery();
 
     const products = data ? data.items : [];
@@ -29,7 +28,7 @@ export const useLazyProducts = () => {
 };
 
 export const useProductDetails = (id: string) => {
-    const { data, error, isLoading }
+    const {data, error, isLoading}
         = useGetProductDetailsQuery(id);
 
     const product: IProduct.Item = data!;

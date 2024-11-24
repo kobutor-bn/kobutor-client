@@ -1,13 +1,13 @@
 import React from 'react';
-import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
-import { SerializedError } from "@reduxjs/toolkit";
+import {FetchBaseQueryError} from "@reduxjs/toolkit/query";
+import {SerializedError} from "@reduxjs/toolkit";
 
 interface ErrorProps {
     error: FetchBaseQueryError | SerializedError | undefined;
     refetch?: () => void;
 }
 
-const Error: React.FC<ErrorProps> = ({ error, refetch }) => {
+const Error: React.FC<ErrorProps> = ({error}) => {
     let message = 'An unexpected error occurred.';
     let code = '';
 

@@ -1,7 +1,7 @@
-import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, {useState} from "react";
+import {Link, useNavigate} from "react-router-dom";
 import Button from "../../../Components/Button.tsx";
-import { useLogin } from "../../../Services/store/hooks/auth.ts";
+import {useLogin} from "../../../Services/store/hooks/auth.ts";
 
 function Login() {
     const navigate = useNavigate();
@@ -9,14 +9,14 @@ function Login() {
     const [account, setAccount] = useState("");
     const [secret, setSecret] = useState("");
     const [source] = useState("username");
-    const { login, isLoading } = useLogin();
+    const {login, isLoading} = useLogin();
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setError(null);
 
         try {
-            await login({ account, secret, source })
+            await login({account, secret, source})
                 .unwrap()
                 .then(() => navigate('/'))
         } catch (error: any) {
@@ -59,8 +59,8 @@ function Login() {
                 <div className="h-[1px] ml-2 bg-gray-400 w-full"></div>
             </div>
             <div className="flex flex-col gap-3 w-full">
-                <Button text="Sign in with Google" size="large" color="primary" />
-                <Button text="Sign in with Facebook" size="large" color="secondary" />
+                <Button text="Sign in with Google" size="large" color="primary"/>
+                <Button text="Sign in with Facebook" size="large" color="secondary"/>
             </div>
             <div>
                 Don't have an account yet?

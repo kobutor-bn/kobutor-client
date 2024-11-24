@@ -1,5 +1,3 @@
-import {ReactNode} from "react";
-
 declare namespace ICommon {
     type Image = {
         id: number;

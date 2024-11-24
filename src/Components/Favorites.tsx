@@ -1,10 +1,11 @@
 import React from 'react';
-import ListingCard from "./Card/ListingCard.tsx";
-import {useSelector} from "react-redux";
-import {userSelector} from "../Services/store/slices/user.ts";
+import {useFavorites} from "../Services/store/hooks/favorites.ts";
+import Loading from "./Loading";
+import Error from "../Pages/Error.tsx";
+import FavListingCard from "./Card/FavListingCard.tsx";
 
 const Favorites: React.FC = () => {
-    const user = useSelector(userSelector);
+    const {products, isLoading, error} = useFavorites();
 
     const Main = () => (
         <>
@@ -20,25 +21,27 @@ const Favorites: React.FC = () => {
             <div className="flex flex-col gap-8 max-w-screen-2xl mx-auto p-4 py-8 pt-4">
                 <p className="font-bold text-xl">Favorites</p>
                 <div className="grid grid-cols-2 gap-5 md:grid-cols-3 lg:grid-cols-4">
-                    {/*{user!.favorites.map((product, i) => {*/}
-                    {/*    return (*/}
-                    {/*        <ListingCard*/}
-                    {/*            key={i}*/}
-                    {/*            item={product}*/}
-                    {/*        ></ListingCard>*/}
-                    {/*    );*/}
-                    {/*})}*/}
+                    {products.map((product: IProduct.Item) => {
+                        return (
+                            <FavListingCard
+                                key={product.id}
+                                item={product}
+                            ></FavListingCard>
+                        );
+                    })}
                 </div>
             </div>
         </>
     )
+
+    if (isLoading) return <Loading/>
+    if (error) return <Error error={error}/>
+
     return (
         <>
-            {/*{!user || !user.favorites || user.favorites.length === 0 ? (*/}
-            {/*    <p className="mx-auto text-center text-2xl font-bold p-5 py-20">You have no favorite items!</p>*/}
-            {/*) : (*/}
-                <Main/>
-            {/*)}*/}
+            {products && products.length > 0 ?
+                (<Main/>) : (<div>You have no favorite items!</div>)
+            }
         </>
     );
 };

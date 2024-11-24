@@ -10,6 +10,12 @@ declare namespace IProduct {
         tags: string[];
     }
 
+    interface FinalProduct extends Item {
+        quantity?: number;
+        color?: string;
+        image?: string;
+    }
+
     type Items = Item[];
 
     interface Colors {

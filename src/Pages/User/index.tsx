@@ -1,65 +1,90 @@
-import Button from "../../Components/Button.tsx";
+// src/pages/User.tsx
+import {useState} from "react";
+import Avatar from "../../Components/Avatar";
+import Form from "../../Components/Form";
+import {z} from "zod";
+import {useGlobal} from "../../GlobalProvider.tsx";
+import {useUpdateUser} from "../../Services/store/hooks/user.ts";
+import Error from "../Error.tsx";
+import Address from "../../Components/Address";
+import {userSettingsFormConfig} from "../../Components/Form/config.ts";
+import {userSettingsSchema} from "../../Components/Form/schema.ts";
 
 function User() {
-    return (
+    const {userCtx} = useGlobal();
+    const user = userCtx.user;
+    const {updateUser, isLoading, error} = useUpdateUser();
+    const [tab, setTab] = useState<"personal" | "addresses">("personal");
 
-        <div
-            className="max-w-md w-full mx-auto h-screen flex flex-col justify-center items-center gap-5 p-6 md:max-h-screen">
-            <p className="font-bold text-5xl text-center md:text-left">User Settings</p>
-            <form className="flex flex-col w-full pt-12 gap-5">
-                <div className="flex flex-col md:flex-row w-full gap-5">
-                    <input
-                        className="border-[1px] p-3 w-full md:w-1/2"
-                        type="text"
-                        name="name"
-                        id="name"
-                        placeholder="Full Name"/>
-                    <input
-                        className="border-[1px] p-3 w-full md:w-1/2"
-                        type="text"
-                        name="username"
-                        id="username"
-                        placeholder="Username"/>
-                </div>
-                <input
-                    className="border-[1px] p-3 w-full"
-                    type="text"
-                    name="email"
-                    id="email"
-                    placeholder="Email"/>
-                <input
-                    className="border-[1px] p-3 w-full"
-                    type="text"
-                    name="phone"
-                    id="phone"
-                    placeholder="Phone"/>
-                <input
-                    className="border-[1px] p-3 w-full"
-                    type="text"
-                    name="avatar"
-                    id="avatar"
-                    placeholder="Phone"/>
-                <input
-                    className="border-[1px] p-3 w-full"
-                    type="password"
-                    id="old_password"
-                    placeholder="Current Password"/>
-                <input
-                    className="border-[1px] p-3 w-full"
-                    type="password"
-                    id="password"
-                    placeholder="New Password"/>
-                <Button text="Save Changes" size="large" color='primary'></Button>
-            </form>
-            {/*ID string `json:"id" binding:"required"`*/}
-            {/*Name *string `json:"name,omitempty"`*/}
-            {/*Phone *string `json:"phone,omitempty"`*/}
-            {/*Email       *string   `json:"email,omitempty"`*/}
-            {/*Username    *string   `json:"username,omitempty"`*/}
-            {/*Avatar      *string   `json:"avatar,omitempty"`*/}
-            {/*CartId      *string   `json:"cart_id,omitempty"`*/}
+    const configWithSubmit = {
+        ...userSettingsFormConfig,
+        schema: userSettingsSchema,
+        onSubmit: async (values: z.infer<typeof userSettingsSchema>) => {
+            try {
+                if (userCtx.isAuthenticated) {
+                    await updateUser({
+                        ...values,
+                        id: user?.id,
+                    }).unwrap();
+                    console.log("User Settings updated successfully");
+                } else {
+                    return <Error error={error}/>;
+                }
+            } catch (error) {
+                console.error("Failed to submit user update:", error);
+            }
+        },
+    };
+
+    const avatar = () => {
+        return <div className="flex justify-center bg-gray-50 shadow-md gap-4 py-6 border-b">
+            <Avatar/>
+            <div className="flex flex-col text-center justify-center">
+                <h1 className="text-2xl font-bold capitalize">{user?.name || "User Name"}</h1>
+                <h2 className="text-gray-500 capitalize">{user?.username}</h2>
+                <p className="text-gray-500">{user?.email}</p>
+            </div>
         </div>
-    )
+    }
+
+    const tabs = () => {
+        return <div className="flex justify-center gap-6 shadow-sm border-b pb-2 p-6">
+            <button
+                className={`pb-2 ${tab === "personal" ? "border-b-2 border-blue-500 text-blue-500" : "text-gray-500"}`}
+                onClick={() => setTab("personal")}
+            >
+                Personal Info
+            </button>
+            <button
+                className={`pb-2 ${tab === "addresses" ? "border-b-2 border-blue-500 text-blue-500" : "text-gray-500"}`}
+                onClick={() => setTab("addresses")}
+            >
+                Address
+            </button>
+        </div>
+    }
+
+    const tabContent = () => {
+        return <div className="">
+            {tab === "personal" ? (
+                <div>
+                    <div>
+                        <Form defaultValues={user} title="Personal Info" {...configWithSubmit}/>
+                    </div>
+                </div>
+            ) : (
+                <Address/>
+            )}
+        </div>
+    }
+
+    return (
+        <div className="max-w-4xl mx-auto">
+            {avatar()}
+            {tabs()}
+            {tabContent()}
+        </div>
+    );
 }
 
 export default User;

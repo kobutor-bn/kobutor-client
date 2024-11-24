@@ -1,74 +1,41 @@
-import { Link, useNavigate } from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import Menu from "../Popup/Menu";
-import MenuContent from "../Popup/Menu/MenuContent.tsx";
-import { CiShop } from "react-icons/ci";
-import { PiHandbagBold, PiUserCircleGear } from "react-icons/pi";
-import { MdOutlineFavoriteBorder } from "react-icons/md";
+import {CiShop} from "react-icons/ci";
+import {PiHandbagBold, PiUserCircleGear} from "react-icons/pi";
+import {MdOutlineFavoriteBorder} from "react-icons/md";
 import SearchBar from "../Searchbar";
 import Dropdown from "../Dropdown";
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "../../Services/store";
-import { useEffect, useRef, useState } from "react";
-import { toggleMenu } from "../../Services/store/slices/menu.ts";
+import {useDispatch, useSelector} from "react-redux";
+import {useEffect, useRef, useState} from "react";
 import Modal from "../Popup/Modal";
 import LoginPrompt from "../Popup/Modal/LoginPrompt.tsx";
 import "./index.css";
-import {userSelector} from "../../Services/store/slices/user.ts";
+import {logout, userSelector} from "../../Services/store/slices/auth.ts";
+import {useGlobal} from "../../GlobalProvider.tsx";
+import Loading from "../Loading";
+import {LiaSpinnerSolid} from "react-icons/lia";
+import {cartSelector} from "../../Services/store/slices/cart.ts";
 
 function Navbar() {
-    const dispatch: AppDispatch = useDispatch();
-    const isMenuOpen = useSelector((state: RootState) => state.menu.isOpen);
+    const dispatch = useDispatch();
+    const user = useSelector(userSelector);
+    const cart = useSelector(cartSelector);
+    const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
+    const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
     const [isDDOpen, setIsDDOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
     const navigate = useNavigate();
-    const user = useSelector(userSelector);
-    // const { cart, isLoading: isCartLoading, error: cartError } = useCart(user?.id);
-    // const [addCart, { isLoading: isAddCartLoading, error: addCartError }] = useAddCartMutation();
-    // const [addCartById, { isLoading: isAddCartByIdLoading, error: addCartByIdError }] = useAddCartByIdMutation();
-
-    // const isLoading = isCartLoading || isUserLoading || isAddCartLoading || isAddCartByIdLoading;
-    // const error = userError || cartError || addCartError || addCartByIdError;
-
-    useEffect(() => {
-        // user ? loggedIn() : notLoggedIn();
-    }, []);
-
-    // const loggedIn = () => {
-    //     if (!cart) {
-    //         if (user) {
-    //             addCartById(user.id).unwrap();
-    //         }
-    //     }
-    // }
-    //
-    // const notLoggedIn = () => {
-    //     const lsCart = localStorage.getItem("cart");
-    //     if (!lsCart) {
-    //         addCart().then((res) => {
-    //             localStorage.setItem("cart", JSON.stringify(res.data));
-    //         });
-    //     } else {
-    //         const cart: ICart.Item = JSON.parse(lsCart) as ICart.Item;
-    //         const id = cart.id;
-    //         console.log("Cart ID:", id);
-    //     }
-    // }
+    const {userCtx, cartCtx} = useGlobal();
 
     const toggleDropdown = () => setIsDDOpen(!isDDOpen);
 
-    const accLogout = () => {
+    const accLogout = async () => {
         setIsDDOpen(false);
-        console.log(localStorage.getItem("access_token"));
-        localStorage.removeItem("access_token");
-        localStorage.removeItem("refresh_token");
-
-        console.log("llllll")
-
-        console.log(localStorage.getItem("access_token"));
+        dispatch(logout());
+        console.log(user)
         if (!localStorage.getItem("access_token")) {
             navigate('/account/login');
         }
-        // dispatch(logout());
     };
 
     const handleClickOutside = (event: MouseEvent) => {
@@ -90,7 +57,7 @@ function Navbar() {
 
     const Button = () => (
         <div className="flex gap-3 items-center">
-            <PiUserCircleGear className="text-white h-6 w-6 2xl:h-10 2xl:w-10" />
+            <PiUserCircleGear className="text-white h-6 w-6 2xl:h-10 2xl:w-10"/>
             <li className="cursor-pointer capitalize" onClick={toggleDropdown}>{user?.username}</li>
         </div>
     );
@@ -112,7 +79,8 @@ function Navbar() {
                             Settings
                         </div>
                     </Link>
-                    <div onClick={accLogout} className="border-b border-gray-300 px-4 py-2 cursor-pointer hover:bg-gray-100">
+                    <div onClick={accLogout}
+                         className="border-b border-gray-300 px-4 py-2 cursor-pointer hover:bg-gray-100">
                         Sign Out
                     </div>
                 </div>
@@ -123,98 +91,141 @@ function Navbar() {
     const MenuTrigger = () => (
         <div
             className={`flex flex-col justify-center items-center w-7 h-5 gap-2 cursor-pointer md:hidden menu-icon ${isMenuOpen ? "clicked" : ""}`}
-            onClick={() => dispatch(toggleMenu())}
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
         >
-            <span className="w-full h-[2px] bg-white menu-line"></span>
-            <span className="w-full h-[2px] bg-white menu-line"></span>
+            <div className="menu-line w-full h-0.5 bg-white"></div>
+            <div className="menu-line w-full h-0.5 bg-white"></div>
         </div>
     );
 
-    // if (isLoading) return <Loading />;
-    // if (error) return <ErrorPage error={error} />;
+    const showPromo = () => {
+        if (userCtx.isUserLoading)
+            return <p className="font-montserrat text-center 2xl:text-3xl py-5 px-1.5 bg-[#FFB347] shadow-lg">
+                Just a moment! We're preparing your exclusive member deals...</p>
+        switch (userCtx.isAuthenticated) {
+            case true:
+                return <p className="font-montserrat text-center 2xl:text-3xl py-5 px-1.5 bg-green-100 shadow-lg">
+                    Welcome back, <span className="capitalize">{user?.name}</span>! Enjoy your exclusive member
+                    benefits and promotions.
+                </p>
+            case false:
+                return <p className="font-montserrat text-center 2xl:text-3xl py-5 bg-yellow-100 shadow-lg">
+                    Free Delivery, Member Exclusive Products and Promos for all our Members. <br/>
+                    <Link to={'/register'}>
+                        <span className="underline font-bold">Join us!</span>
+                    </Link>
+                </p>
+        }
+    }
+
+    const cartIcon = () => {
+        if (userCtx.isUserLoading || cartCtx.isCartLoading) return <LiaSpinnerSolid/>
+        switch (userCtx.isAuthenticated) {
+            case true:
+                return <Link to={"/cart"}>
+                    <div className="relative">
+                        <PiHandbagBold className="text-black h-7 w-7 2xl:h-12 2xl:w-12 bag-icon"/>
+                        <span
+                            className="absolute bottom-0.5 left-1 text-xs font-bold text-red-900 rounded-full w-5 h-5 flex
+                             items-center justify-center bag-count 2xl:h-12 2xl:w-12 2xl:text-xl 2xl:left-0 2xl:top-1">
+                                            {cart?.quantity}
+                        </span>
+                    </div>
+                </Link>
+            case false:
+                return <Modal
+                    isOpen={isModalOpen}
+                    setIsOpen={setIsModalOpen}
+                    trigger={
+                        <PiHandbagBold
+                            className="text-black cursor-pointer h-7 w-7 2xl:h-12 2xl:w-12 bag-icon"/>}
+                    body={
+                        <LoginPrompt isOpen={isModalOpen} setIsOpen={setIsModalOpen}/>}
+                />
+        }
+    }
+
+    const status = () => {
+        if (userCtx.isUserLoading) return <Loading/>
+        switch (userCtx.isAuthenticated) {
+            case true:
+                return <Dropdown
+                    btn={<Button/>}
+                    body={<Options/>}
+                    isOpen={isDDOpen}
+                />
+            case false:
+                return <Link className="flex gap-3 items-center" to={'/account/login'}>
+                    <PiUserCircleGear className="text-white h-6 w-6 2xl:h-10 2xl:w-10"/>
+                    <li onClick={toggleDropdown}>SIGN IN</li>
+                </Link>
+        }
+    }
+
+    const favIcon = () => {
+        if (userCtx.isUserLoading) return <LiaSpinnerSolid/>
+        switch (userCtx.isAuthenticated) {
+            case true:
+                return <Link to={'/favorites'}>
+                    <MdOutlineFavoriteBorder className="text-rose-500 h-7 w-7 2xl:h-12 2xl:w-12"/>
+                </Link>
+            case false:
+                return <Modal
+                    trigger={<MdOutlineFavoriteBorder
+                        className="cursor-pointer text-rose-500 h-7 w-7 2xl:h-12 2xl:w-12"/>}
+                    body={
+                        <LoginPrompt isOpen={isModalOpen} setIsOpen={setIsModalOpen}/>}
+                    isOpen={isModalOpen}
+                    setIsOpen={setIsModalOpen}
+                />
+        }
+    }
 
     return (
         <div className="w-screen">
             <div className="flex flex-col shadow-xl">
                 <div className="bg-[#252525]">
-                    <nav className="flex font-montserrat z-50 max-w-screen-2xl mx-auto justify-between items-center w-full text-white p-3 2xl:p-9 2xl:text-3xl">
+                    <nav
+                        className="flex font-montserrat z-50 max-w-screen-2xl mx-auto justify-between items-center w-full text-white p-3 2xl:p-9 2xl:text-3xl">
                         <Link to={'/'}>LOGO</Link>
                         <ul className="hidden items-center md:flex gap-5">
                             <div className="flex gap-3 items-center">
-                                <CiShop className="text-white h-6 w-6 2xl:h-10 2xl:w-10" />
+                                <CiShop className="text-white h-6 w-6 2xl:h-10 2xl:w-10"/>
                                 <Link to={'/product/listing'}>SHOP</Link>
                             </div>
                             <div className="h-full w-[1px] py-4 bg-white"></div>
-                            {user ? (
-                                <Dropdown
-                                    btn={<Button />}
-                                    body={<Options />}
-                                    isOpen={isDDOpen}
-                                />
-                            ) : (
-                                <Link className="flex gap-3 items-center" to={'/account/login'}>
-                                    <PiUserCircleGear className="text-white h-6 w-6 2xl:h-10 2xl:w-10" />
-                                    <li onClick={toggleDropdown}>SIGN IN</li>
-                                </Link>
-                            )}
+                            {status()}
                         </ul>
-                        <Menu trigger={<MenuTrigger />} body={<MenuContent logout={accLogout} />} />
+                        <Menu
+                            trigger={<div
+                                className={`flex flex-col justify-center items-center w-7 h-5 gap-2 cursor-pointer md:hidden menu-icon ${isMenuOpen ? "clicked" : ""}`}
+                                onClick={() => setIsMenuOpen(!isMenuOpen)}
+                            >
+                                <div className="menu-line w-full h-0.5 bg-white"></div>
+                                <div className="menu-line w-full h-0.5 bg-white"></div>
+                            </div>}
+                            logout={accLogout}
+                            isOpen={isMenuOpen}
+                            setIsOpen={setIsMenuOpen}
+                        />
                     </nav>
                 </div>
 
                 <div className="bg-white">
-                    <nav className="flex items-center w-full max-w-screen-2xl mx-auto justify-between p-3 2xl:p-6 2xl:text-3xl">
+                    <nav
+                        className="flex items-center w-full max-w-screen-2xl mx-auto justify-between p-3 2xl:p-6 2xl:text-3xl">
                         <div className="font-montserrat font-semibold text-lg 2xl:text-3xl">KOBUTOR</div>
                         <ul className="flex items-center md:gap-8 gap-3">
                             <div className="hidden md:flex">
-                                <SearchBar />
+                                <SearchBar/>
                             </div>
-
-                            {user ? (
-                                <Link to={'/favorites'}>
-                                    <MdOutlineFavoriteBorder className="text-rose-500 h-7 w-7 2xl:h-12 2xl:w-12" />
-                                </Link>
-                            ) : (
-                                <Modal
-                                    trigger={<MdOutlineFavoriteBorder
-                                        className="cursor-pointer text-rose-500 h-7 w-7 2xl:h-12 2xl:w-12" />}
-                                    body={<LoginPrompt/>}
-                                />
-                            )}
-
-                            {user ? (
-                                <Link to={"/cart"}>
-                                    <div className="relative">
-                                        <PiHandbagBold className="text-black h-7 w-7 2xl:h-12 2xl:w-12 bag-icon" />
-                                        <span className="absolute bottom-0.5 left-1 text-xs font-bold text-red-900 rounded-full w-5 h-5 flex items-center justify-center bag-count 2xl:h-12 2xl:w-12 2xl:text-xl 2xl:left-0 2xl:top-1">
-                                            {/*{cart?.quantity}*/}
-                                        </span>
-                                    </div>
-                                </Link>
-                            ) : (
-                                <Modal
-                                    trigger={<PiHandbagBold className="text-black cursor-pointer h-7 w-7 2xl:h-12 2xl:w-12 bag-icon" />}
-                                    body={<LoginPrompt />}
-                                />
-                            )}
+                            {favIcon()}
+                            {cartIcon()}
                         </ul>
                     </nav>
                 </div>
             </div>
-
-            {user ? (
-                <p className="font-montserrat text-center 2xl:text-3xl py-5 px-1.5 bg-green-100 shadow-lg">
-                    Welcome back, <span className="capitalize">{user.name}</span>! Enjoy your exclusive member
-                    benefits and promotions.
-                </p>
-            ) : (
-                <p className="font-montserrat text-center 2xl:text-3xl py-5 bg-yellow-100 shadow-lg">
-                    Free Delivery, Member Exclusive Products and Promos for all our Members. <br />
-                    <Link to={'/register'}>
-                        <span className="underline font-bold">Join us!</span>
-                    </Link>
-                </p>
-            )}
+            {showPromo()}
         </div>
     );
 }

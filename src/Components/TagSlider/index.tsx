@@ -5,7 +5,6 @@ import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 import {Navigation, Pagination} from 'swiper/modules';
 import './index.css';
-import {ICommon} from "../../Services/typings/Common";
 import {useTag, useTaggedProducts} from "../../Services/store/hooks/tags.ts";
 import Loading from "../Loading";
 import Error from "../../Pages/Error.tsx";
@@ -14,14 +13,14 @@ import LazyImage from "../../Services/lazy/lazyImage.tsx";
 import {Tag} from "../../Services/typings/Enums.ts";
 
 const TagSlider: React.FC<ICommon.SliderProps> = (props) => {
-    const { id, title} = props;
-    const { tag, isLoading: isTagLoading, error: isTagError } = useTag(id!);
-    const { tagProducts, isLoading: isProductsLoading, error: isProductsError } = useTaggedProducts(id!);
+    const {id, title} = props;
+    const {tag, isLoading: isTagLoading, error: isTagError} = useTag(id!);
+    const {tagProducts, isLoading: isProductsLoading, error: isProductsError} = useTaggedProducts(id!);
     const error = (isTagError || isProductsError);
     const isLoading = (isTagLoading || isProductsLoading);
 
     if (isLoading) return <Loading/>;
-    if (error) return <Error error={error} />;
+    if (error) return <Error error={error}/>;
 
     const layoutWithAttr = () => {
         return tagProducts?.filter(product =>

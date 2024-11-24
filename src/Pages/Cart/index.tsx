@@ -6,16 +6,31 @@ import TagSlider from "../../Components/TagSlider";
 import {useCart} from "../../Services/store/hooks/cart.ts";
 import Loading from "../../Components/Loading";
 import Error from "../Error.tsx";
-import {useSelector} from "react-redux";
-import {userSelector} from "../../Services/store/slices/user.ts";
+import {useDispatch, useSelector} from "react-redux";
+import {userSelector} from "../../Services/store/slices/auth.ts";
+import {useEffect} from "react";
+import {setItem} from "../../Services/store/slices/order.ts";
 
 function Cart() {
+    const dispatch = useDispatch();
     const user = useSelector(userSelector);
-    const { cart, isLoading, error } = useCart(user!.id);
-    console.log(cart)
+    const {cart, isLoading, error} = useCart(user!.id);
+    const totalAmount = cart!.items!.reduce((sum: number, product: ICart.Product) => sum + product.price * product.quantity, 0);
 
-    if (isLoading) return <Loading />;
-    if (error) return <Error error={error} />;
+    useEffect(() => {
+        dispatch(
+            setItem({
+                total_amount: totalAmount,
+                user_id: user!.id,
+                products: cart!.items!.map((product: ICart.Product) => ({...product})),
+            })
+        );
+    }, []);
+
+    if (isLoading) return <Loading/>;
+    if (error) return <Error error={error}/>;
+
+    if (!(cart!.items)) return <div>There is no Item in your cart!</div>
 
     return (
         <>
@@ -32,10 +47,11 @@ function Cart() {
                                         {cart!.quantity} Items | USD {cart!.price.toFixed(2)}
                                     </p>
                                 </div>
-                                {cart!.items?.map((item: IProduct.Item, i) => (
+                                {cart!.items?.map((product: ICart.Product, i) => (
                                     <CartCard
                                         key={i}
-                                        item={item} />
+                                        item={product}
+                                    />
                                 ))}
                             </div>
 
@@ -54,9 +70,12 @@ function Cart() {
                                     <p className="text-gray-600">Delivery fee (if applicable) will be calculated at
                                         checkout.</p>
                                 </div>
-                                <Link to={'/checkout'}>
-                                    <Button className="hidden lg:block" text="Checkout" color="primary"
-                                            shape="circle"></Button>
+                                <Link to={'/order/summary'}>
+                                    <Button
+                                        className="hidden lg:flex justify-center"
+                                        text="Checkout"
+                                        color="primary"
+                                        shape="circle"></Button>
                                 </Link>
                             </div>
                         </div>
@@ -81,16 +100,17 @@ function Cart() {
 
                 </div>
                 <div
-                    className="lg:hidden z-10 fixed flex bg-white w-full py-4 bottom-0 border-t border-black text-center">
-                    <Link to={'/checkout'}>
-                        <div className="w-4/5 rounded-full p-5 bg-black text-white mx-auto my-auto">
-                            Checkout
-                        </div>
+                    className="lg:hidden z-10 fixed flex justify-center bg-white w-full py-4 bottom-0 border-t border-black text-center">
+                    <Link to={'/order/summary'}>
+                        <Button
+                            text="Checkout"
+                            color="primary"
+                            shape="circle"></Button>
                     </Link>
                 </div>
                 {user ?
                     <div className="font-montserrat font-semibold pt-8">
-                        <TagSlider title={"Recently Viewed"} ></TagSlider>
+                        <TagSlider title={"Recently Viewed"}></TagSlider>
                     </div>
                     :
                     <div></div>

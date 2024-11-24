@@ -1,6 +1,6 @@
 import AccordionItem from "./AccordionItem.tsx";
 import {useState} from "react";
-import './index.css'
+import "./index.css";
 
 type NullableNumber = number | null;
 
@@ -9,20 +9,24 @@ const Accordion = () => {
 
     const data = [
         {
-            question: 'What are accordion components?',
-            answer: 'Accordion components are user interface elements used for organizing and presenting content in a collapsible manner. They typically consist of a header, content, and an expand/collapse action.',
+            question: 'What is this platform?',
+            answer: 'This platform connects users with a wide variety of products, offering secure payments and fast delivery options.',
         },
         {
-            question: 'What are they used for?',
-            answer: 'They are commonly employed in various contexts, including FAQs, product descriptions, navigation menus, settings panels, and data tables, to save screen space and provide a structured and user-friendly interface for presenting information or options.',
+            question: 'How do I reset my password?',
+            answer: 'To reset your password, go to the login page, click on "Forgot Password", and follow the instructions to receive a reset link.',
         },
         {
-            question: 'Accordion as a musical instrument',
-            answer: 'The accordion is a musical instrument with a keyboard and bellows. It produces sound by air passing over reeds when the player expands or compresses the bellows, used in various music genres.',
+            question: 'What are the available payment options?',
+            answer: 'We accept all major credit/debit cards, PayPal, and other regional payment methods for your convenience.',
         },
         {
-            question: 'Can I create an accordion component with a different framework?',
-            answer: 'Yes of course, it is very possible to create an accordion component with another framework.',
+            question: 'How long does delivery take?',
+            answer: 'Delivery typically takes 3-5 business days for standard shipping and 1-2 days for expedited shipping.',
+        },
+        {
+            question: 'How do I track my order?',
+            answer: 'Once your order ships, you’ll receive a tracking number via email. You can also find the tracking information in your account under "Orders".',
         }
     ];
 
@@ -31,14 +35,17 @@ const Accordion = () => {
     };
 
     return (
-        <div
-            className='2xl:max-w-screen-2xl max-w-screen-xl w-full m-auto shadow-lg bg-neutral-100 py-20 my-32 2xl:my-64 px-6 flex flex-col gap-16 md:px-32 md:p-10 md:pb-28 lg:rounded-3xl'>
-            <p className="flex flex-col gap-3 2xl:gap-8 md:px-20 md:pb-0 2xl:py-20 md:py-10 text-center">
-                <span
-                    className="font-montserrat text-2xl md:text-5xl 2xl:text-8xl font-black">Questions? We've got answers.</span><br/>
-                <span className="font-Nunito font-light text-sm lg:text-xl xl:text-3xl 2xl:text-5xl">Not seeing your specific question, check our help center or contact our support team.</span>
-            </p>
-            <div className="wrapperp rounded-3xl bg-gray-50 px-3 py-6 md:px-10 md:py-10">
+        <div className="accordion-container my-16 bg-neutral-100 rounded-2xl shadow-lg px-6 py-10">
+            {/* Header */}
+            <div className="text-center mb-8">
+                <h2 className="text-3xl font-bold text-indigo-600 font-montserrat">Frequently Asked Questions</h2>
+                <p className="text-gray-600 text-lg mt-2 font-Nunito">
+                    Got questions? Check the answers below or contact our support team.
+                </p>
+            </div>
+
+            {/* Accordion Items */}
+            <div className="space-y-6">
                 {data.map((item, index) => (
                     <AccordionItem
                         key={index}
@@ -49,12 +56,8 @@ const Accordion = () => {
                     />
                 ))}
             </div>
-            <p className="font-Nunito font-light text-center 2xl:text-3xl">
-                Our customer support is available Monday to Friday: 5am-5pm BD Time.
-                <br/>Average answer time: less than 2 hours
-            </p>
         </div>
-    )
+    );
 };
 
 export default Accordion;

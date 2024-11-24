@@ -1,8 +1,8 @@
-import React, {useEffect, useRef} from 'react';
+import React, {useRef} from 'react';
 import {IModal} from "../../../Services/typings/Modal";
 
-const ModalContent: React.FC<IModal.ModalContentProps> = (props) => {
-    const { isOpen, setIsOpen, content } = props;
+const ModalContent: React.FC<IModal.Item> = (props) => {
+    const {isOpen, setIsOpen, body, onCloseRequest} = props;
     const modalWrapperRef = useRef<HTMLDivElement | null>(null);
 
     const handleOverlayClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
@@ -12,13 +12,9 @@ const ModalContent: React.FC<IModal.ModalContentProps> = (props) => {
     };
 
     const handleButtonClick = () => {
-        console.log("ss")
         setIsOpen(!isOpen);
+        onCloseRequest?.();
     }
-
-    useEffect(() => {
-        console.log(isOpen)
-    }, [isOpen]);
 
     return (
         <>
@@ -29,7 +25,7 @@ const ModalContent: React.FC<IModal.ModalContentProps> = (props) => {
                     ref={modalWrapperRef}
                 >
                     <div
-                        className="bg-white w-11/12 md:w-1/3 lg:w-1/4 p-6 rounded-lg shadow-lg transform transition-transform duration-500 ease-out">
+                        className="max-w-md w-full m-5 bg-white p-6 rounded-lg shadow-lg transform transition-transform duration-500 ease-out">
                         <div className="flex justify-end">
                             <button
                                 onClick={handleButtonClick}
@@ -38,7 +34,9 @@ const ModalContent: React.FC<IModal.ModalContentProps> = (props) => {
                                 &times;
                             </button>
                         </div>
-                        <div className="mt-2">{content}</div>
+                        <div className="mt-2">
+                            {body}
+                        </div>
                     </div>
                 </div>
             )}

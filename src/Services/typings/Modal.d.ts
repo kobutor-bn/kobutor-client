@@ -1,14 +1,11 @@
 import React from "react";
 
 declare namespace IModal {
-    export interface ModalProps {
-        trigger: React.ReactElement;
-        body: React.ReactNode;
-    }
-
-    export interface ModalContentProps {
+    export interface Item {
         isOpen: boolean;
         setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
-        content: React.ReactNode;
+        trigger?: React.ReactElement;
+        body: React.ReactNode;
+        onCloseRequest?: () => void;
     }
 }

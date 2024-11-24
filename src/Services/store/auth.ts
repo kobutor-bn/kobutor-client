@@ -1,11 +1,10 @@
-import { fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import {fetchBaseQuery} from "@reduxjs/toolkit/query/react";
 import {logout} from "./slices/auth.ts";
 
 export const baseQuery = fetchBaseQuery({
     baseUrl: "/api/",
     prepareHeaders: (headers) => {
         const token = localStorage.getItem("access_token");
-        console.log(token)
         if (token) {
             headers.set("Authorization", `Bearer ${token}`);
         }
@@ -16,37 +15,83 @@ export const baseQuery = fetchBaseQuery({
     credentials: "include",
 });
 
+let isRefreshing = false;
+let pendingRequests: (() => void)[] = [];
 
-// Proactive silent token refresh
 export const baseQueryWithReauth: typeof baseQuery = async (args, api, extraOptions) => {
-    let result = await baseQuery(args, api, extraOptions);
+    const retryRequest = () => baseQuery(args, api, extraOptions);
+
+    const result = await baseQuery(args, api, extraOptions);
 
     if (result.error && result.error.status === 401) {
-        // Attempt to refresh token using cookies (handled server-side)
-        const refreshResult = await baseQuery({ url: "/v1/token/refresh", method: "POST" }, api, extraOptions);
+        if (!isRefreshing) {
+            isRefreshing = true;
 
-        if (refreshResult.data) {
-            const { access_token } = refreshResult.data as API.TokenResponse;
-            localStorage.setItem("access_token", access_token!);
+            // Attempt to refresh the token
+            const refreshResult = await baseQuery(
+                {url: "/v1/token/refresh", method: "POST"},
+                api,
+                extraOptions
+            );
 
-            // Retry the original request with the new token
-            result = await baseQuery(args, api, extraOptions);
+            if (refreshResult.data) {
+                const {access_token} = refreshResult.data as API.TokenResponse;
+                localStorage.setItem("access_token", access_token!);
+
+                // Retry all pending requests after successful refresh
+                pendingRequests.forEach((callback) => callback());
+                pendingRequests = [];
+            } else {
+                // Logout if refresh fails
+                localStorage.removeItem("access_token");
+                localStorage.removeItem("refresh_token");
+                api.dispatch(logout());
+            }
+
+            isRefreshing = false;
         } else {
-            localStorage.removeItem("access_token");
-            localStorage.removeItem("refresh_token");
-            api.dispatch(logout());
-        }
-    }
-
-    // Format 400 errors for user-friendly display
-    if (result.error && result.error.status === 400) {
-        const errorData = result.error.data as API.Response<null>;
-        if (errorData.message && typeof errorData.message === 'object') {
-            errorData.message = Object.entries(errorData.message)
-                .map(([key, val]) => `${key}: ${val}`)
-                .join(', ');
+            // If already refreshing, queue the request
+            await new Promise<void>((resolve) => {
+                pendingRequests.push(() => {
+                    Promise.resolve(retryRequest()).then(() => resolve());
+                });
+            });
         }
     }
 
     return result;
 };
+
+// Proactive silent token refresh
+// export const baseQueryWithReauth: typeof baseQuery = async (args, api, extraOptions) => {
+//     let result = await baseQuery(args, api, extraOptions);
+//
+//     if (result.error && result.error.status === 401) {
+//         // Attempt to refresh token using cookies (handled server-side)
+//         const refreshResult = await baseQuery({ url: "/v1/token/refresh", method: "POST" }, api, extraOptions);
+//
+//         if (refreshResult.data) {
+//             const { access_token } = refreshResult.data as API.TokenResponse;
+//             localStorage.setItem("access_token", access_token!);
+//
+//             // Retry the original request with the new token
+//             result = await baseQuery(args, api, extraOptions);
+//         } else {
+//             localStorage.removeItem("access_token");
+//             localStorage.removeItem("refresh_token");
+//             api.dispatch(logout());
+//         }
+//     }
+//
+//     // Format 400 errors for user-friendly display
+//     if (result.error && result.error.status === 400) {
+//         const errorData = result.error.data as API.Response<null>;
+//         if (errorData.message && typeof errorData.message === 'object') {
+//             errorData.message = Object.entries(errorData.message)
+//                 .map(([key, val]) => `${key}: ${val}`)
+//                 .join(', ');
+//         }
+//     }
+//
+//     return result;
+// };

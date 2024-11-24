@@ -1,11 +1,35 @@
 import React from 'react';
-import {IModal} from "../../../Services/typings/Modal";
+import MenuContent from "./MenuContent.tsx";
+import {IMenu} from "../../../Services/typings/Menu";
 
-const Menu: React.FC<IModal.Props> = ({trigger, body}) => {
+const Menu: React.FC<IMenu.Item> = (props) => {
+    const {isOpen, setIsOpen, trigger, logout} = props;
+
+    const closeMenu = () => {
+        setIsOpen(false);
+        const menuIcon = document.querySelector('.menu-icon');
+        if (menuIcon) {
+            menuIcon.classList.remove('clicked');
+        }
+    }
+
+    const handleTriggerClick = () => {
+        setIsOpen(!isOpen);
+    };
+
+    const triggerWithHandler = React.cloneElement(trigger!, {
+        onClick: handleTriggerClick,
+    });
+
     return (
         <>
-            {trigger}
-            {body}
+            {triggerWithHandler}
+            <MenuContent
+                isOpen={isOpen}
+                setIsOpen={setIsOpen}
+                onCloseRequest={closeMenu}
+                logout={logout}
+            />
         </>
     );
 };
