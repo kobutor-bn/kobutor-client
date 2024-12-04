@@ -4,7 +4,7 @@ declare namespace IOrder {
         user_id: string;
         status: string;
         total_amount: number;
-        products: Product[];
+        products: IProduct.Item[];
         currency: string;
         payment_details: PaymentDetails;
         address: IAddress.Item;
@@ -27,17 +27,6 @@ declare namespace IOrder {
         avatar: string;
     }
 
-    type Product = {
-        product_id: string;
-        quantity: number;
-        title: string;
-        price: number;
-        desc: string;
-        category: string;
-        image: string;
-        color: string;
-    }
-
     type Address = {
         address_id: string;
         user_id: string;
@@ -48,7 +37,7 @@ declare namespace IOrder {
 
     type Preview = {
         user: IUser.Info;
-        products: ICart.Product[];
+        products: IProduct.Item[];
         selectedAddress: IAddress.Item;
     };
 }

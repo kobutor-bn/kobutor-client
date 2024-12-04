@@ -16,7 +16,7 @@ export const useReviews = () => {
 export const useReviewDetails = (id: string) => {
     const {data, isLoading, error} = useGetReviewDetailsQuery(id);
 
-    const review = data;
+    const review = data!;
 
     return {
         review,

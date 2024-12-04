@@ -14,6 +14,7 @@ const reviewFormConfig: IForm.Config<z.infer<typeof reviewSchema>> = {
 
 const userSettingsFormConfig: IForm.Config<z.infer<typeof userSettingsSchema>> = {
     fields: [
+        {name: 'id', type: 'hidden', required: true},
         {name: 'name', type: 'text', placeholder: 'Enter your Full Name', required: true},
         {name: 'username', type: 'text', placeholder: 'Enter your username', required: true},
         {name: 'password', type: 'password', placeholder: 'Enter your password', required: false},

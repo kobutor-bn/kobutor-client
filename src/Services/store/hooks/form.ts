@@ -1,6 +1,6 @@
-import {MutationTrigger} from "@reduxjs/toolkit/dist/query/react/buildHooks";
 import {useState} from "react";
 import {useGlobal} from "../../../GlobalProvider.tsx";
+import {TypedMutationTrigger} from "@reduxjs/toolkit/query/react";
 
 export const useFormMutation = <T>() => {
     const {userCtx} = useGlobal();
@@ -9,7 +9,7 @@ export const useFormMutation = <T>() => {
 
     const request = async (
         action: "create" | "update",
-        mutation: MutationTrigger<(args: T) => unknown>,
+        mutation: TypedMutationTrigger<any, any, any>,
         values: T
     ) => {
         try {

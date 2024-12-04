@@ -1,7 +1,7 @@
 declare namespace IUser {
     type Info = {
         id: string;
-        phone?: string;
+        phone?: number;
         email?: string;
         name?: string;
         cart_id?: string;
@@ -44,8 +44,8 @@ declare namespace IUser {
     };
 
     type Update = {
-        id: string;
-        phone?: string;
+        id?: string;
+        phone?: number;
         email?: string;
         username?: string;
         password?: string;

@@ -2,12 +2,13 @@ import React from "react";
 import {useOrderHistory} from "../../Services/store/hooks/order.ts";
 import Error from "../Error.tsx";
 import {Link} from "react-router-dom";
+import Loading from "../../Components/Loading";
 
 const OrderHistory: React.FC = () => {
     const {orders, isLoading, error} = useOrderHistory();
     console.log(orders);
 
-    // if (!isLoading) return <Loading/>
+    if (!isLoading) return <Loading/>
     if (error) return <Error error={error}/>
 
     return (

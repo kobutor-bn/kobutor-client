@@ -1,11 +1,11 @@
 import React from 'react';
 import Button from "../../Button.tsx";
-import {BaseQueryFn, FetchArgs, FetchBaseQueryError} from "@reduxjs/toolkit/query";
-import {MutationTrigger} from "@reduxjs/toolkit/dist/query/react/buildHooks";
+import {TypedMutationTrigger} from "@reduxjs/toolkit/query/react";
 
 interface Props {
     setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
-    mutation: MutationTrigger<BaseQueryFn<string | FetchArgs, unknown, FetchBaseQueryError>>;
+    // mutation: MutationTrigger<BaseQueryFn<string | FetchArgs, unknown, FetchBaseQueryError>>;
+    mutation: TypedMutationTrigger<any, any, any>;
     mutationParams: Record<string, any>
 }
 

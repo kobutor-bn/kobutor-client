@@ -1,18 +1,20 @@
 import React from 'react';
-import {FetchBaseQueryError} from "@reduxjs/toolkit/query";
-import {SerializedError} from "@reduxjs/toolkit";
+import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
+import { SerializedError } from "@reduxjs/toolkit";
 
 interface ErrorProps {
     error: FetchBaseQueryError | SerializedError | undefined;
     refetch?: () => void;
 }
 
-const Error: React.FC<ErrorProps> = ({error}) => {
+const Error: React.FC<ErrorProps> = ({ error }) => {
     let message = 'An unexpected error occurred.';
     let code = '';
+    let requestInfo = ''; // To store request details if available
 
     if (error) {
         if ('status' in error) {
+            // Narrowing for FetchBaseQueryError
             switch (error.status) {
                 case "FETCH_ERROR":
                 case "TIMEOUT_ERROR":
@@ -25,17 +27,24 @@ const Error: React.FC<ErrorProps> = ({error}) => {
                     code = `PARSING_ERROR (${error.originalStatus})`;
                     break;
                 default:
-                    message = `Error: ${error?.data?.message}`;
+                    // Here, data is `unknown`. Perform a type assertion or check.
+                    if (typeof error.data === 'object' && error.data !== null && 'message' in error.data) {
+                        message = (error.data as { message: string }).message;
+                    } else {
+                        message = `Unexpected error response: ${JSON.stringify(error.data)}`;
+                    }
                     code = `Status Code: ${error.status}`;
             }
+            // Attempt to get request info from `data` if present
+            if (typeof error.data === 'object' && error.data !== null && 'request' in error.data) {
+                requestInfo = (error.data as { request: string }).request;
+            }
         } else if ('message' in error) {
-            // Handle SerializedError types
+            // Narrowing for SerializedError
             message = error.message || message;
             code = error.code || 'UNKNOWN_ERROR';
         }
     }
-
-    console.log(error)
 
     return (
         <div style={{
@@ -48,20 +57,23 @@ const Error: React.FC<ErrorProps> = ({error}) => {
             margin: '1rem auto',
             textAlign: 'center'
         }}>
-            <h2>{error?.data?.request}</h2>
+            {requestInfo && <h2>{requestInfo}</h2>}
             <p><strong>{code}</strong></p>
             <p>{message}</p>
-            {/*<button onClick={refetch} style={{*/}
-            {/*    marginTop: '1rem',*/}
-            {/*    padding: '0.5rem 1rem',*/}
-            {/*    border: 'none',*/}
-            {/*    backgroundColor: '#d9534f',*/}
-            {/*    color: 'white',*/}
-            {/*    borderRadius: '4px',*/}
-            {/*    cursor: 'pointer',*/}
-            {/*}}>*/}
-            {/*    Retry*/}
-            {/*</button>*/}
+            {/* Uncomment the button if `refetch` is provided */}
+            {/* {refetch && (
+                <button onClick={refetch} style={{
+                    marginTop: '1rem',
+                    padding: '0.5rem 1rem',
+                    border: 'none',
+                    backgroundColor: '#d9534f',
+                    color: 'white',
+                    borderRadius: '4px',
+                    cursor: 'pointer',
+                }}>
+                    Retry
+                </button>
+            )} */}
         </div>
     );
 };

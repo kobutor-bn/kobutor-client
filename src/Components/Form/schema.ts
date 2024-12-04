@@ -12,6 +12,7 @@ export const loginSchema = z.object({
 });
 
 export const userSettingsSchema = z.object({
+    id: z.string(),
     name: z.string(),
     username: z.string().min(5, "Username too short!"),
     password: z.string().min(8, "Password must be at least 8 characters"),
@@ -32,7 +33,7 @@ export const userSettingsSchema = z.object({
 
 export const userInfoSchema = z.object({
     email: z.string().email("Invalid email address"),
-    phone: z.string().regex(/^\d{10}$/, "Invalid phone number"),
+    phone: z.number()
 });
 
 export const addrSchema = z.object({

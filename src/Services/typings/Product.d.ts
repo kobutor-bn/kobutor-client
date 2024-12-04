@@ -8,6 +8,9 @@ declare namespace IProduct {
         colors: Colors[];
         images: string[];
         tags: string[];
+        quantity?: number;
+        color?: string;
+        image?: string;
     }
 
     interface FinalProduct extends Item {

@@ -10,7 +10,7 @@ import LazyImage from "../../Services/lazy/lazyImage.tsx";
 import {Category} from "../../Services/typings/Enums.ts";
 
 interface Props {
-    item: ICart.Product;
+    item: IProduct.Item;
 }
 
 const CartCard: React.FC<Props> = ({item}) => {
@@ -22,14 +22,14 @@ const CartCard: React.FC<Props> = ({item}) => {
     // const {addNotification} = useNotification();
 
     const calcQty = async (operand: string) => {
-        const updatedItem = {...item, product_id: item.product_id, quantity: 1};
+        const updatedItem = {...item, product_id: item.id, quantity: 1};
         try {
             if (operand === "+") {
                 item.quantity = 1
                 await addToCart({id: cart!.id, item: updatedItem});
                 // addNotification("Item added to cart", "success");
             } else if (operand === "-" && item.quantity! > 0) {
-                await decreaseFromCart({id: cart!.id, product_id: item.product_id});
+                await decreaseFromCart({id: cart!.id, product_id: item.id});
                 // addNotification("Item removed from cart", "success");
             }
         } catch (error) {
@@ -43,7 +43,7 @@ const CartCard: React.FC<Props> = ({item}) => {
                 return (
                     <LazyImage
                         className="object-fill w-full h-64 md:h-80"
-                        key={item.product_id}
+                        key={item.id}
                         src={item.image!}
                         alt={item.title}
                     />
@@ -53,7 +53,7 @@ const CartCard: React.FC<Props> = ({item}) => {
                     <>
                         <LazyImage
                             className="object-fill w-full h-64 md:h-80"
-                            key={item.product_id}
+                            key={item.id}
                             src={item.image!}
                             alt={item.title}
                         />
@@ -69,7 +69,7 @@ const CartCard: React.FC<Props> = ({item}) => {
         <div className="max-w-screen-md mx-auto flex flex-col md:flex-row gap-4 border-b-[1px] border-b-gray-300 py-6">
             {/* Product Image */}
             <Link
-                to={`/item/details/${item.product_id}`}
+                to={`/item/details/${item.id}`}
                 className="flex-shrink-0 w-full md:w-1/3 aspect-w-4 aspect-h-3">
                 {renderImgByCategory(item.category)}
             </Link>
@@ -78,7 +78,7 @@ const CartCard: React.FC<Props> = ({item}) => {
             <div className="flex flex-col justify-between w-full gap-4">
                 {/* Product Title and Price */}
                 <div className="flex justify-between items-center">
-                    <Link to={`/product/details/${item.product_id}`}>
+                    <Link to={`/product/details/${item.id}`}>
                         <h2 className="font-montserrat text-lg md:text-xl font-bold hover:text-indigo-600 transition">
                             {item.title}
                         </h2>
@@ -145,7 +145,7 @@ const CartCard: React.FC<Props> = ({item}) => {
                             <Confirm
                                 setIsOpen={setIsOpen}
                                 mutation={removeFromCart}
-                                mutationParams={{id: cart!.id, product_id: item.product_id}}
+                                mutationParams={{id: cart!.id, product_id: item.id}}
                             />
                         }
                     />

@@ -8,7 +8,7 @@ const initialState: IOrder.Item = {
     currency: "BDT",
     total_amount: 1,
     address: {
-        address_id: '',
+        id: '',
         user_id: '',
         detail: '',
         city: '',

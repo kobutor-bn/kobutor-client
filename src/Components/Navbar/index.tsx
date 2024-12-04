@@ -88,16 +88,6 @@ function Navbar() {
         </>
     );
 
-    const MenuTrigger = () => (
-        <div
-            className={`flex flex-col justify-center items-center w-7 h-5 gap-2 cursor-pointer md:hidden menu-icon ${isMenuOpen ? "clicked" : ""}`}
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-        >
-            <div className="menu-line w-full h-0.5 bg-white"></div>
-            <div className="menu-line w-full h-0.5 bg-white"></div>
-        </div>
-    );
-
     const showPromo = () => {
         if (userCtx.isUserLoading)
             return <p className="font-montserrat text-center 2xl:text-3xl py-5 px-1.5 bg-[#FFB347] shadow-lg">

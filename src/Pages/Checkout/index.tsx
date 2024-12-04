@@ -13,7 +13,7 @@ const stripePromise = loadStripe("YOUR_STRIPE_PUBLIC_KEY");
 const checkoutSchema = z.object({
     name: z.string().min(1, "Name is required"),
     email: z.string().email("Invalid email address"),
-    phone: z.string().min(10, "Phone number is required"),
+    phone: z.number().min(10, "Phone number is required"),
     address: z.string().min(1, "Address is required"),
 });
 
@@ -28,7 +28,7 @@ const Checkout = () => {
     const stripe = useStripe();
     const elements = useElements();
 
-    const onSubmit: SubmitHandler<CheckoutFormData> = async (data) => {
+    const onSubmit: SubmitHandler<CheckoutFormData> = async () => {
         if (selectedPayment === 'bKash') {
             await handleBkashPayment();
         } else if (selectedPayment === 'Stripe' && stripe && elements) {
@@ -59,7 +59,7 @@ const Checkout = () => {
     };
 
 
-    const {error, loading, triggerBkash} = useBkash({
+    const { triggerBkash} = useBkash({
         onSuccess: (data) => {
             console.log(data); // this contains data from api response from onExecutePayment
         },

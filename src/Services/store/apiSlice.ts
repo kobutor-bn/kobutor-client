@@ -8,7 +8,7 @@ export const apiSlice = createApi({
     baseQuery: baseQuery,
     tagTypes: ['User', 'Cart', 'Review', 'Address', 'Favorites', 'Order'],
     endpoints: (builder) => ({
-        getCart: builder.query<ICart.Item, string>({
+        getCart: builder.query<ICart.Item, string | undefined>({
             query: (user_id) => ({
                 url: `/v1/cart/${user_id}`,
             }),
@@ -24,7 +24,7 @@ export const apiSlice = createApi({
             invalidatesTags: ['Cart'],
         }),
 
-        addItemToCart: builder.mutation<void, { id: string; item: ICart.Product }>({
+        addItemToCart: builder.mutation<void, { id: string; item: IProduct.Item }>({
             query: ({id, item}) => ({
                 url: `/v1/cart/item/${id}`,
                 method: 'PUT',

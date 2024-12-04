@@ -102,7 +102,7 @@ const DetailsCard: React.FC<DetailsCardProps> = (props) => {
     };
 
     useEffect(() => {
-        const p: IOrder.Product = {
+        const p: IProduct.Item = {
             ...item,
             quantity: qty,
         };

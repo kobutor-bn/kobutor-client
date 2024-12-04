@@ -67,7 +67,7 @@ const OrderStatus: React.FC = () => {
                     <ul className="space-y-4">
                         {order.products.map((product) => (
                             <li
-                                key={product.product_id}
+                                key={product.id}
                                 className="flex flex-col sm:flex-row justify-between bg-gray-50 p-4 rounded-md shadow-md gap-4"
                             >
                                 <div className="flex items-center gap-4">
@@ -81,7 +81,7 @@ const OrderStatus: React.FC = () => {
                                         <p className="text-sm text-gray-500">Quantity: {product.quantity}</p>
                                     </div>
                                 </div>
-                                <p className="text-lg font-semibold">${(product.price * product.quantity).toFixed(2)}</p>
+                                <p className="text-lg font-semibold">${(product.price * product.quantity!).toFixed(2)}</p>
                             </li>
                         ))}
                     </ul>

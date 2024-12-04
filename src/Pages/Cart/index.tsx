@@ -15,14 +15,14 @@ function Cart() {
     const dispatch = useDispatch();
     const user = useSelector(userSelector);
     const {cart, isLoading, error} = useCart(user!.id);
-    const totalAmount = cart!.items!.reduce((sum: number, product: ICart.Product) => sum + product.price * product.quantity, 0);
+    const totalAmount = cart!.items!.reduce((sum: number, product: IProduct.Item) => sum + product.price * product.quantity!, 0);
 
     useEffect(() => {
         dispatch(
             setItem({
                 total_amount: totalAmount,
                 user_id: user!.id,
-                products: cart!.items!.map((product: ICart.Product) => ({...product})),
+                products: cart!.items!.map((product: IProduct.Item) => ({...product})),
             })
         );
     }, []);
@@ -47,7 +47,7 @@ function Cart() {
                                         {cart!.quantity} Items | USD {cart!.price.toFixed(2)}
                                     </p>
                                 </div>
-                                {cart!.items?.map((product: ICart.Product, i) => (
+                                {cart!.items?.map((product: IProduct.Item, i) => (
                                     <CartCard
                                         key={i}
                                         item={product}

@@ -10,7 +10,7 @@ import Modal from "./Popup/Modal";
 import {Category} from "../Services/typings/Enums.ts";
 
 const OrderPreview: React.FC<IOrder.Preview> = ({user, products, selectedAddress}) => {
-    const totalPrice = products.reduce((sum, product) => sum + product.price * product.quantity, 0);
+    const totalPrice = products.reduce((sum, product) => sum + product.price * product.quantity!, 0);
     const {request, isUpdateOpen, setIsUpdateOpen} = useFormMutation();
     const {updateUser} = useUpdateUser();
 
@@ -27,7 +27,7 @@ const OrderPreview: React.FC<IOrder.Preview> = ({user, products, selectedAddress
         },
     };
 
-    const renderByCategory = (product: ICart.Product, category: string) => {
+    const renderByCategory = (product: IProduct.Item, category: string) => {
         switch (category) {
             case Category.Electronics:
                 return <LazyImage
@@ -93,7 +93,7 @@ const OrderPreview: React.FC<IOrder.Preview> = ({user, products, selectedAddress
             <ul className="space-y-4">
                 {products.map((item) => (
                     <li
-                        key={item.product_id}
+                        key={item.id}
                         className="flex flex-col lg:flex-row items-center justify-between bg-gray-50 p-4 rounded-md shadow-sm gap-4 lg:gap-6"
                     >
                         {renderByCategory(item, item.category)}
@@ -101,7 +101,7 @@ const OrderPreview: React.FC<IOrder.Preview> = ({user, products, selectedAddress
                             <p className="font-medium text-lg">{item.title}</p>
                             <p className="text-sm text-gray-500">Quantity: {item.quantity}</p>
                         </div>
-                        <p className="font-semibold text-lg">${(item.price * item.quantity).toFixed(2)}</p>
+                        <p className="font-semibold text-lg">${(item.price * item.quantity!).toFixed(2)}</p>
                     </li>
                 ))}
             </ul>

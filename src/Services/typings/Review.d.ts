@@ -33,6 +33,7 @@ declare namespace IReview {
         id: string;
         name: string;
         username: string;
+        avatar: string;
     }
 
     interface ResProduct {

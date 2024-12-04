@@ -1,4 +1,3 @@
-// src/pages/User.tsx
 import {useState} from "react";
 import Avatar from "../../Components/Avatar";
 import Form from "../../Components/Form";
@@ -13,7 +12,7 @@ import {userSettingsSchema} from "../../Components/Form/schema.ts";
 function User() {
     const {userCtx} = useGlobal();
     const user = userCtx.user;
-    const {updateUser, isLoading, error} = useUpdateUser();
+    const {updateUser, error} = useUpdateUser();
     const [tab, setTab] = useState<"personal" | "addresses">("personal");
 
     const configWithSubmit = {

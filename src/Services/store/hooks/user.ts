@@ -17,7 +17,7 @@ export const useUser = () => {
     }, [data, isLoading, dispatch]);
 
     const isUserLoading = isLoading;
-    const user = data;
+    const user = data!;
 
     return {
         user,

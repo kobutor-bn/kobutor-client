@@ -25,7 +25,7 @@ function OrderSummary() {
     const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
     const [isCreateAddrOpen, setIsCreateAddrOpen] = useState(false);
     const [selectedAddress, setSelectedAddress] = useState<IAddress.Item | null>(null);
-    const totalAmount = order.products.reduce((sum, product) => sum + product.price * product.quantity, 0);
+    const totalAmount = order.products.reduce((sum, product) => sum + product.price * product.quantity!, 0);
 
     // Hooks
     const {addresses, isLoading: isAddrLoading, error: addrError} = useAddress(user!.id!);
@@ -108,6 +108,7 @@ function OrderSummary() {
         dispatch(
             setItem({
                 address: {
+                    id: addr.id,
                     address_id: addr.id,
                     user_id: addr.user_id,
                     detail: addr.city,
