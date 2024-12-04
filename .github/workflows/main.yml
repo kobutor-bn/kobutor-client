@@ -1,0 +1,30 @@
+name: Publish Docker Image
+
+on:
+  push:
+    branches:
+      - main  # Trigger only on pushes to the main branch
+
+jobs:
+  publish-docker-image:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout the repository
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # Step 2: Login to GitHub Container Registry
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      # Step 3: Build, tag, and push the Docker image
+      - name: Build, test, and push Docker image
+        run: |
+          docker build . --tag ghcr.io/kobutor-bn/kobutor-client:latest
+          docker run --rm ghcr.io/kobutor-bn/kobutor-client:latest  # Test the image
+          docker push ghcr.io/kobutor-bn/kobutor-client:latest
