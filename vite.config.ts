@@ -1,58 +1,32 @@
-import {defineConfig} from 'vite';
+/// <reference types="vite/client" />
+import {defineConfig, loadEnv} from 'vite';
 import react from '@vitejs/plugin-react';
 
-export default defineConfig(() => {
+export default defineConfig(({ mode}) => {
+    const env = loadEnv(mode, process.cwd(), '');
+    console.log(env.VITE_API_BACKEND_BASE_URL)
+
     return {
         plugins: [react()],
         server: {
             proxy: {
                 '/api': {
-                    target: "http://localhost:2335",
-                    changeOrigin: true,
-                    secure: false,
-                    rewrite: (path) => path.replace(/^\/api/, ''),
-                },
-                '/api/v1': {
-                    target: "http://localhost:2335",
-                    changeOrigin: true,
-                    secure: false,
-                    rewrite: (path) => path.replace(/^\/api/, ''),
-                },
-                '/api/cms': {
-                    target: "http://localhost:2335",
+                    target: env.VITE_API_BACKEND_BASE_URL,
                     changeOrigin: true,
                     secure: false,
                     rewrite: (path) => path.replace(/^\/api/, ''),
                 },
                 '/kobutor': {
-                    target: 'http://localhost:9000',
+                    target: env.VITE_API_MINIO_BASE,
                     changeOrigin: true,
                     secure: false,
-                    rewrite: (path) => path.replace(/^\//, ''),
+                    rewrite: (path) => path.replace(/^\/kobutor/, '/kobutor'),
                 },
-                '^/product/.*kobutor': {
-                    target: 'http://localhost:9000',
+                '^/(product|cart|review|order)/.*kobutor': {
+                    target: env.VITE_API_MINIO_BASE,
                     changeOrigin: true,
                     secure: false,
-                    rewrite: (path) => path.replace(/^\/product\/(.*\/)?kobutor/, '/kobutor'),
-                },
-                '^/cart/.*kobutor': {
-                    target: 'http://localhost:9000',
-                    changeOrigin: true,
-                    secure: false,
-                    rewrite: (path) => path.replace(/^\/cart\/(.*\/)?kobutor/, '/kobutor'),
-                },
-                '^/review/.*kobutor': {
-                    target: 'http://localhost:9000',
-                    changeOrigin: true,
-                    secure: false,
-                    rewrite: (path) => path.replace(/^\/review\/(.*\/)?kobutor/, '/kobutor'),
-                },
-                '^/order/.*kobutor': {
-                    target: 'http://localhost:9000',
-                    changeOrigin: true,
-                    secure: false,
-                    rewrite: (path) => path.replace(/^\/order\/(.*\/)?kobutor/, '/kobutor'),
+                    rewrite: (path) => path.replace(/^\/(product|cart|review|order)\/(.*\/)?kobutor/, '/kobutor'),
                 },
             },
         },
