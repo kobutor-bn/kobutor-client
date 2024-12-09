@@ -8,7 +8,7 @@ RUN npm install
 
 # Copy the entire project
 COPY . .
-RUN ls -l /app  # Debug: Verify files are copied
+RUN ls -l /  # Debug: Verify files are copied
 
 # Build the project
 RUN npm run build
