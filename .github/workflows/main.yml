@@ -26,5 +26,5 @@ jobs:
       - name: Build and push Docker image
         run: |
           docker build . --tag ghcr.io/kobutor-bn/kobutor-client:latest
-          docker run --rm ghcr.io/kobutor-bn/kobutor-client:latest sh -c "ls /app/dist"
+          docker run --rm ghcr.io/kobutor-bn/kobutor-client:latest sh -c "ls /usr/share/nginx/html"
           docker push ghcr.io/kobutor-bn/kobutor-client:latest
