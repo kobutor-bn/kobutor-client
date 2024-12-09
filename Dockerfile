@@ -1,3 +1,4 @@
+# Builder stage
 FROM node:16-alpine AS builder
 WORKDIR /app
 
@@ -5,16 +6,16 @@ WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm install
 
-# Copy source code and build
+# Copy the entire project
 COPY . .
+RUN ls -l /  # Debug: Verify files are copied
+
+# Build the project
 RUN npm run build
+RUN ls -l /app/dist  # Debug: Verify dist directory is created
 
-# Serve Stage
+# Serve stage
 FROM nginx:alpine
-COPY --from=builder /app/dist /usr/share/nginx/html
-
-# Expose the default NGINX port
+COPY --from=builder /app/dist/ /usr/share/nginx/html
 EXPOSE 80
-
-# Start NGINX
 CMD ["nginx", "-g", "daemon off;"]
