@@ -6,12 +6,9 @@ WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm install
 
-# Copy the entire project
+# Copy and run
 COPY . .
-
-# Build the project
 RUN npm run build
-RUN ls -l /app/dist
 
 # Serve stage
 FROM nginx:alpine

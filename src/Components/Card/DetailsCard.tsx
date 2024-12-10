@@ -53,7 +53,6 @@ const DetailsCard: React.FC<DetailsCardProps> = (props) => {
             case Category.WomenBags:
                 updatedProduct.image = selectedImage!;
                 updatedProduct.color = selectedColor!; // Add selected color
-                console.log(updatedProduct);
                 addToCart({
                     id: cart!.id,
                     item: updatedProduct,
@@ -65,7 +64,6 @@ const DetailsCard: React.FC<DetailsCardProps> = (props) => {
 
             case Category.Electronics:
                 updatedProduct.image = product.images[0];
-                console.log(updatedProduct);
                 addToCart({
                     id: cart!.id,
                     item: updatedProduct,

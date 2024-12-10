@@ -18,7 +18,6 @@ export const AvatarUploader = () => {
     };
 
     const handleUpload = async () => {
-        console.log(file)
         if (!file) return;
         try {
             const uid = user?.id;
@@ -28,7 +27,6 @@ export const AvatarUploader = () => {
             formData.append("avatar", file);
 
             await setAvatar({id: uid, uid: file.name});
-            console.log("Avatar updated successfully!");
         } catch (err) {
             console.error("Failed to upload avatar:", err);
         }
