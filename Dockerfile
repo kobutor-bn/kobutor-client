@@ -1,11 +1,11 @@
-# Stage 1: Build stage
+# Stage 1: Builder stage
 FROM node:16-alpine AS builder
 
 WORKDIR /app
 
-# Install dependencies (production-only)
+# Install ALL dependencies (including devDependencies)
 COPY package.json package-lock.json ./
-RUN npm install --only=production
+RUN npm install
 
 # Copy application files
 COPY . .
@@ -14,15 +14,17 @@ COPY . .
 RUN npm run build
 
 
-# Stage 2: Final runtime stage
+# Stage 2: Runtime stage
 FROM node:16-alpine
 
 WORKDIR /app
 
-# Copy only the build output and production dependencies
-COPY --from=builder /app/package.json /app/package-lock.json ./
-COPY --from=builder /app/node_modules /app/node_modules
-COPY --from=builder /app/dist /app/dist
+# Install only production dependencies
+COPY package.json package-lock.json ./
+RUN npm install --only=production
+
+# Copy the built files from the builder stage
+COPY --from=builder /app/build /app/build
 
 # Set the environment
 ENV NODE_ENV=production
