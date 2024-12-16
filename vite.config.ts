@@ -24,12 +24,6 @@ export default defineConfig(({ mode}) => {
                     secure: false,
                     rewrite: (path) => path.replace(/^\/kobutor/, '/kobutor'),
                 },
-                '^/(product|cart|review|order)/.*kobutor': {
-                    target: env.VITE_API_MINIO_BASE,
-                    changeOrigin: true,
-                    secure: false,
-                    rewrite: (path) => path.replace(/^\/(product|cart|review|order)\/(.*\/)?kobutor/, '/kobutor'),
-                },
             },
         },
     };
