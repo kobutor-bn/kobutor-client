@@ -20,4 +20,4 @@ WORKDIR /app
 COPY --from=builder /app/dist /app/dist
 
 # Expose the build folder for the central Nginx server
-VOLUME /app/build
+VOLUME /app/dist
