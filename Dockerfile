@@ -1,36 +1,23 @@
-# Stage 1: Builder stage
+# Stage 1: Build stage
 FROM node:16-alpine AS builder
 
 WORKDIR /app
 
-# Install ALL dependencies (including devDependencies)
+# Install dependencies
 COPY package.json package-lock.json ./
 RUN npm install
 
-# Copy application files
+# Copy application files and build the app
 COPY . .
-
-# Build the application
 RUN npm run build
 
-
-# Stage 2: Runtime stage
-FROM node:16-alpine
+# Stage 2: Production-ready container
+FROM alpine:3.18
 
 WORKDIR /app
 
-# Install only production dependencies
-COPY package.json package-lock.json ./
-RUN npm install --only=production
-
-# Copy the built files from the builder stage
+# Copy build artifacts from the builder stage
 COPY --from=builder /app/dist /app/dist
 
-# Set the environment
-ENV NODE_ENV=production
-
-# Expose the application port
-EXPOSE 3000
-
-# Command to run the application
-CMD ["npm", "start"]
+# Expose the build folder for the central Nginx server
+VOLUME /app/build
