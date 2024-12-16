@@ -11,11 +11,13 @@ RUN npm install
 COPY . .
 RUN npm run build
 
-# Step 2: Prepare the built files for Nginx
-FROM alpine:latest
+# Stage 2: Production-ready container
+FROM alpine:3.18
 
-# Create a directory to store the built files
-WORKDIR /dist
+WORKDIR /app
 
-# Copy the built frontend files from the builder stage
-COPY --from=builder /dist /dist
+# Copy build artifacts from the builder stage
+COPY --from=builder /app/dist /app/dist
+
+# Expose the build folder for the central Nginx server
+VOLUME /app/dist
