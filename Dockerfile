@@ -18,6 +18,7 @@ WORKDIR /app
 
 # Copy build artifacts from the builder stage
 COPY --from=builder /app/dist /app/dist
+RUN chmod -R 755 /app/dist
 
 # Expose the build folder for the central Nginx server
 VOLUME /app/dist
