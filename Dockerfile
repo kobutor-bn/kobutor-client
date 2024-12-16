@@ -18,4 +18,4 @@ FROM alpine:latest
 WORKDIR /dist
 
 # Copy the built frontend files from the builder stage
-COPY --from=builder /app/dist /dist
+COPY --from=builder /dist /dist
