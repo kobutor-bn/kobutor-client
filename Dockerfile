@@ -1,23 +1,21 @@
-# Stage 1: Build stage
-FROM node:16-alpine AS builder
+# Step 1: Build the frontend files
+FROM node:18-alpine AS builder
 
 WORKDIR /app
 
-# Install dependencies
+# Copy package files and install dependencies
 COPY package.json package-lock.json ./
 RUN npm install
 
-# Copy application files and build the app
+# Copy the rest of the application and build it
 COPY . .
 RUN npm run build
 
-# Stage 2: Production-ready container
-FROM alpine:3.18
+# Step 2: Prepare the built files for Nginx
+FROM alpine:latest
 
-WORKDIR /app
+# Create a directory to store the built files
+WORKDIR /dist
 
-# Copy build artifacts from the builder stage
-COPY --from=builder /app/dist /app/dist
-
-# Expose the build folder for the central Nginx server
-VOLUME /app/dist
+# Copy the built frontend files from the builder stage
+COPY --from=builder /app/dist /dist
