@@ -16,7 +16,7 @@ export default defineConfig(({ mode}) => {
                     target: env.VITE_API_BACKEND_BASE_URL,
                     changeOrigin: true,
                     secure: false,
-                    rewrite: (path) => path.replace(/^\/api/, '/v1'),
+                    rewrite: (path) => path.replace(/^\/api/, ''),
                 },
                 '/kobutor': {
                     target: env.VITE_API_MINIO_BASE,
