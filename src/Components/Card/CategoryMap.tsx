@@ -77,7 +77,7 @@ export const useCategoryMap = ({item}: UseCategoryMapProps) => {
                     <LazyImage
                         className="object-fill w-full h-64 md:h-80"
                         key={item.id}
-                        src={item.images[0]}
+                        src={`/${item.images[0]}`}
                         alt={item.title}
                     />
                 );
@@ -102,7 +102,8 @@ export const useCategoryMap = ({item}: UseCategoryMapProps) => {
                     <LazyImage
                         className={`object-fill border-2 ${selectedImage === image ? "border-red-400" : "border-black"} w-full h-64 md:h-80`}
                         key={`${item.id}-${i}`}
-                        src={image}
+                        // src={image}
+                        src={`/${item}`}
                         alt={item.title}
                         onClick={() => handleChange(null, image)}
                     />
