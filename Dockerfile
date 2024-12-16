@@ -24,7 +24,7 @@ COPY package.json package-lock.json ./
 RUN npm install --only=production
 
 # Copy the built files from the builder stage
-COPY --from=builder /app/build /app/build
+COPY --from=builder /app/dist /app/dist
 
 # Set the environment
 ENV NODE_ENV=production
