@@ -7,12 +7,11 @@ import "swiper/css/free-mode";
 import Review from "../../Components/Review";
 import {Banner} from "../../Services/typings/Enums.ts";
 import TagSlider from "../../Components/TagSlider";
-import LazyImage from "../../Services/lazy/lazyImage.tsx";
 
 const Home: React.FC = () => {
     const [banner, setBanner] = useState(window.innerWidth >= 768 ? Banner.Large : Banner.Small);
     const [isMediumScreen, setIsMediumScreen] = useState(window.innerWidth >= 768);
-    // const [isImageLoaded, setIsImageLoaded] = useState(false);
+    const [isImageLoaded, setIsImageLoaded] = useState(false);
 
     useEffect(() => {
         const handleResize = () => {
@@ -31,14 +30,16 @@ const Home: React.FC = () => {
             {/* Banner Section */}
             <div className="relative flex justify-center items-center">
                 <div className="relative w-full max-w-7xl">
-                    {/*{!isImageLoaded && (*/}
+                    {!isImageLoaded && (
                         <div className="placeholder h-64 md:h-96 bg-gray-200 animate-pulse rounded-lg"></div>
-                    {/*)}*/}
-                    <LazyImage
-                        className={`advertise w-full rounded-lg shadow-lg transition-opacity duration-700 `}
+                    )}
+                    <img
+                        className={`advertise w-full rounded-lg shadow-lg transition-opacity duration-700 ${
+                            isImageLoaded ? "opacity-100" : "opacity-0"
+                        }`}
                         src={banner}
                         alt="Advertisement"
-                        // onLoad={() => setIsImageLoaded(true)}
+                        onLoad={() => setIsImageLoaded(true)}
                     />
                 </div>
             </div>
