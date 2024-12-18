@@ -1,4 +1,4 @@
-const minioURI = import.meta.env.VITE_API_MINIO_INCLUDE_BUCKET;
+// const minioURI = import.meta.env.VITE_API_MINIO_INCLUDE_BUCKET;
 
 export const Banner = {
     Large: `http://16.16.18.26:9000/kobutor/2024/photo-1587731556938-38755b4803a6.jpg`,
