@@ -19,10 +19,10 @@ export default defineConfig(({ mode}) => {
                     rewrite: (path) => path.replace(/^\/api/, ''),
                 },
                 '/kobutor': {
-                    target: env.VITE_API_MINIO_BASE_URL,
+                    target: env.VITE_S3_BASE_URL,
                     changeOrigin: true,
-                    secure: false,
-                    rewrite: (path) => path.replace(/^\/kobutor/, '/kobutor'),
+                    secure: true, // Changed to true for S3
+                    rewrite: (path) => path.replace(/^\/kobutor/, ''),
                 },
             },
         },

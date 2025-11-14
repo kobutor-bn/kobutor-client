@@ -29,7 +29,7 @@ const Home: React.FC = () => {
         <div className="bg-gray-50">
             {/* Banner Section */}
             <div className="relative flex justify-center items-center">
-                <div className="relative w-full max-w-7xl">
+                <div className="relative w-full  max-w-7xl">
                     {!isImageLoaded && (
                         <div className="placeholder h-64 md:h-96 bg-gray-200 animate-pulse rounded-lg"></div>
                     )}
