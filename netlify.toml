@@ -1,8 +1,7 @@
 [[redirects]]
 from = "/api/*"
-to = "http://34.196.37.58:2335/:splat"
+to = "/.netlify/functions/api-proxy/:splat"
 status = 200
-force = true
 
 [[redirects]]
 from = "/kobutor/*"
