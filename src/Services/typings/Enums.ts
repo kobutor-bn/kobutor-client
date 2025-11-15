@@ -1,7 +1,12 @@
-export enum Banner {
-    Large = "http://127.0.0.1:9000/kobutor/2024/photo-1587731556938-38755b4803a6.jpg",
-    Small= "http://localhost:9000/kobutor/2024/vlad-bunu-d2Q0ZXnWI_c-unsplash.jpg"
-}
+import sm from "../../assets/vlad-bunu-d2Q0ZXnWI_c-unsplash.jpg";
+import lg from "../../assets/clay-banks-fEVaiLwWvlU-unsplash.jpg";
+
+export const Banner = {
+    Large: lg,
+    Small: sm,
+} as const;
+
+export type Banner = typeof Banner[keyof typeof Banner];
 
 export enum Category {
     WomenBags = 'Women Bags',
