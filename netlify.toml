@@ -1,0 +1,11 @@
+[[redirects]]
+from = "/api/*"
+to = "http://34.196.37.58:2335/:splat"
+status = 200
+force = true
+
+[[redirects]]
+from = "/kobutor/*"
+to = "https://kobutor.s3.us-east-1.amazonaws.com/:splat"
+status = 200
+force = true
