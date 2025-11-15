@@ -1,13 +1,13 @@
 [[redirects]]
 from = "/api/v1/*"
-to = "http://34.196.37.58:80/v1/:splat"
+to = "http://34.196.37.58:2335/v1/:splat"
 status = 200
 force = true
 headers = {X-From = "Netlify"}
 
 [[redirects]]
 from = "/api/*"
-to = "http://34.196.37.58:80/cms/:splat"
+to = "http://34.196.37.58:2335/cms/:splat"
 status = 200
 force = true
 
