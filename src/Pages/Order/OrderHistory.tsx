@@ -4,7 +4,7 @@ import Error from "../Error.tsx";
 import {Link} from "react-router-dom";
 
 const OrderHistory: React.FC = () => {
-    const {orders, isLoading, error} = useOrderHistory();
+    const {orders, error} = useOrderHistory();
     console.log(orders);
 
     // if (!isLoading) return <Loading/>

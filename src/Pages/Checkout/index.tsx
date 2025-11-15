@@ -28,7 +28,7 @@ const Checkout = () => {
     const stripe = useStripe();
     const elements = useElements();
 
-    const onSubmit: SubmitHandler<CheckoutFormData> = async (data) => {
+    const onSubmit: SubmitHandler<CheckoutFormData> = async () => {
         if (selectedPayment === 'bKash') {
             await handleBkashPayment();
         } else if (selectedPayment === 'Stripe' && stripe && elements) {
@@ -59,7 +59,7 @@ const Checkout = () => {
     };
 
 
-    const {error, loading, triggerBkash} = useBkash({
+    const {triggerBkash} = useBkash({
         onSuccess: (data) => {
             console.log(data); // this contains data from api response from onExecutePayment
         },

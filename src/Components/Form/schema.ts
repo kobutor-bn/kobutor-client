@@ -17,7 +17,7 @@ export const userSettingsSchema = z.object({
     password: z.string().min(8, "Password must be at least 8 characters"),
     new_password: z.string().min(4),
     email: z.string().email("Invalid email address"),
-    phone: z.number().transform(data => Number(data)),
+    phone: z.string().regex(/^\d{10}$/, "Invalid phone number"),
     avatar: z.string().optional(),
     isVerified: z.boolean().optional()
 }).superRefine(({new_password, password}, ctx) => {

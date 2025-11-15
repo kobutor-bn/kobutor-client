@@ -14,8 +14,8 @@ declare namespace ICart {
         price: number;
         desc: string;
         category: string;
-        image: string;
-        color: string;
+        image?: string;
+        color?: string;
     }
 
     interface Color {

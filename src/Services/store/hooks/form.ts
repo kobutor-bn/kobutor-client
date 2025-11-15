@@ -1,15 +1,14 @@
-import {MutationTrigger} from "@reduxjs/toolkit/dist/query/react/buildHooks";
-import {useState} from "react";
-import {useGlobal} from "../../../GlobalProvider.tsx";
+import { useState } from "react";
+import { useGlobal } from "../../../GlobalProvider.tsx";
 
-export const useFormMutation = <T>() => {
-    const {userCtx} = useGlobal();
+export const useFormMutation = () => {
+    const { userCtx } = useGlobal();
     const [isCreateOpen, setIsCreateOpen] = useState(false);
     const [isUpdateOpen, setIsUpdateOpen] = useState(false);
 
-    const request = async (
+    const request = async <T,>(
         action: "create" | "update",
-        mutation: MutationTrigger<(args: T) => unknown>,
+        mutation: (arg: T) => Promise<any>,
         values: T
     ) => {
         try {
@@ -30,5 +29,5 @@ export const useFormMutation = <T>() => {
         console.log(action === "create" ? "Created successfully" : "Updated successfully");
     };
 
-    return {request, helper, isCreateOpen, isUpdateOpen, setIsCreateOpen, setIsUpdateOpen}
+    return { request, helper, isCreateOpen, isUpdateOpen, setIsCreateOpen, setIsUpdateOpen }
 }

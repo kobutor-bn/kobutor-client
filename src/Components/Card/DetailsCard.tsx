@@ -102,18 +102,23 @@ const DetailsCard: React.FC<DetailsCardProps> = (props) => {
     };
 
     useEffect(() => {
+        if (!user?.id) return;
+
         const p: IOrder.Product = {
             ...item,
             quantity: qty,
+            product_id: '',
+            image: '',
+            color: ''
         };
 
         dispatch(
             setItem({
-                user_id: user!.id,
+                user_id: user.id,
                 products: [p],
             })
         );
-    }, []);
+    }, [user, item, qty, dispatch]);
 
     return (
         <div className="max-w-screen-2xl mx-auto bg-white border-black overflow-hidden">

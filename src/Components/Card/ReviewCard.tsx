@@ -9,23 +9,24 @@ const MAX_DESCRIPTION_LENGTH = 100;
 const ReviewCard: React.FC<{ id: string }> = ({id}) => {
     const {review, isLoading, error} = useReviewDetails(id);
 
-    const isDescriptionLong = review?.product?.desc?.length > MAX_DESCRIPTION_LENGTH;
-    const displayedDescription = isDescriptionLong
-        ? review?.product.desc.slice(0, MAX_DESCRIPTION_LENGTH) + "..."
-        : review?.product.desc;
-
     if (isLoading) return <Loading/>;
     if (error) return <Error error={error}/>;
+    if (!review) return null; // Add this safety check
+
+    const isDescriptionLong = (review.product?.desc?.length ?? 0) > MAX_DESCRIPTION_LENGTH;
+    const displayedDescription = isDescriptionLong
+        ? review.product?.desc?.slice(0, MAX_DESCRIPTION_LENGTH) + "..."
+        : review.product?.desc;
 
     return (
         <div className="flex flex-col gap-4 bg-white rounded-lg shadow-lg p-6 border border-gray-100">
             <div className="flex items-center gap-4">
                 <LazyImage
                     className="w-12 h-12 rounded-full object-cover shadow"
-                    src={review?.user.avatar || "/default-avatar.png"}
-                    alt={`${review?.user.name}'s avatar`}
+                    src={review.user?.avatar || "/default-avatar.png"}
+                    alt={`${review.user?.name}'s avatar`}
                 />
-                <p className="font-montserrat font-semibold text-lg">{review?.user.name}</p>
+                <p className="font-montserrat font-semibold text-lg">{review.user?.name}</p>
             </div>
             <p className="text-sm text-neutral-700 leading-relaxed">
                 {displayedDescription}{" "}
@@ -38,11 +39,11 @@ const ReviewCard: React.FC<{ id: string }> = ({id}) => {
                     </Link>
                 )}
             </p>
-            {review?.product.images && (
+            {review.product?.images && review.product.images.length > 0 && (
                 <LazyImage
                     className="w-full h-48 rounded-md object-cover"
                     src={review.product.images[0]}
-                    alt={review.product.title}
+                    alt={review.product.title || "Product image"}
                 />
             )}
         </div>

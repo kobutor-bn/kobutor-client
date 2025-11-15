@@ -21,7 +21,7 @@ declare namespace IOrder {
         user_id: string;
         username: string;
         name: string;
-        phone: number;
+        phone: string;
         email: string;
         cart_id: string;
         avatar: string;
@@ -34,8 +34,8 @@ declare namespace IOrder {
         price: number;
         desc: string;
         category: string;
-        image: string;
-        color: string;
+        image?: string;
+        color?: string;
     }
 
     type Address = {

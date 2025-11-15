@@ -48,7 +48,7 @@ function Address() {
 
             const updateAddrValues: IAddress.Update = {
                 ...values,
-                id: currentAddress.id,
+                id: currentAddress.id!,
                 user_id: userCtx.user!.id,
             };
 
@@ -86,7 +86,7 @@ function Address() {
                     <p>{addr.city}, {addr.postal_code}</p>
                     <div className="mt-4 flex gap-2">
                         {updateAddress(addr)}
-                        {removeAddress(addr.id)}
+                        {removeAddress(addr.id!)}
                     </div>
                 </div>
             ))}

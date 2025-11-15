@@ -1,4 +1,3 @@
-// src/pages/User.tsx
 import {useState} from "react";
 import Avatar from "../../Components/Avatar";
 import Form from "../../Components/Form";
@@ -13,7 +12,7 @@ import {userSettingsSchema} from "../../Components/Form/schema.ts";
 function User() {
     const {userCtx} = useGlobal();
     const user = userCtx.user;
-    const {updateUser, isLoading, error} = useUpdateUser();
+    const {updateUser, error} = useUpdateUser();
     const [tab, setTab] = useState<"personal" | "addresses">("personal");
 
     const configWithSubmit = {
@@ -21,10 +20,10 @@ function User() {
         schema: userSettingsSchema,
         onSubmit: async (values: z.infer<typeof userSettingsSchema>) => {
             try {
-                if (userCtx.isAuthenticated) {
+                if (userCtx.isAuthenticated && user?.id) {
                     await updateUser({
                         ...values,
-                        id: user?.id,
+                        id: user.id,
                     }).unwrap();
                     console.log("User Settings updated successfully");
                 } else {

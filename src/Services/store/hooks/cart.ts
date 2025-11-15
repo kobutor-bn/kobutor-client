@@ -30,9 +30,12 @@ export const InitCart = (isAuthenticated: boolean, isUserLoading: boolean) => {
     const user = useSelector(userSelector);
     const cart = useSelector(cartSelector);
 
-    const {data: cartData, isLoading: isCartFetching, error: cartError} = useGetCartQuery(user?.id, {
-        skip: !isAuthenticated || isUserLoading || !user?.id,
-    });
+    const {data: cartData, isLoading: isCartFetching, error: cartError} = useGetCartQuery(
+        user?.id || '',
+        {
+            skip: !isAuthenticated || isUserLoading || !user?.id,
+        }
+    );
 
     const [addCart, {isLoading: isAddingCart}] = useAddCartMutation();
 
@@ -72,7 +75,7 @@ export const InitCart = (isAuthenticated: boolean, isUserLoading: boolean) => {
         } catch (err) {
             console.error('Error reading cart from localStorage:', err);
         }
-    }, [dispatch]);
+    }, [addCart, dispatch]);
 
     useEffect(() => {
         if (isAuthenticated && !isUserLoading) {

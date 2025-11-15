@@ -7,12 +7,26 @@ interface ErrorProps {
     refetch?: () => void;
 }
 
+// Type guard functions
+function isFetchBaseQueryError(error: any): error is FetchBaseQueryError {
+    return error && 'status' in error;
+}
+
+function isSerializedError(error: any): error is SerializedError {
+    return error && 'message' in error;
+}
+
+function hasDataProperty(error: any): error is { data: { message?: string; request?: string } } {
+    return error && 'data' in error && typeof error.data === 'object';
+}
+
 const Error: React.FC<ErrorProps> = ({error}) => {
     let message = 'An unexpected error occurred.';
     let code = '';
+    let request = '';
 
     if (error) {
-        if ('status' in error) {
+        if (isFetchBaseQueryError(error)) {
             switch (error.status) {
                 case "FETCH_ERROR":
                 case "TIMEOUT_ERROR":
@@ -25,11 +39,16 @@ const Error: React.FC<ErrorProps> = ({error}) => {
                     code = `PARSING_ERROR (${error.originalStatus})`;
                     break;
                 default:
-                    message = `Error: ${error?.data?.message}`;
+                    // Use type guard for data property
+                    if (hasDataProperty(error)) {
+                        message = `Error: ${error.data.message || 'Unknown error'}`;
+                        request = error.data.request || '';
+                    } else {
+                        message = `Error: Status ${error.status}`;
+                    }
                     code = `Status Code: ${error.status}`;
             }
-        } else if ('message' in error) {
-            // Handle SerializedError types
+        } else if (isSerializedError(error)) {
             message = error.message || message;
             code = error.code || 'UNKNOWN_ERROR';
         }
@@ -48,20 +67,9 @@ const Error: React.FC<ErrorProps> = ({error}) => {
             margin: '1rem auto',
             textAlign: 'center'
         }}>
-            <h2>{error?.data?.request}</h2>
+            {request && <h2>{request}</h2>}
             <p><strong>{code}</strong></p>
             <p>{message}</p>
-            {/*<button onClick={refetch} style={{*/}
-            {/*    marginTop: '1rem',*/}
-            {/*    padding: '0.5rem 1rem',*/}
-            {/*    border: 'none',*/}
-            {/*    backgroundColor: '#d9534f',*/}
-            {/*    color: 'white',*/}
-            {/*    borderRadius: '4px',*/}
-            {/*    cursor: 'pointer',*/}
-            {/*}}>*/}
-            {/*    Retry*/}
-            {/*</button>*/}
         </div>
     );
 };
