@@ -19,7 +19,7 @@ const userSettingsFormConfig: IForm.Config<z.infer<typeof userSettingsSchema>> =
         {name: 'password', type: 'password', placeholder: 'Enter your password', required: false},
         {name: 'new_password', type: 'password', placeholder: 'Confirm your new password', required: false},
         {name: 'phone', type: 'number', placeholder: 'Enter your phone number', required: true},
-        {name: 'avatar', type: 'text', placeholder: 'Enter avatar URL', required: false},
+        {name: 'avatar', type: 'hidden', placeholder: 'Enter avatar URL', required: false},
     ],
     schema: userSettingsSchema,
     onSubmit: (values) => console.log('Registering user:', values),

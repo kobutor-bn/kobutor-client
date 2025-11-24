@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import {Link} from "react-router-dom";
 import Modal from "../Popup/Modal";
-import {FaTrashAlt} from "react-icons/fa";
+import {HiOutlineTrash} from "react-icons/hi";
 import {useSelector} from "react-redux";
 import {useAddToCart, useDecreaseFromCart, useRemoveFromCart} from "../../Services/store/hooks/cart.ts";
 import {cartSelector} from "../../Services/store/slices/cart.ts";
@@ -19,141 +19,164 @@ const CartCard: React.FC<Props> = ({item}) => {
     const {decreaseFromCart, isLoading: decreaseIsLoading} = useDecreaseFromCart();
     const {removeFromCart} = useRemoveFromCart();
     const [isOpen, setIsOpen] = useState<boolean>(false);
-    // const {addNotification} = useNotification();
 
     const calcQty = async (operand: string) => {
         const updatedItem = {...item, product_id: item.product_id, quantity: 1};
         try {
             if (operand === "+") {
-                item.quantity = 1
                 await addToCart({id: cart!.id, item: updatedItem});
-                // addNotification("Item added to cart", "success");
             } else if (operand === "-" && item.quantity! > 0) {
                 await decreaseFromCart({id: cart!.id, product_id: item.product_id});
-                // addNotification("Item removed from cart", "success");
             }
         } catch (error) {
-            // addNotification("Action failed", "error");
+            console.error("Cart update failed:", error);
         }
     };
 
-    const renderImgByCategory = (category: string) => {
-        switch (category) {
-            case "Electronics":
-                return (
-                    <LazyImage
-                        className="object-fill w-full h-64 md:h-80"
-                        key={item.product_id}
-                        src={item.image!}
-                        alt={item.title}
-                    />
-                );
-            case "Women Bags":
-                return (
-                    <>
-                        <LazyImage
-                            className="object-fill w-full h-64 md:h-80"
-                            key={item.product_id}
-                            src={item.image!}
-                            alt={item.title}
-                        />
-                    </>
-
-                );
-            default:
-                return null;
-        }
+    const renderImgByCategory = () => {
+        return (
+            <LazyImage
+                className="w-full h-full object-cover rounded-lg"
+                key={item.product_id}
+                src={item.image!}
+                alt={item.title}
+            />
+        );
     };
 
     return (
-        <div className="max-w-screen-md mx-auto flex flex-col md:flex-row gap-4 border-b-[1px] border-b-gray-300 py-6">
-            {/* Product Image */}
-            <Link
-                to={`/item/details/${item.product_id}`}
-                className="flex-shrink-0 w-full md:w-1/3 aspect-w-4 aspect-h-3">
-                {renderImgByCategory(item.category)}
-            </Link>
+        <div className="p-6 2xl:p-8 hover:bg-gray-50 transition-colors">
+            <div className="flex gap-6">
+                {/* Product Image */}
+                <Link
+                    to={`/product/details/${item.product_id}`}
+                    className="flex-shrink-0 w-32 h-32 md:w-40 md:h-40 2xl:w-48 2xl:h-48 rounded-lg overflow-hidden border border-gray-200 hover:border-blue-500 transition-colors group"
+                >
+                    <div className="relative w-full h-full">
+                        {renderImgByCategory()}
+                        <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-10 transition-opacity"></div>
+                    </div>
+                </Link>
 
-            {/* Product Details */}
-            <div className="flex flex-col justify-between w-full gap-4">
-                {/* Product Title and Price */}
-                <div className="flex justify-between items-center">
-                    <Link to={`/product/details/${item.product_id}`}>
-                        <h2 className="font-montserrat text-lg md:text-xl font-bold hover:text-indigo-600 transition">
-                            {item.title}
-                        </h2>
-                    </Link>
-                    <p className="text-lg font-semibold text-gray-700">{`$${item.price}`}</p>
-                </div>
-
-                {/* Product Description and Category */}
-                <div className="flex flex-col gap-1">
-                    <p className="font-nunito text-sm md:text-base text-gray-600">{item.desc}</p>
-                    <p className="text-indigo-500 font-montserrat font-semibold text-sm md:text-base">
-                        {item.category}
-                    </p>
-                    {item.category === Category.WomenBags && (
-                        <div className="flex items-center font-semibold text-rose-500 gap-2">
-                            <p>Color: </p>
-                            <div
-                                className={`h-5 w-5 p-0.5 cursor-pointer rounded-full border-2 border-black`}
-                                style={{backgroundColor: item.color}}
-                            ></div>
+                {/* Product Details */}
+                <div className="flex-1 flex flex-col justify-between min-w-0">
+                    {/* Top Section: Title, Category, Price */}
+                    <div className="space-y-2">
+                        <div className="flex justify-between items-start gap-4">
+                            <Link to={`/product/details/${item.product_id}`} className="flex-1 min-w-0">
+                                <h3 className="font-montserrat text-base md:text-lg 2xl:text-2xl font-bold text-gray-900 hover:text-blue-600 transition-colors line-clamp-2">
+                                    {item.title}
+                                </h3>
+                            </Link>
+                            <p className="text-lg md:text-xl 2xl:text-3xl font-bold text-gray-900 flex-shrink-0">
+                                €{item.price.toFixed(2)}
+                            </p>
                         </div>
-                    )}
-                </div>
 
-                {/* Quantity Controls and Trash Icon */}
-                <div className="flex justify-between items-center gap-4">
-                    {/* Quantity Buttons */}
-                    <div className="font-montserrat flex flex-col gap-2">
-                        <div
-                            className="flex items-center gap-4 bg-gray-100 py-2 px-4 rounded-full shadow-md">
+                        {/* Category Badge */}
+                        <div className="flex items-center gap-2">
+                            <span className="inline-block px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs 2xl:text-base font-semibold">
+                                {item.category}
+                            </span>
+                            {item.category === Category.WomenBags && item.color && (
+                                <div className="flex items-center gap-2">
+                                    <span className="text-sm 2xl:text-lg text-gray-600">Color:</span>
+                                    <div
+                                        className="h-6 w-6 2xl:h-8 2xl:w-8 rounded-full border-2 border-gray-300 shadow-sm"
+                                        style={{backgroundColor: item.color}}
+                                        title={item.color}
+                                    ></div>
+                                </div>
+                            )}
+                        </div>
+
+                        {/* Description - Desktop Only */}
+                        {item.desc && (
+                            <p className="hidden md:block font-Nunito text-sm 2xl:text-lg text-gray-600 line-clamp-2">
+                                {item.desc}
+                            </p>
+                        )}
+                    </div>
+
+                    {/* Bottom Section: Quantity Controls & Delete */}
+                    <div className="flex items-center justify-between gap-4 mt-4">
+                        {/* Quantity Controls */}
+                        <div className="flex items-center gap-3 bg-gray-100 rounded-lg p-1">
                             <button
-                                disabled={decreaseIsLoading}
+                                disabled={decreaseIsLoading || item.quantity <= 1}
                                 onClick={() => calcQty('-')}
-                                className={`bg-gray-300 hover:bg-gray-400 text-black font-bold py-2 px-4 rounded-full transition-all ${
-                                    decreaseIsLoading ? 'opacity-50 cursor-not-allowed' : ''
+                                className={`w-10 h-10 2xl:w-12 2xl:h-12 flex items-center justify-center rounded-md bg-white hover:bg-gray-200 text-gray-700 font-bold transition-all shadow-sm ${
+                                    (decreaseIsLoading || item.quantity <= 1) ? 'opacity-50 cursor-not-allowed' : 'hover:scale-105'
                                 }`}
+                                aria-label="Decrease quantity"
                             >
-                                -
+                                {decreaseIsLoading ? (
+                                    <svg className="animate-spin h-5 w-5" fill="none" viewBox="0 0 24 24">
+                                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
+                                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"/>
+                                    </svg>
+                                ) : (
+                                    <span className="text-xl 2xl:text-2xl">−</span>
+                                )}
                             </button>
-                            <span className="text-lg md:text-xl font-semibold text-black">
-                        {item.quantity}
-                    </span>
+
+                            <span className="font-montserrat text-lg md:text-xl 2xl:text-2xl font-bold text-gray-900 min-w-[2rem] text-center">
+                                {item.quantity}
+                            </span>
+
                             <button
                                 disabled={addLoading}
                                 onClick={() => calcQty('+')}
-                                className={`bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-full transition-all ${
-                                    addLoading ? 'opacity-50 cursor-not-allowed' : ''
+                                className={`w-10 h-10 2xl:w-12 2xl:h-12 flex items-center justify-center rounded-md bg-blue-600 hover:bg-blue-700 text-white font-bold transition-all shadow-sm ${
+                                    addLoading ? 'opacity-50 cursor-not-allowed' : 'hover:scale-105'
                                 }`}
+                                aria-label="Increase quantity"
                             >
-                                +
+                                {addLoading ? (
+                                    <svg className="animate-spin h-5 w-5" fill="none" viewBox="0 0 24 24">
+                                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
+                                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"/>
+                                    </svg>
+                                ) : (
+                                    <span className="text-xl 2xl:text-2xl">+</span>
+                                )}
                             </button>
                         </div>
-                    </div>
 
-                    <Modal
-                        isOpen={isOpen}
-                        setIsOpen={setIsOpen}
-                        trigger={
-                            <FaTrashAlt
-                                className="text-gray-700 hover:text-red-600 text-xl cursor-pointer transition-transform transform hover:scale-110 ml-4"
-                            />
-                        }
-                        body={
-                            <Confirm
+                        {/* Subtotal & Delete */}
+                        <div className="flex items-center gap-4">
+                            <div className="text-right hidden md:block">
+                                <p className="text-xs 2xl:text-base text-gray-500">Subtotal</p>
+                                <p className="text-lg 2xl:text-2xl font-bold text-gray-900">
+                                    €{(item.price * item.quantity).toFixed(2)}
+                                </p>
+                            </div>
+
+                            <Modal
+                                isOpen={isOpen}
                                 setIsOpen={setIsOpen}
-                                mutation={removeFromCart}
-                                mutationParams={{id: cart!.id, product_id: item.product_id}}
+                                trigger={
+                                    <button
+                                        className="p-2 2xl:p-3 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all"
+                                        aria-label="Remove item"
+                                    >
+                                        <HiOutlineTrash className="h-6 w-6 2xl:h-8 2xl:w-8"/>
+                                    </button>
+                                }
+                                body={
+                                    <Confirm
+                                        setIsOpen={setIsOpen}
+                                        mutation={removeFromCart}
+                                        mutationParams={{id: cart!.id, product_id: item.product_id}}
+                                    />
+                                }
                             />
-                        }
-                    />
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-
-    )
-}
+    );
+};
 
 export default CartCard;

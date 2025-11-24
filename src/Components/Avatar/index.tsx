@@ -13,15 +13,21 @@ const Avatar = () => {
         <div className="flex flex-col items-center">
             {/* Avatar Preview */}
             <div className="relative w-24 h-24 rounded-full border shadow-md">
-                {preview ? (
+                {preview && (
                     <img
                         src={preview}
                         alt="Avatar Preview"
-                        className="w-full h-full rounded-full object-cover"
+                        className={`w-full h-full rounded-full object-cover ${isLoading && "opacity-50"}`}
                     />
-                ) : (
+                )}
+                {!preview && (
                     <div className="w-full h-full flex items-center justify-center text-gray-400">
                         No Avatar
+                    </div>
+                )}
+                {isLoading && (
+                    <div className="absolute inset-0 flex items-center justify-center">
+                        <div className="loader"></div>
                     </div>
                 )}
             </div>

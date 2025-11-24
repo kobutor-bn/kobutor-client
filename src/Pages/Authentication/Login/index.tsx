@@ -64,7 +64,7 @@ function Login() {
             </div>
             <div>
                 Don't have an account yet?
-                <Link className="ml-1 underline" to="/register">
+                <Link className="ml-1 underline" to="/account/register">
                     Register now
                 </Link>
             </div>

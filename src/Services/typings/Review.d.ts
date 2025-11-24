@@ -32,7 +32,7 @@ declare namespace IReview {
     interface ResUser {
         id: string;
         name: string;
-        avatar: string;y
+        avatar: string;
         username: string;
     }
 

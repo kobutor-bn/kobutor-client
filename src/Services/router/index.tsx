@@ -16,7 +16,7 @@ const Products = lazy(() => import('../../Pages/Products'));
 const ProductDetails = lazy(() => import('../../Pages/ProductDetails'));
 const Cart = lazy(() => import('../../Pages/Cart'));
 const Login = lazy(() => import('../../Pages/Authentication/Login'));
-const Register = lazy(() => import('../../Pages/Authentication/Register/Register'));
+const Register = lazy(() => import('../../Pages/Authentication/Register'));
 const User = lazy(() => import('../../Pages/User'));
 const Error = lazy(() => import('../../Pages/Error.tsx'));
 

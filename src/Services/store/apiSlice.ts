@@ -102,12 +102,18 @@ export const apiSlice = createApi({
             providesTags: ['User'],
         }),
 
-        setAvatar: builder.mutation<void, { id: string, uid: string }>({
-            query: ({id, uid}) => ({
-                url: `/v1/avatar/${id}`,
-                method: 'PUT',
-                body: {uid},
-            }),
+        setAvatar: builder.mutation<{ avatar: string; path: string }, File>({
+            query: (file) => {
+                const formData = new FormData();
+                formData.append('file', file);
+
+                return {
+                    url: '/v1/user/avatar',
+                    method: 'PUT',
+                    body: formData,
+                };
+            },
+            // Invalidate user cache to refetch updated user data
             invalidatesTags: ['User'],
         }),
 

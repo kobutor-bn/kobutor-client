@@ -29,7 +29,7 @@ const ReviewDetails: React.FC = () => {
                     <LazyImage
                         className="flex-shrink-0 object-cover w-32 h-32"
                         src={image}
-                        alt={""}/>
+                        alt={"avatar"}/>
                 ))}
             </div>
 
