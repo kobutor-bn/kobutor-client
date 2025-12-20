@@ -102,7 +102,7 @@ export const apiSlice = createApi({
 
         getUser: builder.query<IUser.Info, void>({
             query: () => ({
-                url: '/cms/user/info',
+                url: '/v1/user/info',
             }),
             async onQueryStarted(_, {dispatch, queryFulfilled}) {
                 try {
