@@ -1,26 +1,32 @@
 import React, {useState} from "react";
-import {Link, useNavigate} from "react-router-dom";
+import {Link, useNavigate, useLocation} from "react-router-dom";
 import Button from "../../../Components/Button.tsx";
 import {useLogin} from "../../../Services/store/hooks/auth.ts";
 
 function Login() {
     const navigate = useNavigate();
+    const location = useLocation();
     const [error, setError] = useState<string | null>(null);
     const [account, setAccount] = useState("");
     const [secret, setSecret] = useState("");
     const [source] = useState("username");
     const {login, isLoading} = useLogin();
 
+    // Get the page user was trying to access
+    const from = (location.state as any)?.from?.pathname || '/';
+
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setError(null);
 
         try {
-            await login({account, secret, source})
-                .unwrap()
-                .then(() => navigate('/'))
+            await login({account, secret, source}).unwrap();
+
+            // Navigate to the page they were trying to access or home
+            navigate(from, {replace: true});
         } catch (error: any) {
-            setError(error?.data?.message || "Login failed");
+            console.error("Login error:", error);
+            setError(error?.data?.message || "Login failed. Please try again.");
         }
     };
 
@@ -30,27 +36,39 @@ function Login() {
             <p className="font-semibold text-xl">Peace be upon you!</p>
 
             <form onSubmit={handleSubmit} className="flex flex-col w-full gap-5">
-                {error && <div className="bg-red-200 text-red-600 p-5">{error}</div>}
+                {error && (
+                    <div className="bg-red-200 text-red-600 p-5 rounded">
+                        {error}
+                    </div>
+                )}
                 <input
                     required
-                    className="border-[1px] p-3"
+                    className="border-[1px] p-3 rounded"
                     type="text"
                     name="account"
                     id="account"
                     placeholder="Username"
                     value={account}
                     onChange={(e) => setAccount(e.target.value)}
+                    disabled={isLoading}
                 />
                 <input
                     required
-                    className="border-[1px] p-3"
+                    className="border-[1px] p-3 rounded"
                     type="password"
                     id="password"
                     placeholder="Password"
                     value={secret}
                     onChange={(e) => setSecret(e.target.value)}
+                    disabled={isLoading}
                 />
-                <Button text="Login" type="submit" size="large" color="primary" disabled={isLoading}/>
+                <Button
+                    text={isLoading ? "Logging in..." : "Login"}
+                    type="submit"
+                    size="large"
+                    color="primary"
+                    disabled={isLoading}
+                />
             </form>
 
             <div className="flex items-center w-full">

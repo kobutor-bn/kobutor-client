@@ -9,7 +9,7 @@ import OrderSummary from "../../Pages/Order/OrderSummary.tsx";
 import OrderStatus from "../../Pages/Order/OrderStatus.tsx";
 import OrderHistory from "../../Pages/Order/OrderHistory.tsx";
 import OrderDetails from "../../Pages/Order/OrderDetails.tsx";
-// import Checkout from "../../Pages/Checkout";
+import Checkout from "../../Pages/Checkout";
 
 const Home = lazy(() => import('../../Pages/Home'));
 const Products = lazy(() => import('../../Pages/Products'));
@@ -166,16 +166,16 @@ const router = createBrowserRouter([
                     },
                 ],
             },
-            // {
-            //     path: '/checkout',
-            //     element: (
-            //         <ProtectedRoute>
-            //             <Suspense fallback={<Loading/>}>
-            //                 <Checkout/>
-            //             </Suspense>
-            //         </ProtectedRoute>
-            //     ),
-            // },
+            {
+                path: '/checkout',
+                element: (
+                    <ProtectedRoute>
+                        <Suspense fallback={<Loading/>}>
+                            <Checkout/>
+                        </Suspense>
+                    </ProtectedRoute>
+                ),
+            },
         ],
     },
 ]);

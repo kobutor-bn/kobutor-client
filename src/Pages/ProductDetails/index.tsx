@@ -126,7 +126,7 @@ function ProductDetails() {
 
             {/* Related Products */}
             <div className="max-w-screen-2xl mx-auto px-4 md:px-6 pb-16 2xl:pb-24">
-                <TagSlider title="You May Also Like"/>
+                <TagSlider title="You May Also Like" id="cs1ict7q4o9j8k43gqcg"/>
             </div>
         </div>
     );

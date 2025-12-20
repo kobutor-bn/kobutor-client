@@ -14,6 +14,7 @@
     "@reduxjs/toolkit": "^2.2.4",
     "@stripe/react-stripe-js": "^2.8.1",
     "@stripe/stripe-js": "^4.9.0",
+    "async-mutex": "^0.5.0",
     "react": "^18.2.0",
     "react-bkash": "^3.0.0",
     "react-dom": "^18.2.0",

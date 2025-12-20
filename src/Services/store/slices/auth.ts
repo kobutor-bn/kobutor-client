@@ -1,33 +1,48 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {RootState} from "../index.ts";
 
-const initialState: IUser.Auth = {
+interface AuthState {
+    isAuthenticated: boolean;
+    user: IUser.Info | null;
+    isInitialized: boolean; // NEW: Track if auth state has been checked
+}
+
+const initialState: AuthState = {
+    isAuthenticated: !!localStorage.getItem("access_token"), // Check token on load
     user: null,
-    isAuthenticated: !!localStorage.getItem("access_token"),
-    isUserLoading: false,
+    isInitialized: false,
 };
 
-export const authSlice = createSlice({
+const authSlice = createSlice({
     name: "auth",
-    initialState: initialState,
+    initialState,
     reducers: {
-        logout: (state) => {
-            localStorage.removeItem("access_token");
-            localStorage.removeItem("refresh_token");
-            state.isAuthenticated = false;
-            state.user = null;
+        setAuthenticated: (state, action: PayloadAction<boolean>) => {
+            state.isAuthenticated = action.payload;
+            state.isInitialized = true;
         },
         setUser: (state, action: PayloadAction<IUser.Info>) => {
             state.user = action.payload;
             state.isAuthenticated = true;
+            state.isInitialized = true;
         },
-        // setAuthenticated(state, action: PayloadAction<boolean>) {
-        //     state.isAuthenticated = action.payload;
-        // },
+        logout: (state) => {
+            state.isAuthenticated = false;
+            state.user = null;
+            state.isInitialized = true;
+        },
+        // NEW: Mark auth as initialized
+        setInitialized: (state) => {
+            state.isInitialized = true;
+        }
     },
 });
 
-export const {logout, setUser} = authSlice.actions;
-export const userSelector = (state: RootState) => state.auth.user;
+export const {setAuthenticated, setUser, logout, setInitialized} = authSlice.actions;
+
+// Selectors
 export const isAuthenticatedSelector = (state: RootState) => state.auth.isAuthenticated;
+export const userSelector = (state: RootState) => state.auth.user;
+export const isInitializedSelector = (state: RootState) => state.auth.isInitialized;
+
 export default authSlice.reducer;

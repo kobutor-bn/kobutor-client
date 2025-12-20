@@ -11,7 +11,7 @@ const ReviewCard: React.FC<{ id: string }> = ({id}) => {
 
     if (isLoading) return <Loading/>;
     if (error) return <Error error={error}/>;
-    if (!review) return null; // Add this safety check
+    if (!review) return null;
 
     const isDescriptionLong = (review.product?.desc?.length ?? 0) > MAX_DESCRIPTION_LENGTH;
     const displayedDescription = isDescriptionLong

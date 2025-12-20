@@ -1,11 +1,11 @@
 import {createApi} from '@reduxjs/toolkit/query/react';
 import PagingUtil from '../util/PagingUtil';
-import {baseQuery} from "./auth.ts";
+import {baseQueryWithReauth} from "./auth.ts"; // CHANGED: Use baseQueryWithReauth
 import {setUser} from "./slices/auth.ts";
 
 export const apiSlice = createApi({
     reducerPath: 'api',
-    baseQuery: baseQuery,
+    baseQuery: baseQueryWithReauth, // CHANGED: Use the reauth version
     tagTypes: ['User', 'Cart', 'Review', 'Address', 'Favorites', 'Order'],
     endpoints: (builder) => ({
         getCart: builder.query<ICart.Item, string>({
@@ -71,18 +71,33 @@ export const apiSlice = createApi({
                     const {data} = await queryFulfilled;
                     const {access_token, refresh_token} = data;
 
-                    await (async () => {
-                        localStorage.setItem("access_token", access_token!);
-                        localStorage.setItem("refresh_token", refresh_token!);
-                        // dispatch(setAuthenticated(true));
-                    })();
+                    // Store tokens
+                    if (access_token) localStorage.setItem("access_token", access_token);
+                    if (refresh_token) localStorage.setItem("refresh_token", refresh_token);
 
+                    // Fetch user data immediately after login
                     await dispatch(apiSlice.endpoints.getUser.initiate());
                 } catch (error) {
                     console.error("Login failed:", error);
                 }
             },
             invalidatesTags: ['User'],
+        }),
+
+        // NEW: Logout endpoint
+        logout: builder.mutation<void, void>({
+            query: () => ({
+                url: '/v1/logout',
+                method: 'POST',
+            }),
+            async onQueryStarted(_, {dispatch}) {
+                // Clear local storage
+                localStorage.removeItem("access_token");
+                localStorage.removeItem("refresh_token");
+
+                // Reset the entire API cache
+                dispatch(apiSlice.util.resetApiState());
+            },
         }),
 
         getUser: builder.query<IUser.Info, void>({
@@ -92,11 +107,12 @@ export const apiSlice = createApi({
             async onQueryStarted(_, {dispatch, queryFulfilled}) {
                 try {
                     const res = await queryFulfilled;
-                    console.log("User Data:", res.data);
-
                     dispatch(setUser(res.data));
                 } catch (error) {
-                    console.error("Failed to fetch and set user data:", error);
+                    console.error("Failed to fetch user data:", error);
+                    // Clear tokens if user fetch fails
+                    localStorage.removeItem("access_token");
+                    localStorage.removeItem("refresh_token");
                 }
             },
             providesTags: ['User'],
@@ -113,7 +129,6 @@ export const apiSlice = createApi({
                     body: formData,
                 };
             },
-            // Invalidate user cache to refetch updated user data
             invalidatesTags: ['User'],
         }),
 
@@ -263,6 +278,7 @@ export const {
     useGetReviewsQuery,
     useGetReviewDetailsQuery,
     useLoginMutation,
+    useLogoutMutation, // NEW
     useGetUserQuery,
     useLazyGetProductsQuery,
     useGetTagsQuery,
