@@ -11,7 +11,7 @@ interface CheckoutFormProps {
     clientSecret: string;
 }
 
-const CheckoutForm: React.FC<CheckoutFormProps> = ({ clientSecret }) => {
+const CheckoutForm: React.FC<CheckoutFormProps> = () => {
     const stripe = useStripe();
     const elements = useElements();
     const navigate = useNavigate();
