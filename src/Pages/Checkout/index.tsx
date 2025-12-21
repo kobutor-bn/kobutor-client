@@ -28,33 +28,31 @@ const Checkout: React.FC = () => {
         const createPaymentIntent = async () => {
             try {
                 setIsLoading(true);
-                const response = await fetch(
-                    `${import.meta.env.VITE_API_PROXY_TARGET}/v1/payment/intent`,
-                    {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
-                        },
-                        body: JSON.stringify({
-                            order_id: order.id || `order_${Date.now()}`,
-                            amount: order.total_amount,
-                            currency: 'eur',
-                            payment_method: 'card',
-                            metadata: {
-                                user_id: user?.id || '',
-                                user_email: user?.email || '',
-                                products: JSON.stringify(order.products.map(p => ({
-                                    id: p.product_id,
-                                    quantity: p.quantity
-                                })))
-                            }
-                        }),
-                    }
-                );
+                const response = await fetch('/api/v1/payment/intent', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
+                    },
+                    body: JSON.stringify({
+                        order_id: order.id || `order_${Date.now()}`,
+                        amount: order.total_amount,
+                        currency: 'eur',
+                        payment_method: 'card',
+                        metadata: {
+                            user_id: user?.id || '',
+                            user_email: user?.email || '',
+                            products: JSON.stringify(order.products.map(p => ({
+                                id: p.product_id,
+                                quantity: p.quantity
+                            })))
+                        }
+                    }),
+                });
 
                 if (!response.ok) {
-                    throw new Error('Failed to create payment intent');
+                    const errorData = await response.json().catch(() => null);
+                    throw new Error(errorData?.message || 'Failed to create payment intent');
                 }
 
                 const data = await response.json();
